@@ -3,14 +3,14 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2013-10-16T16:28:39+08:00</updated>
+    <updated>2013-10-16T16:33:22+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
         <title type="html"><![CDATA[Homework for C plus]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/homework-for-c-plus"/>
         <published>2013-10-16T00:00:00+08:00</published>
-        <updated>2013-10-16T16:28:39+08:00</updated>
+        <updated>2013-10-16T16:31:33+08:00</updated>
         <id>http://tinple.me/tech/homework-for-c-plus</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <h2 id="toc_0">For 2013-10-16 C plus homework</h2>
@@ -35,7 +35,7 @@ int main() {
     cout2 &lt;&lt; &quot;Hello World!&quot; &lt;&lt; endl;
     return 0;
 }</code></pre>
-<p><strong>“cout2”: 未声明的标识符</strong></p>
+<p><strong>cout2: 未声明的标识符</strong></p>
 
 <h3 id="toc_3">运行错误 - 缺少运行库</h3>
 ]]>
@@ -45,7 +45,7 @@ int main() {
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/add-security-to-defense-in-web"/>
         <published>2013-10-10T00:00:00+08:00</published>
-        <updated>2013-10-10T23:20:28+08:00</updated>
+        <updated>2013-10-16T16:33:22+08:00</updated>
         <id>http://tinple.me/tech/add-security-to-defense-in-web</id>
         <category scheme="http://tinple.me/tag/security/" term="security" label="security" />
         <category scheme="http://tinple.me/tag/defence/" term="defence" label="defence" />
@@ -67,6 +67,7 @@ to easily 操作 something he wants.If we don&#39;t care about privileges and ju
 <h2 id="toc_1">CSRF &amp;&amp; Token defense</h2>
 
 <h2 id="toc_2">XSS</h2>
+<p>Give me some time to complete. </p>
 ]]>
         </content>
     </entry><entry>

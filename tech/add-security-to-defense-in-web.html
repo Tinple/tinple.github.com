@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Add security to defense in web - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=7f42a" />
+    <link rel="stylesheet" href="/static/pygments.css?v=c6adc" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/add-security-to-defense-in-web" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Add security to defense in web</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2013-10-10T00:00:00+08:00" pubdate>
+            <a href="/2013/">2013-10-10</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <p>It would be a hard decision for me to write down this essay.But I still want to
+express some security opinion and give the solution for some attack that I used to do.</p>
+
+<h2 id="toc_0">Mysql privileges</h2>
+<p>Like some other man, I used <code>Mysql</code> as my database to store datas in my last project.
+But I am not professional, just use it to combine with <code>php</code>.
+I didn&#39;t care the privileges when I executed a sql statement, just let it runned as I
+expected.</p>
+<p>And now I realized the <strong>big potential</strong> problem that I have made. I didn&#39;t set privileges 精确地 for mysql users.</p>
+<p>Think about an online shopping platform which includes manage page for admin
+to easily 操作 something he wants.If we don&#39;t care about privileges and just use the 
+默认的 settings, the problem is the 顾客 has same privileges as admin.</p>
+<p>So we needs to 区分 the privileges between 顾客 and admin.</p>
+
+<h2 id="toc_1">CSRF &amp;&amp; Token defense</h2>
+
+<h2 id="toc_2">XSS</h2>
+<p>Give me some time to complete. </p>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        <a href="/tag/security/">security</a><a href="/tag/defence/">defence</a>
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Add security to defense in web';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://facebook.com/Tinple">Facebook</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+      <p class="copyright">
+      <span class="software">
+        Powered by <a href="http://lab.lepture.com/liquidluck/">Felix Felicis</a> 3.8.1,
+      </span>
+      <span class="theme">
+        Theme <a href="https://github.com/lepture/liquidluck-theme-moment" rel="nofollow">moment</a> 2.0 by <a href="http://lepture.com">Hsiaoming Yang</a>
+      </span>
+      </p>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>
