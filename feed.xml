@@ -3,9 +3,73 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2013-10-06T00:42:24+08:00</updated>
+    <updated>2013-10-16T16:25:37+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[Homework for C plus]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/homework-for-c-plus"/>
+        <published>2013-10-16T00:00:00+08:00</published>
+        <updated>2013-10-16T16:25:37+08:00</updated>
+        <id>http://tinple.me/tech/homework-for-c-plus</id>
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">For 2013-10-16 C plus homework</h2>
+
+<h3 id="toc_1">链接错误</h3>
+
+<pre><code>#include&lt;iostream&gt;
+using namespace std;
+
+int main_fake() {
+    cout &lt;&lt; &quot;Hello World!&quot; &lt;&lt; endl;
+    return 0;
+}</code></pre>
+<p><strong>MSVCRTD.lib(crtexe.obj) : error LNK2019: 无法解析的外部符号 <em>main，该符号在函数 _</em>_tmainCRTStartup 中被引用</strong></p>
+
+<h3 id="toc_2">编译错误</h3>
+
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout2 &lt;&lt; &quot;Hello World!&quot; &lt;&lt; endl;
+    return 0;
+}</code></pre>
+<p><strong>“cout2”: 未声明的标识符</strong></p>
+
+<h3 id="toc_3">运行错误 - 缺少运行库</h3>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Add security to defense in web]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/add-security-to-defense-in-web"/>
+        <published>2013-10-10T00:00:00+08:00</published>
+        <updated>2013-10-10T23:20:28+08:00</updated>
+        <id>http://tinple.me/tech/add-security-to-defense-in-web</id>
+        <category scheme="http://tinple.me/tag/security/" term="security" label="security" />
+        <category scheme="http://tinple.me/tag/defence/" term="defence" label="defence" />
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <p>It would be a hard decision for me to write down this essay.But I still want to
+express some security opinion and give the solution for some attack that I used to do.</p>
+
+<h2 id="toc_0">Mysql privileges</h2>
+<p>Like some other man, I used <code>Mysql</code> as my database to store datas in my last project.
+But I am not professional, just use it to combine with <code>php</code>.
+I didn&#39;t care the privileges when I executed a sql statement, just let it runned as I
+expected.</p>
+<p>And now I realized the <strong>big potential</strong> problem that I have made. I didn&#39;t set privileges 精确地 for mysql users.</p>
+<p>Think about an online shopping platform which includes manage page for admin
+to easily 操作 something he wants.If we don&#39;t care about privileges and just use the 
+默认的 settings, the problem is the 顾客 has same privileges as admin.</p>
+<p>So we needs to 区分 the privileges between 顾客 and admin.</p>
+
+<h2 id="toc_1">CSRF &amp;&amp; Token defense</h2>
+
+<h2 id="toc_2">XSS</h2>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[Monthly review for Sep.2013]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/life/monthly-review-for-sep-2013"/>
