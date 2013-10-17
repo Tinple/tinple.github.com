@@ -55,9 +55,142 @@
         </span>
     </div>
     <div class="entry-content">
-        <h2 id="toc_0">For 2013-10-16 C plus homework</h2>
+        <h2 id="toc_0">For 2013-10-17 C plus homework</h2>
 
-<h3 id="toc_1">链接错误</h3>
+<h3 id="toc_1">Answer:</h3>
+
+<h4 id="toc_2">Question 1:</h4>
+
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+int main() {
+    int a, b;
+    cout &lt;&lt; &quot;请输入两个整数&quot; &lt;&lt; endl;
+    cin &gt;&gt; a &gt;&gt; b;
+
+    if (a &gt; b) {
+        cout&lt;&lt; a &lt;&lt; endl;
+    } elseif (a &lt; b) {
+        cout &lt;&lt; b &lt;&lt; endl;
+    } else {
+        cout &lt;&lt; &quot;两个数相等&quot; &lt;&lt; endl;
+    }
+
+    return 0;
+}</code></pre>
+
+<h4 id="toc_3">Question 2:</h4>
+
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+int main() {
+
+    int a;
+    double b;
+    cout &lt;&lt; &quot;请输入两个数，第一个为整数，第二个为浮点数&quot; &lt;&lt; endl;
+    cin &gt;&gt; a &gt;&gt; b;
+
+    if(a &gt; b) {
+        cout &lt;&lt; a &lt;&lt; endl;
+    } elseif (a&lt;b) {
+        cout &lt;&lt; b &lt;&lt; endl;
+    } else {
+       cout &lt;&lt; &quot;两个数相等&quot; &lt;&lt; endl;
+    }
+
+    return 0;
+}</code></pre>
+
+<h4 id="toc_4">Question 3:</h4>
+
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+int main() {
+
+   double f, c;
+   cout &lt;&lt; &quot;请输入摄氏温度&quot; &lt;&lt; endl;
+   cin &gt;&gt; c;
+
+   f = c * 9.0 / 5.0 + 21.0;
+
+   cout &lt;&lt; &quot;转换为华氏温度&quot; &lt;&lt; f &lt;&lt; endl;
+
+   return 0;
+
+}</code></pre>
+
+<h4 id="toc_5">Question 4.1:</h4>
+
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+int main() {
+
+   double miles, kilometres;
+   const double N = 1.60934;
+   cout &lt;&lt; &quot;请输入metres&quot; &lt;&lt; endl;
+   cin &gt;&gt; kilometres;
+   miles = kilometres / N;
+   cout &lt;&lt; &quot;转换miles为&quot; &lt;&lt; endl;
+   cout &lt;&lt; miles &lt;&lt; endl;
+
+   return 0;
+
+}</code></pre>
+
+<h4 id="toc_6">Question 4.2:</h4>
+
+<pre><code>#include &lt;iostream&gt;
+
+#define N 1.60934
+
+using namespace std;
+
+int main() {
+
+   double miles, metres;
+   cout &lt;&lt; &quot;请输入metres&quot; &lt;&lt; endl;
+   cin &gt;&gt; metres;
+   miles = metres / N;
+   cout &lt;&lt; &quot;转换miles为&quot; &lt;&lt; endl;
+   cout &lt;&lt; miles &lt;&lt; endl;
+
+   return 0;
+
+}</code></pre>
+
+<h4 id="toc_7">Question 5:</h4>
+
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+int main() {
+
+   int num, t;
+   cout &lt;&lt; &quot;请输入一个整数&quot; &lt;&lt; endl;
+   cin &gt;&gt; num;
+
+   t = num % 10000;
+   num = num - t + 1111;
+
+   cout &lt;&lt; &quot;右四位变为1111&quot; &lt;&lt; endl;
+   cout &lt;&lt; num &lt;&lt; endl;
+
+   return 0;
+
+}</code></pre>
+
+<h2 id="toc_8">For 2013-10-16 C plus homework</h2>
+
+<h3 id="toc_9">链接错误</h3>
 
 <pre><code>#include&lt;iostream&gt;
 using namespace std;
@@ -68,7 +201,7 @@ int main_fake() {
 }</code></pre>
 <p><strong>MSVCRTD.lib(crtexe.obj) : error LNK2019: 无法解析的外部符号 <em>main，该符号在函数 _</em>_tmainCRTStartup 中被引用</strong></p>
 
-<h3 id="toc_2">编译错误</h3>
+<h3 id="toc_10">编译错误</h3>
 
 <pre><code>#include &lt;iostream&gt;
 using namespace std;
@@ -79,7 +212,7 @@ int main() {
 }</code></pre>
 <p><strong>cout2: 未声明的标识符</strong></p>
 
-<h3 id="toc_3">运行错误 - 缺少运行库</h3>
+<h3 id="toc_11">运行错误 - 缺少运行库</h3>
 
     </div>
 
