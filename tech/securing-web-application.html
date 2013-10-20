@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Securing web application - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=7f42a" />
+    <link rel="stylesheet" href="/static/pygments.css?v=c6adc" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/securing-web-application" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Securing web application</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2013-10-10T00:00:00+08:00" pubdate>
+            <a href="/2013/">2013-10-10</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <p>It would be a hard decision for me to write down this essay.But I still want to
+express some security opinion and give the solution for some attack that I used to do.</p>
+
+<h2 id="toc_0">SQL Injection</h2>
+<p>When I learned <code>PHP</code> last term, I just only finished a simple web application and ensured the ability it should have.But it is really dangerous leaving web application without any other defences.You see, something with SQL could be attacked by some sneaky tricks.</p>
+<p>Considering a situation that I make a platform for users to join a competition, 
+and at first they should apply but the <strong>privilege field</strong> in database that for 
+users logining in platform is 0(same as false), I may change it to
+1 few days later.</p>
+<p>And if I design my table structure like this(I use mysql):</p>
+
+<pre><code>CREATE TABLE EXAMPLE (
+    ID   INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+    USERNAME VARCHAR(40) NOT NULL,
+    PASSWORD VARCHAR(40) NOT NULL,
+    PRIVILEGE TINYINT(1) DEFAULT 0,
+
+    PRIMARY KEY (ID)
+);</code></pre>
+<p>And my form page receives datas which are posted and immediately inserted into database without any filter: </p>
+
+<pre><code>$username = $_POST['username'];
+$pwd = $_POST['password'];
+
+//..some database connection codes
+$query = &quot;INSERT INTO EXAMPLE VALUES('$username', '$pwd', 0)&quot;;
+//$dbc is a mysql connection return
+mysqli_query($dbc, $query);
+
+//any other codes</code></pre>
+<p>If someone put <code>passwor&#39;, 1) --</code> into password field, the sql query will be 
+<code>INSERT INTO EXAMPLE VALUES(&#39;someone&#39;, &#39;password&#39;, 1) -- &#39;, 0)</code>, and the double-hyphen comment causes the rest of the line of SQL code to be ignored!Hence,
+his privilege will be 1.And this attack is known as an <strong>SQL Injection</strong>.</p>
+<p>And something we could do to defense it is filter any datas that user can write into
+database, an example defence:</p>
+
+<pre><code>$username = mysqli_real_escape($dbc, trim($_POST['username']));
+$pwd = mysqli_real_escape($dbc, trim($_POST['password']));</code></pre>
+<p>Sure, you can alse use <strong>regular expression</strong> to filter it.Besides, the privilege field could be designed to <code>DEFAULT 0</code> so that it would not be inserted any more, or just revoke the <code>INSERT privilege(field)</code> privilege in mysql for users, like we will talk below. </p>
+
+<h2 id="toc_1">Mysql privileges</h2>
+<p>Like some other man, I used <code>Mysql</code> as my database to store datas in my all project.
+But I am not professional, just use it to combine with <code>PHP</code>.
+I didn&#39;t care the mysql privileges when I executed a sql statement, just let it runned as I expected.</p>
+<p>And now I realized the <strong>big potential</strong> problem that I have made. I didn&#39;t set privileges accurately for mysql users.</p>
+<p>Above example again.This time we create another mysql user named user_example at begin.And we could set this mysql user only few privileges when users apply:</p>
+
+<pre><code>//[...] should be replaced depends on you
+GRANT INSERT(`USERNAME`, `PASSWORD`) ON `[database]`.`EXAMPLE` TO `user_example`@[ip_address];</code></pre>
+<p>Like this, users will not be able to do something like INSERT privilege field into database.And if you have a backstage to manage platform, you may also set the second mysql user privilege accurately, just use two mysql users and <strong>ensure their respective privilege</strong> in your web application, accurating privileges to your every table field.And it means a lot about security to your web application.</p>
+
+<h2 id="toc_2">CSRF &amp;&amp; Token defense</h2>
+<p><strong>Cross-site request forgery</strong>, which exploits the trust that a site has in user\&#39;s
+browser.</p>
+
+<blockquote>
+<blockquote>
+<p>The attack works by including a link or script in a page that accesses a site to which the user is known (or is supposed) to have been authenticated.</p>
+</blockquote>
+</blockquote>
+<p>I am sorry that I know little about it.But you could learn it more on <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">wiki</a>.Have fun!</p>
+
+<h2 id="toc_3">End</h2>
+<p>Nothing is ever truly 100% secure, so we are always talking about degrees of security.The above three points may let you realize the security about your web
+application, and just try to make preventions to protect it!</p>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        <a href="/tag/security/">security</a><a href="/tag/defence/">defence</a>
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Securing web application';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://facebook.com/Tinple">Facebook</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+      <p class="copyright">
+      <span class="software">
+        Powered by <a href="http://lab.lepture.com/liquidluck/">Felix Felicis</a> 3.8.1,
+      </span>
+      <span class="theme">
+        Theme <a href="https://github.com/lepture/liquidluck-theme-moment" rel="nofollow">moment</a> 2.0 by <a href="http://lepture.com">Hsiaoming Yang</a>
+      </span>
+      </p>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>
