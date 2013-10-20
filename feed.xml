@@ -3,7 +3,7 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2013-10-17T20:14:28+08:00</updated>
+    <updated>2013-10-20T18:50:07+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
         <title type="html"><![CDATA[Homework for C plus]]></title>
@@ -174,33 +174,80 @@ int main() {
 ]]>
         </content>
     </entry><entry>
-        <title type="html"><![CDATA[Add security to defense in web]]></title>
+        <title type="html"><![CDATA[Securing web application]]></title>
         <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/add-security-to-defense-in-web"/>
+        <link href="http://tinple.me/tech/securing-web-application"/>
         <published>2013-10-10T00:00:00+08:00</published>
-        <updated>2013-10-16T16:33:22+08:00</updated>
-        <id>http://tinple.me/tech/add-security-to-defense-in-web</id>
+        <updated>2013-10-20T18:50:07+08:00</updated>
+        <id>http://tinple.me/tech/securing-web-application</id>
         <category scheme="http://tinple.me/tag/security/" term="security" label="security" />
         <category scheme="http://tinple.me/tag/defence/" term="defence" label="defence" />
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <p>It would be a hard decision for me to write down this essay.But I still want to
 express some security opinion and give the solution for some attack that I used to do.</p>
 
-<h2 id="toc_0">Mysql privileges</h2>
-<p>Like some other man, I used <code>Mysql</code> as my database to store datas in my last project.
-But I am not professional, just use it to combine with <code>php</code>.
-I didn&#39;t care the privileges when I executed a sql statement, just let it runned as I
-expected.</p>
-<p>And now I realized the <strong>big potential</strong> problem that I have made. I didn&#39;t set privileges 精确地 for mysql users.</p>
-<p>Think about an online shopping platform which includes manage page for admin
-to easily 操作 something he wants.If we don&#39;t care about privileges and just use the 
-默认的 settings, the problem is the 顾客 has same privileges as admin.</p>
-<p>So we needs to 区分 the privileges between 顾客 and admin.</p>
+<h2 id="toc_0">SQL Injection</h2>
+<p>When I learned <code>PHP</code> last term, I just only finished a simple web application and ensured the ability it should have.But it is really dangerous leaving web application without any other defences.You see, something with SQL could be attacked by some sneaky tricks.</p>
+<p>Considering a situation that I make a platform for users to join a competition, 
+and at first they should apply but the <strong>privilege field</strong> in database that for 
+users logining in platform is 0(same as false), I may change it to
+1 few days later.</p>
+<p>And if I design my table structure like this(I use mysql):</p>
 
-<h2 id="toc_1">CSRF &amp;&amp; Token defense</h2>
+<pre><code>CREATE TABLE EXAMPLE (
+    ID   INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+    USERNAME VARCHAR(40) NOT NULL,
+    PASSWORD VARCHAR(40) NOT NULL,
+    PRIVILEGE TINYINT(1) DEFAULT 0,
 
-<h2 id="toc_2">XSS</h2>
-<p>Give me some time to complete. </p>
+    PRIMARY KEY (ID)
+);</code></pre>
+<p>And my form page receives datas which are posted and immediately inserted into database without any filter: </p>
+
+<pre><code>$username = $_POST['username'];
+$pwd = $_POST['password'];
+
+//..some database connection codes
+$query = &quot;INSERT INTO EXAMPLE VALUES('$username', '$pwd', 0)&quot;;
+//$dbc is a mysql connection return
+mysqli_query($dbc, $query);
+
+//any other codes</code></pre>
+<p>If someone put <code>passwor&#39;, 1) --</code> into password field, the sql query will be 
+<code>INSERT INTO EXAMPLE VALUES(&#39;someone&#39;, &#39;password&#39;, 1) -- &#39;, 0)</code>, and the double-hyphen comment causes the rest of the line of SQL code to be ignored!Hence,
+his privilege will be 1.And this attack is known as an <strong>SQL Injection</strong>.</p>
+<p>And something we could do to defense it is filter any datas that user can write into
+database, an example defence:</p>
+
+<pre><code>$username = mysqli_real_escape($dbc, trim($_POST['username']));
+$pwd = mysqli_real_escape($dbc, trim($_POST['password']));</code></pre>
+<p>Sure, you can alse use <strong>regular expression</strong> to filter it.Besides, the privilege field could be designed to <code>DEFAULT 0</code> so that it would not be inserted any more, or just revoke the <code>INSERT privilege(field)</code> privilege in mysql for users, like we will talk below. </p>
+
+<h2 id="toc_1">Mysql privileges</h2>
+<p>Like some other man, I used <code>Mysql</code> as my database to store datas in my all project.
+But I am not professional, just use it to combine with <code>PHP</code>.
+I didn&#39;t care the mysql privileges when I executed a sql statement, just let it runned as I expected.</p>
+<p>And now I realized the <strong>big potential</strong> problem that I have made. I didn&#39;t set privileges accurately for mysql users.</p>
+<p>Above example again.This time we create another mysql user named user_example at begin.And we could set this mysql user only few privileges when users apply:</p>
+
+<pre><code>//[...] should be replaced depends on you
+GRANT INSERT(`USERNAME`, `PASSWORD`) ON `[database]`.`EXAMPLE` TO `user_example`@[ip_address];</code></pre>
+<p>Like this, users will not be able to do something like INSERT privilege field into database.And if you have a backstage to manage platform, you may also set the second mysql user privilege accurately, just use two mysql users and <strong>ensure their respective privilege</strong> in your web application, accurating privileges to your every table field.And it means a lot about security to your web application.</p>
+
+<h2 id="toc_2">CSRF &amp;&amp; Token defense</h2>
+<p><strong>Cross-site request forgery</strong>, which exploits the trust that a site has in user\&#39;s
+browser.</p>
+
+<blockquote>
+<blockquote>
+<p>The attack works by including a link or script in a page that accesses a site to which the user is known (or is supposed) to have been authenticated.</p>
+</blockquote>
+</blockquote>
+<p>I am sorry that I know little about it.But you could learn it more on <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">wiki</a>.Have fun!</p>
+
+<h2 id="toc_3">End</h2>
+<p>Nothing is ever truly 100% secure, so we are always talking about degrees of security.The above three points may let you realize the security about your web
+application, and just try to make preventions to protect it!</p>
 ]]>
         </content>
     </entry><entry>
