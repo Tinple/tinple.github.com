@@ -136,7 +136,7 @@ div.innerHTML = &quot;&lt;h3&gt;Error&lt;/h3&gt;&lt;p&gt;Invalid e-mail address.
 <p>Embedding HTML strings inside your JavaScript is a bad practice for a number of
 reasons.And there are several ways to accomplish this in a loosely coupled manner.</p>
 
-<h4 id="toc_6"><strong>Load from the Server</strong></h4>
+<h4 id="toc_6">1.Load from the Server</h4>
 <p>keep the templates remote and use an XMLHttpRequest object to retrieve
 additional markup, it is much more convenient for single-page applications than 
 multiple-page applications. But when using this method, you should pay attention 
@@ -162,9 +162,9 @@ to <code>XSS</code> attack, and it requires lots of transcode and decode strateg
     xhr.send(null);
 }</code></pre>
 
-<h4 id="toc_7">Simple Client-Side Templates</h4>
+<h4 id="toc_7">2.Simple Client-Side Templates</h4>
 
-<h4 id="toc_8">Complex Client-Side Templates</h4>
+<h4 id="toc_8">3.Complex Client-Side Templates</h4>
 
     </div>
 
