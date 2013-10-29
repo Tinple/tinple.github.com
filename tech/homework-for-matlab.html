@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Homework for matlab - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=7f42a" />
+    <link rel="stylesheet" href="/static/pygments.css?v=c6adc" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/homework-for-matlab" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Homework for matlab</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2013-10-20T00:00:00+08:00" pubdate>
+            <a href="/2013/">2013-10-20</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <h2 id="toc_0">Matlab 第二章</h2>
+<p>2.
+b. 首字母为数字，非字母
+d. 首字符为下划线
+e. 有标点</p>
+<p>4.</p>
+<p>&gt;&gt;array1=[1.1 0.0 2.1 -3.5 6.0;0.0 1.1 -6.6 2.8 3.4;2.1 0.1 0.3 -0.4 1.3 ;-1.4 5.1 0.0 1.1 0.0]
+array1 =
+    1.1000         0    2.1000   -3.5000    6.0000
+         0    1.1000   -6.6000    2.8000    3.4000
+    2.1000    0.1000    0.3000   -0.4000    1.3000
+   -1.4000    5.1000         0    1.1000         0
+&gt;&gt;array1(3,:)
+ans =
+    2.1000    0.1000    0.3000   -0.4000    1.3000
+&gt;&gt; array1(:,3)
+ans =
+    2.1000
+   -6.6000
+    0.3000
+         0
+&gt;&gt;array1(1:2:3,[3 3 4])
+ans =
+    2.1000    2.1000   -3.5000
+    0.3000    0.3000   -0.4000
+&gt;&gt; array1([1 1],:)
+ans =
+    1.1000         0    2.1000   -3.5000    6.0000
+    1.1000         0    2.1000   -3.5000    6.0000</p>
+<p>6.</p>
+<p>&gt;&gt;  a = [2 -2;-1 2],b = [1, -1;0, 2], c = [1; -2], d = eye(2)</p>
+<p>a =</p>
+
+<pre><code>2    -2
+-1     2</code></pre>
+<p>b =</p>
+
+<pre><code>1    -1
+ 0     2</code></pre>
+<p>c =</p>
+
+<pre><code>1
+-2</code></pre>
+<p>d =</p>
+
+<pre><code>1     0
+ 0     1</code></pre>
+<p>&gt; result= a*b</p>
+<p>result =</p>
+
+<pre><code>2    -6
+-1     5</code></pre>
+<p>&gt;&gt; result = a.*d</p>
+<p>result =</p>
+
+<pre><code>2     0
+ 0     2</code></pre>
+<p>&gt;&gt; result = a*c</p>
+<p>result =</p>
+
+<pre><code>6
+-5</code></pre>
+<p>&gt;&gt; result = a.<em>c
+Error using  .</em> 
+Matrix dimensions must agree.</p>
+<p>&gt;&gt; result = a.*d</p>
+<p>result =</p>
+
+<pre><code>2     0
+ 0     2</code></pre>
+<p>&gt;&gt; result = a\b</p>
+<p>result =</p>
+
+<pre><code>1.0000    1.0000
+0.5000    1.5000</code></pre>
+<p>&gt;&gt; result = a.\b</p>
+<p>result =</p>
+
+<pre><code>0.5000    0.5000
+     0    1.0000</code></pre>
+<p>&gt;&gt; result = a.^b</p>
+<p>result =</p>
+
+<pre><code>2.0000   -0.5000
+1.0000    4.0000</code></pre>
+<p>8.</p>
+<p>&gt;&gt; (3-5i)*(-4+6i)</p>
+<p>ans =</p>
+<p>  18.0000 +38.0000i</p>
+<p>&gt;&gt; (cos(1.2))^(-1)</p>
+<p>ans =</p>
+
+<pre><code>2.7597</code></pre>
+<p>10.</p>
+<p>v0 = input(&#39;v0=&#39;);
+h0 = input(&#39;h0=&#39;);
+t = -10:0.01:10;
+h = 0.5.*(-9.81).*t.^2+v0.*t+h0;
+v=(-9.81).*t+v0;
+plot(t,h, &#39;r&ndash;&#39;, t,v, &#39;g&#39;);
+axis([-10, 10, -50, 50]);
+xlabel(&#39;t&#39;);
+ylabel(&#39;h and v&#39;);
+legend(&#39;h&#39;, &#39;v&#39;)</p>
+<p>&gt;&gt; untitled2
+v0=10
+h0=10</p>
+<p>12.</p>
+<p>clear all
+p2 = input(&#39;请输入一个功率p2:&#39;);
+p1 = 0.001;
+dB=10*log10(p2/1000/p1);
+fprintf(&#39;dB=%fdBm\n&#39;, dB);
+p3 = 1:100;
+dBm = 10*log10(p3/1000/p1);
+subplot(2, 1, 1);
+plot(p3, dBm);
+title(&#39;线性轴图&#39;);
+xlabel(&#39;p3&#39;);
+ylabel(&#39;dBm&#39;);
+grid on;
+subplot(2, 1, 2);
+semilogx(p3,dBm);
+title(&#39;对数－线性轴图&#39;);
+xlabel(&#39;p3&#39;);
+ylabel(&#39;dBm&#39;);
+grid on;</p>
+<p>14.</p>
+<p>clear all
+F = input(&#39;请输入弹力F&#39;);
+k = input(&#39;请输入进度系数K&#39;);
+x = F/k;
+E = &frac12; *k*x*x;
+fprintf(&#39;伸长量x为%6.2fN\n&#39;, x);
+fprintf(&#39;弹簧弹性势能E为%6.2fJ\n&#39;, E);</p>
+<p>16.</p>
+<p>clear all
+L=0.1*10^-3;
+C=0.25*10^-9;
+R=50;
+V0=10*10^-3;f=1:(2*10^6);
+VR=R./sqrt(R.^2+(2*pi*f*L-1./(2*pi*f*C)).^2)*V0;
+[Vm,Fm]=max(VR);
+fprintf(&#39;在频率为%.4fMHz时,电压最大，为%.3fmV，这个频率叫做电路的固有频率。\n\n&#39;,Fm/(10^6),Vm*10^3);
+plot(f,VR);
+hold on;
+plot(Fm,Vm,&#39;*r&#39;);
+grid;
+F=1.1*Fm;
+VR1=R./sqrt(R.^2+(2*pi*F*L-1./(2*pi*F*C)).^2)*V0;
+fprintf(&#39;当频率比固有频率大百分之十时,电阻上的电压为%.3fmV\n\n&#39;,VR1*10^3);
+display(&#39;在下面两个频率下这个电阻上的电压会降到固有频率电压的一半&#39;)
+sym x;
+x=solve(&#39;&frac12;*Vm=R*V0/sqrt(R^2+(2*pi*F1*L-1/(2*pi*F1*C))^2)&#39;,&#39;F1&#39;);
+y=eval(x);
+sym j;
+j=0;
+for ii=1:length(y)
+    if y(ii)&gt;0j=j+1;
+        fprintf(&#39;f%d=%.4fMHz\n&#39;,j,y(ii)/(10^6))
+    end
+end</p>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Homework for matlab';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://facebook.com/Tinple">Facebook</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+      <p class="copyright">
+      <span class="software">
+        Powered by <a href="http://lab.lepture.com/liquidluck/">Felix Felicis</a> 3.8.1,
+      </span>
+      <span class="theme">
+        Theme <a href="https://github.com/lepture/liquidluck-theme-moment" rel="nofollow">moment</a> 2.0 by <a href="http://lepture.com">Hsiaoming Yang</a>
+      </span>
+      </p>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>

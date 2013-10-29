@@ -3,9 +3,46 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2013-10-20T18:50:07+08:00</updated>
+    <updated>2013-10-29T14:25:20+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[Monthly review for Oct.2013]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/life/monthly-review-for-oct-2013"/>
+        <published>2013-11-01T00:00:00+08:00</published>
+        <updated>2013-10-29T14:24:24+08:00</updated>
+        <id>http://tinple.me/life/monthly-review-for-oct-2013</id>
+        <category scheme="http://tinple.me/tag/month-review/" term="month-review" label="month-review" />
+        <category scheme="http://tinple.me/tag/life/" term="life" label="life" />
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">Tech</h2>
+<p>1.国庆回来后月初忙着报名平台的上线，忙乱中各种页面UI优化，功能测试，注入测试，最后还是赶在10号上线了。</p>
+<p>2.也是管中窥豹了一番web安全，学习了数据库权限(Privilege)的精确设置，数据的各种过滤，服务端文件的权限设置。</p>
+<p>3.第一次读完了英文影印版的Head First系列PHP &amp; Mysql，非常有趣，idea发散式学习，觉得比较适合入门看如果英文阅读能力强的话，但还是权当巩固基础知识了。</p>
+<p>4.月末在读Javascript的乌龟书，200多页精悍的书讲述着编程风格，编程实践等等，虽然现在缺少机会去参与团队协作开发，但现在看一点也不显早，相反的确帮我改进了许多coding习惯还有思维。</p>
+<p>5.间断性地读了一些框架的源码，比如codeigniter（CI），jQuery。感触最大的一点是它们整体的设计模式，还有编程，的确能学到许多，从中也是能看到它们之所以作为框架给予开发者的便捷之处。</p>
+<p>6.这个月学习的时候更侧重自己的<strong>英文阅读能力</strong>了，啃Head First系列的书时把不认识的单词全都摘记下来一个个google translate。总之现在觉得英语很重要。</p>
+
+<h2 id="toc_1">Work</h2>
+<p>1.随着10号报名平台的上线，也是跟协会的小伙伴们去摆了3天的摊。累归累，但这种活动收获还是颇多，校内宣传也基本到位。PS：怀念那个音箱。</p>
+<p>2.参与了院级的创新项目，溷了小学妹的队。主要是觉得这个项目的idea很赞，但总隐隐感觉后续的发展绝不会如我们策划预料的那么吻合，潜在许多未知的隐患，真正做好很难。不过还是要赞一下这个idea。</p>
+<p>3.把以前存的乱七八糟零碎的东西都整理了一遍，开始合理有秩序地收集资料，方便以后需要的时候查找。也是整理了寝室的书桌和协会的桌子:D</p>
+<p>4.跟别人讨论马云推崇来往的事，weibo上也是炒得很火。暂不论来往这个产品的好坏，总之觉得马云这事强制性做的比较成功。许多时候产品是一回事，宣传推广是一回事。</p>
+<p>5.参加了今年10月的阿里云开发者大会，虽然地点设在偏僻的云溪小镇，到处都是来往的牌子。但是阿里人的热情真是火旺，从头到尾都很贴心。也看到了一些自己想看到的东西，引发了许多对产品的思考。听说随行的小伙伴还见到马云了。</p>
+<p>6.简单地思考了下以后的出路。暂时不说，继续努力，毕竟现在还远远不够。</p>
+
+<h2 id="toc_2">Life</h2>
+<p>1.国庆还是回了嘉兴，在那闷的慌没事做，呆了几天就匆忙回去了。换了个环境就不知道该去做什么，相信这的确是自己生活上一个赤裸裸的嘲讽。</p>
+<p>2.报名参加了今年11月份的杭州国际马拉松，报的短程13000。想去挑战下，或者又可以说是想跟小伙伴们去玩下:D</p>
+<p>3.这个月跟K聊了好多，女王一直跟我说羡慕什么的，但我觉得她是纯属瞎搞。然后 也是再一次意识到自己最大的缺陷所在，这种虚拟与现实带来的反差让人很难受，却依旧苦于其中不知如何去突破。</p>
+<p>4.这个月中旬写了每天Must to do的清单，但还是有一些没能坚持下来，比如每天一集美剧，每天shanbay打卡。反思。</p>
+<p>5.月末不是特别想坐在电脑前了，更倾向于捧着本书看，或者是去思考其他事。</p>
+
+<h2 id="toc_3">End</h2>
+<p>这个月大多事是围着<strong>攻防比赛</strong>这条主线进行的，跟9月不一样的是，这个月还忙着处理一些情感，还有一些琐事。10月，多了点忙碌带来的紧迫节奏感。</p>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[Homework for C plus]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/homework-for-c-plus"/>
@@ -174,12 +211,12 @@ int main() {
 ]]>
         </content>
     </entry><entry>
-        <title type="html"><![CDATA[Securing web application]]></title>
+        <title type="html"><![CDATA[Securing web application part one]]></title>
         <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/securing-web-application"/>
+        <link href="http://tinple.me/tech/securing-web-application-1"/>
         <published>2013-10-10T00:00:00+08:00</published>
-        <updated>2013-10-20T18:50:07+08:00</updated>
-        <id>http://tinple.me/tech/securing-web-application</id>
+        <updated>2013-10-29T12:37:38+08:00</updated>
+        <id>http://tinple.me/tech/securing-web-application-1</id>
         <category scheme="http://tinple.me/tag/security/" term="security" label="security" />
         <category scheme="http://tinple.me/tag/defence/" term="defence" label="defence" />
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
@@ -255,7 +292,7 @@ application, and just try to make preventions to protect it!</p>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/life/monthly-review-for-sep-2013"/>
         <published>2013-10-01T00:00:00+08:00</published>
-        <updated>2013-10-06T00:42:24+08:00</updated>
+        <updated>2013-10-29T14:25:20+08:00</updated>
         <id>http://tinple.me/life/monthly-review-for-sep-2013</id>
         <category scheme="http://tinple.me/tag/month-review/" term="month-review" label="month-review" />
         <category scheme="http://tinple.me/tag/life/" term="life" label="life" />
@@ -299,8 +336,11 @@ application, and just try to make preventions to protect it!</p>
 <p>1.有得必有失。自己清楚自己得到了什么学会了什么，也清楚自己正在逐步疏远什么，失去什么，诸事为难只求兼顾，愿能理解原谅。</p>
 <p>2.升大二后生活不再像刚入学般具有挑战性，很难再有去年跟An air们一起全身投入各种活动，不可否认大一跟An air们在一起是最欢乐的时光。</p>
 <p>3.越是陷入技术越深，越是对生活中的一些细节警觉，昔日的故友，好友的关切，父母的慰问，很是怕因为固执己见失去更重要的东西，也尝试去处理好。</p>
-<p>4.开学后生活的节奏感已被定型，大部分时间是呆在协会，有课上课，不喜欢的翘，然后组团吃饭，完后继续协会，最后10点半回寝。虽说枯燥平淡，但也的确忙的有来有回，乐于其中，或许这个10月要改变什么。</p>
+<p>4.开学后生活的节奏感已被定型，大部分时间是呆在协会，有课上课，不喜欢的翘，然后组团吃饭，完后继续协会，最后10点半回寝。虽说枯燥平澹，但也的确忙的有来有回，乐于其中，或许这个10月要改变什么。</p>
 <p>5.偶尔抽空跟某人也是聊了几句，只不过两人好像都太忙太忙了，聊的也根本不在该在的点上，思来想去还是自己的问题最大，谁会去勉强自己的感情呢，何况若还是无心。</p>
+
+<h2 id="toc_3">End:</h2>
+<p>总的来说这个9月过得很充实，忙得开心，心里也觉得踏实，各方面都还行。展望10月的到来:D</p>
 ]]>
         </content>
     </entry><entry>
@@ -369,7 +409,7 @@ determination and continually solving the problem.And what I think is that is ca
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/life/write-before-start"/>
         <published>2013-09-14T00:00:00+08:00</published>
-        <updated>2013-09-27T11:56:21+08:00</updated>
+        <updated>2013-10-29T14:25:10+08:00</updated>
         <id>http://tinple.me/life/write-before-start</id>
         <category scheme="http://tinple.me/tag/life/" term="life" label="life" />
         <category scheme="http://tinple.me/tag/development/" term="development" label="development" />
@@ -391,7 +431,7 @@ determination and continually solving the problem.And what I think is that is ca
 </blockquote>
 </blockquote>
 <p>或许你自己也不知道哪一天回头看看现在所做的一些事，是多么的低俗、毫无价值。说的过了。</p>
-<p>接着谈谈学习。大一一年的课自己上的有多水自己心里也最清楚，要么自学，要么期末猛补， 说白了就是上课没听过课。为什么我会有这样的想法？跟大多数人一样，觉得大学上课没必要像以前那样，每节课都要去学好，觉得大学没有条条框框限制着了，就要装出一副洒脱的样子享受大学无拘无束的日子。又或者更多的时候可以解释为大学让人没有安全感，许多人怀疑上过的课能给自己将来带来多少可能性，毕竟上的是一样的课，不是说你努力学的好就能比别人多份希望， 就如考证一样，往往对结果毫无影响。</p>
+<p>接着谈谈学习。大一一年的课自己上的有多水自己心里也最清楚，要么自学，要么期末勐补， 说白了就是上课没听过课。为什么我会有这样的想法？跟大多数人一样，觉得大学上课没必要像以前那样，每节课都要去学好，觉得大学没有条条框框限制着了，就要装出一副洒脱的样子享受大学无拘无束的日子。又或者更多的时候可以解释为大学让人没有安全感，许多人怀疑上过的课能给自己将来带来多少可能性，毕竟上的是一样的课，不是说你努力学的好就能比别人多份希望， 就如考证一样，往往对结果毫无影响。</p>
 
 <blockquote>
 <blockquote>
@@ -399,7 +439,7 @@ determination and continually solving the problem.And what I think is that is ca
 </blockquote>
 </blockquote>
 <p>一来是大学的课程，二来便是专业的问题。大部分人不知道自己所在的专业将来能干嘛，基本上对大学所定位的专业毫无感觉，更多的时候是直接去询问长一辈的人，甚至连自己的想法都没夹杂一丝。在这样的情况下，再是跟紧大学的相关&quot;量身定制&quot;基本上就是三个和尚没水喝的喜闻乐见的剧情了。</p>
-<p>说了这么多贬低的话，其实没必要去相信，我自己也不相信自己说的。正所谓术业有专攻， 一旦你喜爱自己所在的领域，去专心学习其实是件很享受的事。其实大二有很多课我非常感兴趣， 很多时候我觉得学习的确是件美好的事，尤其是学习那些勾着自己心的东西，那种充实的感觉， 很温暖。</p>
+<p>说了这么多贬低的话，其实没必要去相信，我自己也不相信自己说的。正所谓术业有专攻， 一旦你喜爱自己所在的领域，去专心学习其实是件很享受的事。其实大二有很多课我非常感兴趣， 很多时候我觉得学习的确是件美好的事，尤其是学习那些勾着自己心的东西，那种充实的感觉，很温暖。</p>
 <p>最后说说感情。算了不说了。</p>
 <p>懒懒散散说了那么多无关痛痒的事，也只是对大二定了个基调。不过谁知道呢，也许将来有一天回过头来将这一切全盘否定。姑且就这么进行下去吧。<strong>也祝明天安协迎新宣讲顺利:D</strong></p>
 ]]>
@@ -409,7 +449,7 @@ determination and continually solving the problem.And what I think is that is ca
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/life/the-introvert-advantage-1"/>
         <published>2013-09-08T00:00:00+08:00</published>
-        <updated>2013-09-27T11:55:43+08:00</updated>
+        <updated>2013-10-29T14:24:46+08:00</updated>
         <id>http://tinple.me/life/the-introvert-advantage-1</id>
         <category scheme="http://tinple.me/tag/introvert/" term="introvert" label="introvert" />
         <category scheme="http://tinple.me/tag/thought/" term="thought" label="thought" />
@@ -437,7 +477,7 @@ determination and continually solving the problem.And what I think is that is ca
 </blockquote>
 <p>显然,这种说法简直是把性格内向的人掐死在胡同里。我只是觉得不同的人有不同的方式描述他们的快乐,
 父母经常就因为我常嘟着嘴、常常不说话闷在心里就觉得我心情很不好,然后就拿琐事来纷扰我所做的事。
-可是这样往往适得其反。我想大部分这种错误的想法都是站在不属于性格内向人的角度去考虑一个性格内向的人。而的确是有这样一句显著描述两种性格的话:</p>
+可是这样往往适得其反。我想大部分这种错误的想法都是站在不属于性格内向人的角度去考虑一个性格内向的人。而的确是有这样一句显着描述两种性格的话:</p>
 
 <blockquote>
 <p>内向和外向处于能量连续体的相反的两端。我们落入那连续体的什么位置就决定了我们获得自己生活精力的方式。处于连续体的偏内向那一端的人倾向于向内以获得精力。而处于连续体的偏外向那一端的人倾向于向外获得精力。</p>
@@ -475,10 +515,10 @@ determination and continually solving the problem.And what I think is that is ca
     </entry><entry>
         <title type="html"><![CDATA[Tinple.me]]></title>
         <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/tinple-me"/>
+        <link href="http://tinple.me/tech/tinple-me-and-liquidluck"/>
         <published>2013-09-06T00:00:00+08:00</published>
         <updated>2013-09-27T11:16:43+08:00</updated>
-        <id>http://tinple.me/tech/tinple-me</id>
+        <id>http://tinple.me/tech/tinple-me-and-liquidluck</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <p>These days I have been occupied with <a href="http://tinple.me">tinple.me</a> in my leisure.
 And I use liquidluck to build it.Now I want to share the process with you.</p>
@@ -534,14 +574,14 @@ Anyway, liquidluck is just so lovely and I really like it! </p>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/life/pick-up-writing"/>
         <published>2013-09-01T00:00:00+08:00</published>
-        <updated>2013-09-27T11:39:20+08:00</updated>
+        <updated>2013-10-29T14:24:54+08:00</updated>
         <id>http://tinple.me/life/pick-up-writing</id>
         <category scheme="http://tinple.me/tag/life/" term="life" label="life" />
         <category scheme="http://tinple.me/tag/thought/" term="thought" label="thought" />
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <p>想来已经好久没有写下关乎生活的片段，哪怕是一件事，一个人，一句话。</p>
-<p>大一已经恍恍惚惚地混过去了，显得随意，奔放不羁。期间经历的不多也不少，暑假在家的日子也是时刻去审视这一年来的日子是否能让人念念不忘，是否能让自己觉得不虚度。现在想来随性而过的日子毕竟是凤毛麟角，许多时候性情毕竟和心意相违，而一旦牵连到周遭的事，一年下来也没有几天是能完完全全按着自己既定的轨迹运行。而一旦有了担当的责任与意识，想置身事外便很难了。</p>
-<p>我是个很懒的人，大一大部分的日子是在懒散中消散。许多时候知道这种懒散会慢性循环，而自己却依旧无可奈何，想来这便是意志力的缺乏吧。好在生活并不是一如既往的无解，技术带给了我些许解脱与释怀。许多烦恼与担忧被技术冲淡，许多时候的孤寂也好过多了，毕竟大多人是孤寂的。</p>
+<p>大一已经恍恍惚惚地溷过去了，显得随意，奔放不羁。期间经历的不多也不少，暑假在家的日子也是时刻去审视这一年来的日子是否能让人念念不忘，是否能让自己觉得不虚度。现在想来随性而过的日子毕竟是凤毛麟角，许多时候性情毕竟和心意相违，而一旦牵连到周遭的事，一年下来也没有几天是能完完全全按着自己既定的轨迹运行。而一旦有了担当的责任与意识，想置身事外便很难了。</p>
+<p>我是个很懒的人，大一大部分的日子是在懒散中消散。许多时候知道这种懒散会慢性循环，而自己却依旧无可奈何，想来这便是意志力的缺乏吧。好在生活并不是一如既往的无解，技术带给了我些许解脱与释怀。许多烦恼与担忧被技术冲澹，许多时候的孤寂也好过多了，毕竟大多人是孤寂的。</p>
 
 <blockquote>
 <p>性格决定命运。</p>
