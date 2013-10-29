@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Maintainable Javascript Part One - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=7f42a" />
+    <link rel="stylesheet" href="/static/pygments.css?v=c6adc" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/maintainable-javascript-1" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Maintainable Javascript Part One</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2013-10-28T00:00:00+08:00" pubdate>
+            <a href="/2013/">2013-10-28</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <p>Last two days I just have finished the book 《Maintainable Javascript》.</p>
+
+<blockquote>
+<p>When you come to work, you&#39;re not writing code for you, you&#39;re
+writing code for those who come after you.</p>
+</blockquote>
+<p>I really like the words above the author Nicholas C. Zakas said, and this book really
+improves someone who may not work in professional team like me, or someone who wants to organize a team.Below is just my note that I regard it useful, and it may not really meets you.</p>
+
+<h2 id="toc_0">Part one ：Style Guidelines</h2>
+
+<blockquote>
+<p>Programs are meant to be read by humans and only incidentally for computers to execute.</p>
+</blockquote>
+
+<h4 id="toc_1">null</h4>
+<p><strong><code>null</code></strong> should be used in just a few cases:</p>
+
+<ol>
+<li>To initialize a variable that may later be assigned an object value</li>
+<li>To compare against an initialized variable that may or may not have an object value.</li>
+<li>To pass into a function where an object is expected</li>
+<li>To return from a function where an object is expected</li>
+</ol>
+<p>And the best way to think about null is as a placeholder for an object. </p>
+
+<h4 id="toc_2">for-in loop</h4>
+<p>As <code>for-in</code> loop returns not only instance properties of an object but also all
+properties it inherits through the prototype.Hence, it is best to filter the <code>for-in</code> loop to only instance properties by using <code>hasOwnProperty()</code>.</p>
+
+<pre><code>var prop;
+
+for (prop in object) {
+    if (object.hasOwnProperty(prop)) {
+        console.log(&quot;Property name is&quot; + prop);
+        console.log(&quot;Property value is&quot; + object[prop]);
+    }
+}</code></pre>
+<p>And remember do not use <code>for-in</code> to iterate over members of an array.</p>
+
+<h4 id="toc_3">Equality</h4>
+<p>One of the main areas in which <strong>type coercion</strong> occurs is with the use of equality operators, <code>==</code> and <code>!=</code>. </p>
+<p>And <strong>other points</strong> in this part I just easily skip.</p>
+
+<h2 id="toc_4">Part two ：Programming Practices</h2>
+
+<h3 id="toc_5">Loose Coupling of UI Layers</h3>
+<p>Loose coupling is achieved when you are able to make changes to a single component without making changes to other components. And it is achieved by limiting each component&#39;s knowledge of the larger system.</p>
+
+<ul>
+<li>Keep JavaScript Out of CSS (css expression denied)</li>
+<li>Keep CSS Out of JavaScript</li>
+<li><strong>Keep JavaScript Out of HTML</strong></li>
+</ul>
+
+<pre><code>//ugly code
+&lt;button onclick=&quot;doSomething()&quot; id=&quot;action-btn&quot;&gt;Click Me&lt;/button&gt;
+
+//use JavaScript methods for adding event handlers
+function addListener(target, type, handler) {
+    if (target.addEventListener) {
+        target.addEventListener(type, handler, false);
+    } else if (target.attachEvent) {
+        target.attachEvent(&quot;on&quot; + type, handler);
+    } else {
+        target[&quot;on&quot; + type] = handler;
+    }
+}
+var btn = document.getElementById(&quot;action-btn&quot;);
+addListener(btn, &quot;click&quot;, doSomething);</code></pre>
+
+<ul>
+<li><strong>Keep HTML Out of JavaScript</strong></li>
+</ul>
+
+<pre><code>//Bad 
+var div = document.getElementById(&quot;my-div&quot;);
+div.innerHTML = &quot;&lt;h3&gt;Error&lt;/h3&gt;&lt;p&gt;Invalid e-mail address.&lt;/p&gt;&quot;;</code></pre>
+<p>Embedding HTML strings inside your JavaScript is a bad practice for a number of
+reasons.And there are several ways to accomplish this in a loosely coupled manner.</p>
+
+<h4 id="toc_6"><strong>Load from the Server</strong></h4>
+<p>keep the templates remote and use an XMLHttpRequest object to retrieve
+additional markup, it is much more convenient for single-page applications than 
+multiple-page applications. But when using this method, you should pay attention 
+to <code>XSS</code> attack, and it requires lots of transcode and decode strategy between client and server to defense.</p>
+
+<pre><code>function loadDialog(name, oncomplete) {
+    var xhr = new XMLHttpRequest();
+    xhr.open(&quot;get&quot;, &quot;/js/dialog/&quot; + name, true);
+
+    xhr.onreadystatechange = function() {
+
+        if (xhr.readyState == 4 &amp;&amp; xhr.status == 200) {
+
+            var div = document.getElementById(&quot;dlg-holder&quot;);
+            div.innerHTML = xhr.responseText;
+            oncomplete();
+
+        } else {
+            //wrong handler
+        }
+    };
+
+    xhr.send(null);
+}</code></pre>
+
+<h4 id="toc_7">Simple Client-Side Templates</h4>
+
+<h4 id="toc_8">Complex Client-Side Templates</h4>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        <a href="/tag/javascript/">Javascript</a><a href="/tag/maintainable/">maintainable</a>
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Maintainable Javascript Part One';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://facebook.com/Tinple">Facebook</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+      <p class="copyright">
+      <span class="software">
+        Powered by <a href="http://lab.lepture.com/liquidluck/">Felix Felicis</a> 3.8.1,
+      </span>
+      <span class="theme">
+        Theme <a href="https://github.com/lepture/liquidluck-theme-moment" rel="nofollow">moment</a> 2.0 by <a href="http://lepture.com">Hsiaoming Yang</a>
+      </span>
+      </p>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>
