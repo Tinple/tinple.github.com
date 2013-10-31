@@ -55,14 +55,168 @@
         </span>
     </div>
     <div class="entry-content">
-        <h2 id="toc_0">Part three ：Automation</h2>
+        <p><strong>Maintainable Javascript continue</strong>, you can read <a href="http://tinple.me/tech/maintainable-javascript-1">Part One</a> to review.</p>
 
-<h4 id="toc_1">Useful tools：</h4>
+<h3 id="toc_0">Avoid Globals</h3>
+<p>Global variables are really special in <code>Javascript</code>, see examples below.</p>
+
+<pre><code>// A &quot;mistake&quot; semicolon creates a global variable
+function doSomething() {
+    var count = 10; 
+        title = &quot;Maintainable Javascript&quot;; 
+}
+
+// This global variable affects window.name
+function doAnotherThing() {
+    var count = 10;
+        name = &quot;Tinple&quot;; 
+}</code></pre>
+<p>And the author recommends that anything that can be defined within the function should be written as such; any data that comes from outside the function should be passed in as an argument. Besides, it is better to use *<em>The One-Global Approach
+*</em>, like some popular <code>JavaScript libraries</code>.</p>
+
+<pre><code>// only one gloabal object
+var MaintainableJS = {};
+
+MaintainableJS.Book = function(title) {
+    this.title = title;
+    this.page = 1;
+};
+
+MaintainableJS.Book.prototype.turnPage = function(direction) {
+    this.page += direction;
+};
+
+MaintainableJS.Chapter1 = new MaintainableJS.Book(&quot;part-one&quot;);
+MaintainableJS.Chapter2 = new MaintainableJS.Book(&quot;part-two&quot;);
+MaintainableJS.Chapter3 = new MaintainableJS.Book(&quot;part-three&quot;);</code></pre>
+
+<h3 id="toc_1">Namespace</h3>
+<p>And you can easily create your own namespaces in <code>JavaScript</code> with objects.</p>
+
+<pre><code>var Books = {};
+
+// namespace for this book
+Books.MaintainableJavascript = {};
+
+//namespace for another book
+Books.HighPerformanceJavascript = {};</code></pre>
+<p>There are also times when each file is simply adding to a namespace.</p>
+
+<pre><code>var YourGlobal = {
+    namespace: function(ns) {
+        var parts = ns.split(&quot;.&quot;),
+            object = this,
+            i, len;
+
+        for (i = 0, len = parts.length; i &lt; len; i++) {
+            if (!object[parts[i]]) {
+                object[parts[i]] = {};
+            }
+            object = object[parts[i]];
+        }
+
+        return object;
+    }
+};
+
+/*
+* Creates both YourGlobal.Books and YourGlobal.Books.MaintainableJavaScript.
+* Neither exists before hand, so each is created from scratch.
+*/
+YourGlobal.namespace(&quot;Books.MaintainableJavaScript&quot;);
+
+// you can now start using the namespace
+YourGlobal.Books.MaintainableJavaScript.author = &quot;Nicholas C. Zakas&quot;;
+
+/*
+* Leaves YourGlobal.Books alone and adds HighPerformanceJavaScript to it.
+* This leaves YourGlobal.Books.MaintainableJavaScript intact.
+*/
+YourGlobal.namespace(&quot;Books.HighPerformanceJavaScript&quot;);
+
+// still a valid reference
+console.log(YourGlobal.Books.MaintainableJavaScript.author);
+
+// You can also start adding new properties right off the method call
+YourGlobal.namespace(&quot;Books&quot;).ANewBook = {};</code></pre>
+
+<h3 id="toc_2">Modules</h3>
+<p>Sorry, but I will try to understand it entirely later.You can read some documents
+at will.</p>
+
+<blockquote>
+<p><a href="http://seajs.org/docs/">Sea.js</a></p>
+<p><a href="http://requirejs.org/">Require.js</a></p>
+</blockquote>
+
+<h3 id="toc_3">Event Handling</h3>
+<p>Event handling is an important part of any JavaScript application. All  JavaScript is tied to the UI through events.And the following rules may improve your code.</p>
+
+<pre><code>// Rule #1
+// It is better to separate application logic
+var MyApplication = {
+
+    handleClick: function(event) {
+        this.showPopup(event);
+    },
+
+    showPopup: function(event) {
+        var popup = document.getElementById(&quot;popup&quot;);
+        popup.style.left = event.clientX + &quot;px&quot;;
+        popup.style.top = event.clientY + &quot;px&quot;;
+        popup.className = &quot;reveal&quot;;
+    }
+};
+
+addListener(element, &quot;click&quot;, function(event) {
+    MyApplication.handleClick(event);
+});
+
+// Rule #2
+// Do not Pass the Event Object Around
+var MyApplication = {
+
+    handleClick: function(event) {
+
+        // assume DOM Level 2 events support
+        event.preventDefault();
+        event.stopPropagation();
+
+        // pass to application logic
+        this.showPopup(event.clientX, event.clientY);
+    },
+
+    showPopup: function(x, y) {
+        var popup = document.getElementById(&quot;popup&quot;);
+        popup.style.left = x + &quot;px&quot;;
+        popup.style.top = y + &quot;px&quot;;
+        popup.className = &quot;reveal&quot;;
+    }
+};
+
+addListener(element, &quot;click&quot;, function(event) {
+    MyApplication.handleClick(event);
+});</code></pre>
+
+<h3 id="toc_4">Avoid Null Comparisons</h3>
 
 <ul>
-<li>JSLint</li>
-<li>JSHint</li>
+<li>Use <code>typeof</code> operator to detect <strong>Primitive Values (string, number, boolean, undefined)</strong></li>
+<li>Use <code>instanceof</code> operator to detect <strong>Reference Values (Obejct, Array, Date, Error, RegExp)</strong></li>
+<li>Use <code>typeof</code> operator to detect <strong>Functions (also works across frames
+but not IE8)</strong></li>
+<li>Use <code>in</code> operator to detect <strong>the presence of a property (hasOwnProperty() to make sure of an instance property)</strong></li>
+<li>Detect <strong>Array</strong></li>
 </ul>
+
+<pre><code>function isArray(value) {
+    if (typeof Array.isArray === &quot;function&quot;) {
+        return Array.isArray(value);
+    } else {
+        return Object.prototype.toString.call(value) === &quot;[object Array]&quot;;
+    }
+}</code></pre>
+<p><strong>Maintainable Javascript Part One over</strong>.</p>
 
     </div>
 

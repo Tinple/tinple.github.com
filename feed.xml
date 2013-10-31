@@ -3,14 +3,14 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2013-10-29T21:35:30+08:00</updated>
+    <updated>2013-10-31T19:46:36+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
         <title type="html"><![CDATA[Monthly review for Oct.2013]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/life/monthly-review-for-oct-2013"/>
         <published>2013-11-01T00:00:00+08:00</published>
-        <updated>2013-10-29T21:35:30+08:00</updated>
+        <updated>2013-10-29T21:41:53+08:00</updated>
         <id>http://tinple.me/life/monthly-review-for-oct-2013</id>
         <category scheme="http://tinple.me/tag/month-review/" term="month-review" label="month-review" />
         <category scheme="http://tinple.me/tag/life/" term="life" label="life" />
@@ -49,19 +49,173 @@
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/maintainable-javascript-2"/>
         <published>2013-10-30T00:00:00+08:00</published>
-        <updated>2013-10-29T21:19:59+08:00</updated>
+        <updated>2013-10-31T19:46:36+08:00</updated>
         <id>http://tinple.me/tech/maintainable-javascript-2</id>
         <category scheme="http://tinple.me/tag/javascript/" term="Javascript" label="Javascript" />
         <category scheme="http://tinple.me/tag/maintainable/" term="maintainable" label="maintainable" />
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <h2 id="toc_0">Part three ：Automation</h2>
+            <![CDATA[ <p><strong>Maintainable Javascript continue</strong>, you can read <a href="http://tinple.me/tech/maintainable-javascript-1">Part One</a> to review.</p>
 
-<h4 id="toc_1">Useful tools：</h4>
+<h3 id="toc_0">Avoid Globals</h3>
+<p>Global variables are really special in <code>Javascript</code>, see examples below.</p>
+
+<pre><code>// A &quot;mistake&quot; semicolon creates a global variable
+function doSomething() {
+    var count = 10; 
+        title = &quot;Maintainable Javascript&quot;; 
+}
+
+// This global variable affects window.name
+function doAnotherThing() {
+    var count = 10;
+        name = &quot;Tinple&quot;; 
+}</code></pre>
+<p>And the author recommends that anything that can be defined within the function should be written as such; any data that comes from outside the function should be passed in as an argument. Besides, it is better to use *<em>The One-Global Approach
+*</em>, like some popular <code>JavaScript libraries</code>.</p>
+
+<pre><code>// only one gloabal object
+var MaintainableJS = {};
+
+MaintainableJS.Book = function(title) {
+    this.title = title;
+    this.page = 1;
+};
+
+MaintainableJS.Book.prototype.turnPage = function(direction) {
+    this.page += direction;
+};
+
+MaintainableJS.Chapter1 = new MaintainableJS.Book(&quot;part-one&quot;);
+MaintainableJS.Chapter2 = new MaintainableJS.Book(&quot;part-two&quot;);
+MaintainableJS.Chapter3 = new MaintainableJS.Book(&quot;part-three&quot;);</code></pre>
+
+<h3 id="toc_1">Namespace</h3>
+<p>And you can easily create your own namespaces in <code>JavaScript</code> with objects.</p>
+
+<pre><code>var Books = {};
+
+// namespace for this book
+Books.MaintainableJavascript = {};
+
+//namespace for another book
+Books.HighPerformanceJavascript = {};</code></pre>
+<p>There are also times when each file is simply adding to a namespace.</p>
+
+<pre><code>var YourGlobal = {
+    namespace: function(ns) {
+        var parts = ns.split(&quot;.&quot;),
+            object = this,
+            i, len;
+
+        for (i = 0, len = parts.length; i &lt; len; i++) {
+            if (!object[parts[i]]) {
+                object[parts[i]] = {};
+            }
+            object = object[parts[i]];
+        }
+
+        return object;
+    }
+};
+
+/*
+* Creates both YourGlobal.Books and YourGlobal.Books.MaintainableJavaScript.
+* Neither exists before hand, so each is created from scratch.
+*/
+YourGlobal.namespace(&quot;Books.MaintainableJavaScript&quot;);
+
+// you can now start using the namespace
+YourGlobal.Books.MaintainableJavaScript.author = &quot;Nicholas C. Zakas&quot;;
+
+/*
+* Leaves YourGlobal.Books alone and adds HighPerformanceJavaScript to it.
+* This leaves YourGlobal.Books.MaintainableJavaScript intact.
+*/
+YourGlobal.namespace(&quot;Books.HighPerformanceJavaScript&quot;);
+
+// still a valid reference
+console.log(YourGlobal.Books.MaintainableJavaScript.author);
+
+// You can also start adding new properties right off the method call
+YourGlobal.namespace(&quot;Books&quot;).ANewBook = {};</code></pre>
+
+<h3 id="toc_2">Modules</h3>
+<p>Sorry, but I will try to understand it entirely later.You can read some documents
+at will.</p>
+
+<blockquote>
+<p><a href="http://seajs.org/docs/">Sea.js</a></p>
+<p><a href="http://requirejs.org/">Require.js</a></p>
+</blockquote>
+
+<h3 id="toc_3">Event Handling</h3>
+<p>Event handling is an important part of any JavaScript application. All  JavaScript is tied to the UI through events.And the following rules may improve your code.</p>
+
+<pre><code>// Rule #1
+// It is better to separate application logic
+var MyApplication = {
+
+    handleClick: function(event) {
+        this.showPopup(event);
+    },
+
+    showPopup: function(event) {
+        var popup = document.getElementById(&quot;popup&quot;);
+        popup.style.left = event.clientX + &quot;px&quot;;
+        popup.style.top = event.clientY + &quot;px&quot;;
+        popup.className = &quot;reveal&quot;;
+    }
+};
+
+addListener(element, &quot;click&quot;, function(event) {
+    MyApplication.handleClick(event);
+});
+
+// Rule #2
+// Do not Pass the Event Object Around
+var MyApplication = {
+
+    handleClick: function(event) {
+
+        // assume DOM Level 2 events support
+        event.preventDefault();
+        event.stopPropagation();
+
+        // pass to application logic
+        this.showPopup(event.clientX, event.clientY);
+    },
+
+    showPopup: function(x, y) {
+        var popup = document.getElementById(&quot;popup&quot;);
+        popup.style.left = x + &quot;px&quot;;
+        popup.style.top = y + &quot;px&quot;;
+        popup.className = &quot;reveal&quot;;
+    }
+};
+
+addListener(element, &quot;click&quot;, function(event) {
+    MyApplication.handleClick(event);
+});</code></pre>
+
+<h3 id="toc_4">Avoid Null Comparisons</h3>
 
 <ul>
-<li>JSLint</li>
-<li>JSHint</li>
+<li>Use <code>typeof</code> operator to detect <strong>Primitive Values (string, number, boolean, undefined)</strong></li>
+<li>Use <code>instanceof</code> operator to detect <strong>Reference Values (Obejct, Array, Date, Error, RegExp)</strong></li>
+<li>Use <code>typeof</code> operator to detect <strong>Functions (also works across frames
+but not IE8)</strong></li>
+<li>Use <code>in</code> operator to detect <strong>the presence of a property (hasOwnProperty() to make sure of an instance property)</strong></li>
+<li>Detect <strong>Array</strong></li>
 </ul>
+
+<pre><code>function isArray(value) {
+    if (typeof Array.isArray === &quot;function&quot;) {
+        return Array.isArray(value);
+    } else {
+        return Object.prototype.toString.call(value) === &quot;[object Array]&quot;;
+    }
+}</code></pre>
+<p><strong>Maintainable Javascript Part One over</strong>.</p>
 ]]>
         </content>
     </entry><entry>
@@ -69,7 +223,7 @@
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/maintainable-javascript-1"/>
         <published>2013-10-28T00:00:00+08:00</published>
-        <updated>2013-10-29T21:25:57+08:00</updated>
+        <updated>2013-10-31T19:12:46+08:00</updated>
         <id>http://tinple.me/tech/maintainable-javascript-1</id>
         <category scheme="http://tinple.me/tag/javascript/" term="Javascript" label="Javascript" />
         <category scheme="http://tinple.me/tag/maintainable/" term="maintainable" label="maintainable" />
@@ -81,7 +235,8 @@
 writing code for those who come after you.</p>
 </blockquote>
 <p>I really like the words above the author Nicholas C. Zakas said, and this book really
-improves someone who may not work in professional team like me, or someone who wants to organize a team.Below is just my note that I regard it useful, and it may not really meets you.</p>
+improves someone who may not work in professional team like me, or someone who wants to organize a team.The
+following is just my note that I regard it useful, but it may not really meets you.</p>
 
 <h2 id="toc_0">Part one ：Style Guidelines</h2>
 
@@ -129,10 +284,10 @@ for (prop in object) {
 <li><strong>Keep JavaScript Out of HTML</strong></li>
 </ul>
 
-<pre><code>//ugly code
+<pre><code>// ugly code
 &lt;button onclick=&quot;doSomething()&quot; id=&quot;action-btn&quot;&gt;Click Me&lt;/button&gt;
 
-//use JavaScript methods for adding event handlers
+// use JavaScript methods for adding event handlers
 function addListener(target, type, handler) {
     if (target.addEventListener) {
         target.addEventListener(type, handler, false);
@@ -149,7 +304,7 @@ addListener(btn, &quot;click&quot;, doSomething);</code></pre>
 <li><strong>Keep HTML Out of JavaScript</strong></li>
 </ul>
 
-<pre><code>//Bad 
+<pre><code>// Bad 
 var div = document.getElementById(&quot;my-div&quot;);
 div.innerHTML = &quot;&lt;h3&gt;Error&lt;/h3&gt;&lt;p&gt;Invalid e-mail address.&lt;/p&gt;&quot;;</code></pre>
 <p>Embedding HTML strings inside your JavaScript is a bad practice for a number of
@@ -174,7 +329,7 @@ to <code>XSS</code> attack, and it requires lots of transcode and decode strateg
             oncomplete();
 
         } else {
-            //wrong handler
+            // wrong handler
         }
     };
 
@@ -182,8 +337,38 @@ to <code>XSS</code> attack, and it requires lots of transcode and decode strateg
 }</code></pre>
 
 <h4 id="toc_7">2.Simple Client-Side Templates</h4>
+<p>Client-side Templates are markup pieces with slots that must be filled by JavaScript in order to be complete.For example:</p>
+
+<pre><code>&lt;li&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;</code></pre>
+<p>And you can make templates accessible to Javascript by embedding them directly
+in the HTML page.Maybe a function will make it.</p>
+
+<pre><code>function sprintf(text) {
+    var i = 1, args = arguments;
+    return text.replace(/%s/g, function() {
+        return (i &lt; args.length) ? args[i++] : &quot;&quot;;
+    });
+}
+
+// usage
+var result = sprintf(templateText, &quot;/item/4&quot;, &quot;Fourth item&quot;);</code></pre>
+<p>It is ok to include the templates as an comment or embed templates into an HTML
+page by using a <code>&lt;script&gt;</code> element with a custom <code>type</code> property.</p>
+
+<pre><code>// comment
+&lt;ul id=&quot;mylist&quot;&gt;&lt;!--&lt;li id=&quot;item%s&quot;&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;--&gt;
+&lt;/ul&gt;
+
+/* script element, remember to strip any leading white space 
+that may be in the template, because template text is  
+on the line after the opening &lt;script&gt; tag */
+&lt;script type=&quot;text/x-my-template&quot; id=&quot;list-item&quot;&gt;
+    &lt;li&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;
+&lt;/script&gt;</code></pre>
 
 <h4 id="toc_8">3.Complex Client-Side Templates</h4>
+<p>Complex Client-Side Templates may do some escaping, well, you can use some robust templates like <a href="http://handlebarsjs.com/">Handlebars</a>, which is a complete client-side templating system designed to work with JavaScript in the browser.</p>
+<p><strong>Maintainable Javascript Part One over</strong>.</p>
 ]]>
         </content>
     </entry><entry>

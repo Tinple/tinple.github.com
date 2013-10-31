@@ -62,7 +62,8 @@
 writing code for those who come after you.</p>
 </blockquote>
 <p>I really like the words above the author Nicholas C. Zakas said, and this book really
-improves someone who may not work in professional team like me, or someone who wants to organize a team.Below is just my note that I regard it useful, and it may not really meets you.</p>
+improves someone who may not work in professional team like me, or someone who wants to organize a team.The
+following is just my note that I regard it useful, but it may not really meets you.</p>
 
 <h2 id="toc_0">Part one ：Style Guidelines</h2>
 
@@ -110,10 +111,10 @@ for (prop in object) {
 <li><strong>Keep JavaScript Out of HTML</strong></li>
 </ul>
 
-<pre><code>//ugly code
+<pre><code>// ugly code
 &lt;button onclick=&quot;doSomething()&quot; id=&quot;action-btn&quot;&gt;Click Me&lt;/button&gt;
 
-//use JavaScript methods for adding event handlers
+// use JavaScript methods for adding event handlers
 function addListener(target, type, handler) {
     if (target.addEventListener) {
         target.addEventListener(type, handler, false);
@@ -130,7 +131,7 @@ addListener(btn, &quot;click&quot;, doSomething);</code></pre>
 <li><strong>Keep HTML Out of JavaScript</strong></li>
 </ul>
 
-<pre><code>//Bad 
+<pre><code>// Bad 
 var div = document.getElementById(&quot;my-div&quot;);
 div.innerHTML = &quot;&lt;h3&gt;Error&lt;/h3&gt;&lt;p&gt;Invalid e-mail address.&lt;/p&gt;&quot;;</code></pre>
 <p>Embedding HTML strings inside your JavaScript is a bad practice for a number of
@@ -155,7 +156,7 @@ to <code>XSS</code> attack, and it requires lots of transcode and decode strateg
             oncomplete();
 
         } else {
-            //wrong handler
+            // wrong handler
         }
     };
 
@@ -163,8 +164,38 @@ to <code>XSS</code> attack, and it requires lots of transcode and decode strateg
 }</code></pre>
 
 <h4 id="toc_7">2.Simple Client-Side Templates</h4>
+<p>Client-side Templates are markup pieces with slots that must be filled by JavaScript in order to be complete.For example:</p>
+
+<pre><code>&lt;li&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;</code></pre>
+<p>And you can make templates accessible to Javascript by embedding them directly
+in the HTML page.Maybe a function will make it.</p>
+
+<pre><code>function sprintf(text) {
+    var i = 1, args = arguments;
+    return text.replace(/%s/g, function() {
+        return (i &lt; args.length) ? args[i++] : &quot;&quot;;
+    });
+}
+
+// usage
+var result = sprintf(templateText, &quot;/item/4&quot;, &quot;Fourth item&quot;);</code></pre>
+<p>It is ok to include the templates as an comment or embed templates into an HTML
+page by using a <code>&lt;script&gt;</code> element with a custom <code>type</code> property.</p>
+
+<pre><code>// comment
+&lt;ul id=&quot;mylist&quot;&gt;&lt;!--&lt;li id=&quot;item%s&quot;&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;--&gt;
+&lt;/ul&gt;
+
+/* script element, remember to strip any leading white space 
+that may be in the template, because template text is  
+on the line after the opening &lt;script&gt; tag */
+&lt;script type=&quot;text/x-my-template&quot; id=&quot;list-item&quot;&gt;
+    &lt;li&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;
+&lt;/script&gt;</code></pre>
 
 <h4 id="toc_8">3.Complex Client-Side Templates</h4>
+<p>Complex Client-Side Templates may do some escaping, well, you can use some robust templates like <a href="http://handlebarsjs.com/">Handlebars</a>, which is a complete client-side templating system designed to work with JavaScript in the browser.</p>
+<p><strong>Maintainable Javascript Part One over</strong>.</p>
 
     </div>
 
