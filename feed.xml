@@ -3,7 +3,7 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2013-10-31T19:46:36+08:00</updated>
+    <updated>2013-10-31T19:51:38+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
         <title type="html"><![CDATA[Monthly review for Oct.2013]]></title>
@@ -49,7 +49,7 @@
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/maintainable-javascript-2"/>
         <published>2013-10-30T00:00:00+08:00</published>
-        <updated>2013-10-31T19:46:36+08:00</updated>
+        <updated>2013-10-31T19:51:38+08:00</updated>
         <id>http://tinple.me/tech/maintainable-javascript-2</id>
         <category scheme="http://tinple.me/tag/javascript/" term="Javascript" label="Javascript" />
         <category scheme="http://tinple.me/tag/maintainable/" term="maintainable" label="maintainable" />
@@ -70,8 +70,7 @@ function doAnotherThing() {
     var count = 10;
         name = &quot;Tinple&quot;; 
 }</code></pre>
-<p>And the author recommends that anything that can be defined within the function should be written as such; any data that comes from outside the function should be passed in as an argument. Besides, it is better to use *<em>The One-Global Approach
-*</em>, like some popular <code>JavaScript libraries</code>.</p>
+<p>And the author recommends that anything that can be defined within the function should be written as such; any data that comes from outside the function should be passed in as an argument. Besides, it is better to use <strong>The One-Global Approach</strong>, like some popular <code>JavaScript libraries</code>.</p>
 
 <pre><code>// only one gloabal object
 var MaintainableJS = {};
@@ -149,7 +148,7 @@ at will.</p>
 </blockquote>
 
 <h3 id="toc_3">Event Handling</h3>
-<p>Event handling is an important part of any JavaScript application. All  JavaScript is tied to the UI through events.And the following rules may improve your code.</p>
+<p>Event handling is an important part of any JavaScript application. All JavaScript is tied to the UI through events.And the following rules may improve your code.</p>
 
 <pre><code>// Rule #1
 // It is better to separate application logic
@@ -215,7 +214,7 @@ but not IE8)</strong></li>
         return Object.prototype.toString.call(value) === &quot;[object Array]&quot;;
     }
 }</code></pre>
-<p><strong>Maintainable Javascript Part One over</strong>.</p>
+<p><strong>Maintainable Javascript Part Two over</strong>.</p>
 ]]>
         </content>
     </entry><entry>
