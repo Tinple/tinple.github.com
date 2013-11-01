@@ -60,156 +60,156 @@
 <h3 id="toc_1">Answer:</h3>
 
 <h4 id="toc_2">Question 1:</h4>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<pre><code>#include &lt;iostream&gt;
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-using namespace std;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;请输入两个整数&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">;</span>
 
-int main() {
-    int a, b;
-    cout &lt;&lt; &quot;请输入两个整数&quot; &lt;&lt; endl;
-    cin &gt;&gt; a &gt;&gt; b;
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span> <span class="n">elseif</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;两个数相等&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    if (a &gt; b) {
-        cout&lt;&lt; a &lt;&lt; endl;
-    } elseif (a &lt; b) {
-        cout &lt;&lt; b &lt;&lt; endl;
-    } else {
-        cout &lt;&lt; &quot;两个数相等&quot; &lt;&lt; endl;
-    }
-
-    return 0;
-}</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 
 <h4 id="toc_3">Question 2:</h4>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<pre><code>#include &lt;iostream&gt;
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-using namespace std;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 
-int main() {
+    <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;请输入两个数，第一个为整数，第二个为浮点数&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">;</span>
 
-    int a;
-    double b;
-    cout &lt;&lt; &quot;请输入两个数，第一个为整数，第二个为浮点数&quot; &lt;&lt; endl;
-    cin &gt;&gt; a &gt;&gt; b;
+    <span class="k">if</span><span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span> <span class="n">elseif</span> <span class="p">(</span><span class="n">a</span><span class="o">&lt;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+       <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;两个数相等&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    if(a &gt; b) {
-        cout &lt;&lt; a &lt;&lt; endl;
-    } elseif (a&lt;b) {
-        cout &lt;&lt; b &lt;&lt; endl;
-    } else {
-       cout &lt;&lt; &quot;两个数相等&quot; &lt;&lt; endl;
-    }
-
-    return 0;
-}</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 
 <h4 id="toc_4">Question 3:</h4>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<pre><code>#include &lt;iostream&gt;
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-using namespace std;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 
-int main() {
+   <span class="kt">double</span> <span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;请输入摄氏温度&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">c</span><span class="p">;</span>
 
-   double f, c;
-   cout &lt;&lt; &quot;请输入摄氏温度&quot; &lt;&lt; endl;
-   cin &gt;&gt; c;
+   <span class="n">f</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mf">9.0</span> <span class="o">/</span> <span class="mf">5.0</span> <span class="o">+</span> <span class="mf">21.0</span><span class="p">;</span>
 
-   f = c * 9.0 / 5.0 + 21.0;
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;转换为华氏温度&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">f</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 
-   cout &lt;&lt; &quot;转换为华氏温度&quot; &lt;&lt; f &lt;&lt; endl;
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 
-   return 0;
-
-}</code></pre>
+<span class="p">}</span>
+</pre></div>
 
 <h4 id="toc_5">Question 4.1:</h4>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<pre><code>#include &lt;iostream&gt;
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-using namespace std;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 
-int main() {
+   <span class="kt">double</span> <span class="n">miles</span><span class="p">,</span> <span class="n">kilometres</span><span class="p">;</span>
+   <span class="k">const</span> <span class="kt">double</span> <span class="n">N</span> <span class="o">=</span> <span class="mf">1.60934</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;请输入metres&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">kilometres</span><span class="p">;</span>
+   <span class="n">miles</span> <span class="o">=</span> <span class="n">kilometres</span> <span class="o">/</span> <span class="n">N</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;转换miles为&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">miles</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 
-   double miles, kilometres;
-   const double N = 1.60934;
-   cout &lt;&lt; &quot;请输入metres&quot; &lt;&lt; endl;
-   cin &gt;&gt; kilometres;
-   miles = kilometres / N;
-   cout &lt;&lt; &quot;转换miles为&quot; &lt;&lt; endl;
-   cout &lt;&lt; miles &lt;&lt; endl;
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 
-   return 0;
-
-}</code></pre>
+<span class="p">}</span>
+</pre></div>
 
 <h4 id="toc_6">Question 4.2:</h4>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<pre><code>#include &lt;iostream&gt;
+<span class="cp">#define N 1.60934</span>
 
-#define N 1.60934
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-using namespace std;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 
-int main() {
+   <span class="kt">double</span> <span class="n">miles</span><span class="p">,</span> <span class="n">metres</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;请输入metres&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">metres</span><span class="p">;</span>
+   <span class="n">miles</span> <span class="o">=</span> <span class="n">metres</span> <span class="o">/</span> <span class="n">N</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;转换miles为&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">miles</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 
-   double miles, metres;
-   cout &lt;&lt; &quot;请输入metres&quot; &lt;&lt; endl;
-   cin &gt;&gt; metres;
-   miles = metres / N;
-   cout &lt;&lt; &quot;转换miles为&quot; &lt;&lt; endl;
-   cout &lt;&lt; miles &lt;&lt; endl;
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 
-   return 0;
-
-}</code></pre>
+<span class="p">}</span>
+</pre></div>
 
 <h4 id="toc_7">Question 5:</h4>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<pre><code>#include &lt;iostream&gt;
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-using namespace std;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 
-int main() {
+   <span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="n">t</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;请输入一个整数&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num</span><span class="p">;</span>
 
-   int num, t;
-   cout &lt;&lt; &quot;请输入一个整数&quot; &lt;&lt; endl;
-   cin &gt;&gt; num;
+   <span class="n">t</span> <span class="o">=</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">10000</span><span class="p">;</span>
+   <span class="n">num</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1111</span><span class="p">;</span>
 
-   t = num % 10000;
-   num = num - t + 1111;
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;右四位变为1111&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">num</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 
-   cout &lt;&lt; &quot;右四位变为1111&quot; &lt;&lt; endl;
-   cout &lt;&lt; num &lt;&lt; endl;
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 
-   return 0;
-
-}</code></pre>
+<span class="p">}</span>
+</pre></div>
 
 <h2 id="toc_8">For 2013-10-16 C plus homework</h2>
 
 <h3 id="toc_9">链接错误</h3>
+<div class="highlight"><pre><span class="cp">#include&lt;iostream&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-<pre><code>#include&lt;iostream&gt;
-using namespace std;
-
-int main_fake() {
-    cout &lt;&lt; &quot;Hello World!&quot; &lt;&lt; endl;
-    return 0;
-}</code></pre>
+<span class="kt">int</span> <span class="nf">main_fake</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Hello World!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 <p><strong>MSVCRTD.lib(crtexe.obj) : error LNK2019: 无法解析的外部符号 <em>main，该符号在函数 _</em>_tmainCRTStartup 中被引用</strong></p>
 
 <h3 id="toc_10">编译错误</h3>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
-
-int main() {
-    cout2 &lt;&lt; &quot;Hello World!&quot; &lt;&lt; endl;
-    return 0;
-}</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">cout2</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Hello World!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 <p><strong>cout2: 未声明的标识符</strong></p>
 
 <h3 id="toc_11">运行错误 - 缺少运行库</h3>

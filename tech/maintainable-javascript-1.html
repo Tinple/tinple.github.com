@@ -85,15 +85,14 @@ following is just my note that I regard it useful, but it may not really meets y
 <h4 id="toc_2">for-in loop</h4>
 <p>As <code>for-in</code> loop returns not only instance properties of an object but also all
 properties it inherits through the prototype.Hence, it is best to filter the <code>for-in</code> loop to only instance properties by using <code>hasOwnProperty()</code>.</p>
-
-<pre><code>var prop;
-
-for (prop in object) {
-    if (object.hasOwnProperty(prop)) {
-        console.log(&quot;Property name is&quot; + prop);
-        console.log(&quot;Property value is&quot; + object[prop]);
-    }
-}</code></pre>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">prop</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="nx">prop</span> <span class="k">in</span> <span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">object</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Property name is&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Property value is&quot;</span> <span class="o">+</span> <span class="nx">object</span><span class="p">[</span><span class="nx">prop</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 <p>And remember do not use <code>for-in</code> to iterate over members of an array.</p>
 
 <h4 id="toc_3">Equality</h4>
@@ -110,30 +109,30 @@ for (prop in object) {
 <li>Keep CSS Out of JavaScript</li>
 <li><strong>Keep JavaScript Out of HTML</strong></li>
 </ul>
-
-<pre><code>// ugly code
-&lt;button onclick=&quot;doSomething()&quot; id=&quot;action-btn&quot;&gt;Click Me&lt;/button&gt;
-
-// use JavaScript methods for adding event handlers
-function addListener(target, type, handler) {
-    if (target.addEventListener) {
-        target.addEventListener(type, handler, false);
-    } else if (target.attachEvent) {
-        target.attachEvent(&quot;on&quot; + type, handler);
-    } else {
-        target[&quot;on&quot; + type] = handler;
-    }
-}
-var btn = document.getElementById(&quot;action-btn&quot;);
-addListener(btn, &quot;click&quot;, doSomething);</code></pre>
+<div class="highlight"><pre>// ugly code
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;doSomething()&quot;</span> <span class="na">id=</span><span class="s">&quot;action-btn&quot;</span><span class="nt">&gt;</span>Click Me<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="highlight"><pre><span class="c1">// use JavaScript methods for adding event handlers</span>
+<span class="kd">function</span> <span class="nx">addListener</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">target</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">target</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">(</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">target</span><span class="p">[</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="nx">handler</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">btn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;action-btn&quot;</span><span class="p">);</span>
+<span class="nx">addListener</span><span class="p">(</span><span class="nx">btn</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">doSomething</span><span class="p">);</span>
+</pre></div>
 
 <ul>
 <li><strong>Keep HTML Out of JavaScript</strong></li>
 </ul>
-
-<pre><code>// Bad 
-var div = document.getElementById(&quot;my-div&quot;);
-div.innerHTML = &quot;&lt;h3&gt;Error&lt;/h3&gt;&lt;p&gt;Invalid e-mail address.&lt;/p&gt;&quot;;</code></pre>
+<div class="highlight"><pre><span class="c1">// Bad </span>
+<span class="kd">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;my-div&quot;</span><span class="p">);</span>
+<span class="nx">div</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&lt;h3&gt;Error&lt;/h3&gt;&lt;p&gt;Invalid e-mail address.&lt;/p&gt;&quot;</span><span class="p">;</span>
+</pre></div>
 <p>Embedding HTML strings inside your JavaScript is a bad practice for a number of
 reasons.And there are several ways to accomplish this in a loosely coupled manner.</p>
 
@@ -142,53 +141,53 @@ reasons.And there are several ways to accomplish this in a loosely coupled manne
 additional markup, it is much more convenient for single-page applications than 
 multiple-page applications. But when using this method, you should pay attention 
 to <code>XSS</code> attack, and it requires lots of transcode and decode strategy between client and server to defense.</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">loadDialog</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">oncomplete</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+    <span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;/js/dialog/&quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 
-<pre><code>function loadDialog(name, oncomplete) {
-    var xhr = new XMLHttpRequest();
-    xhr.open(&quot;get&quot;, &quot;/js/dialog/&quot; + name, true);
+    <span class="nx">xhr</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
-    xhr.onreadystatechange = function() {
+        <span class="k">if</span> <span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
 
-        if (xhr.readyState == 4 &amp;&amp; xhr.status == 200) {
+            <span class="kd">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;dlg-holder&quot;</span><span class="p">);</span>
+            <span class="nx">div</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
+            <span class="nx">oncomplete</span><span class="p">();</span>
 
-            var div = document.getElementById(&quot;dlg-holder&quot;);
-            div.innerHTML = xhr.responseText;
-            oncomplete();
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c1">// wrong handler</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
 
-        } else {
-            // wrong handler
-        }
-    };
-
-    xhr.send(null);
-}</code></pre>
+    <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 
 <h4 id="toc_7">2.Simple Client-Side Templates</h4>
 <p>Client-side Templates are markup pieces with slots that must be filled by JavaScript in order to be complete.For example:</p>
-
-<pre><code>&lt;li&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;</code></pre>
+<div class="highlight"><pre><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;%s&quot;</span><span class="nt">&gt;</span>%s<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</pre></div>
 <p>And you can make templates accessible to Javascript by embedding them directly
 in the HTML page.Maybe a function will make it.</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">sprintf</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">text</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/%s/g</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="o">?</span> <span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="p">});</span>
+<span class="p">}</span>
 
-<pre><code>function sprintf(text) {
-    var i = 1, args = arguments;
-    return text.replace(/%s/g, function() {
-        return (i &lt; args.length) ? args[i++] : &quot;&quot;;
-    });
-}
-
-// usage
-var result = sprintf(templateText, &quot;/item/4&quot;, &quot;Fourth item&quot;);</code></pre>
+<span class="c1">// usage</span>
+<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">sprintf</span><span class="p">(</span><span class="nx">templateText</span><span class="p">,</span> <span class="s2">&quot;/item/4&quot;</span><span class="p">,</span> <span class="s2">&quot;Fourth item&quot;</span><span class="p">);</span>
+</pre></div>
 <p>It is ok to include the templates as an comment or embed templates into an HTML
 page by using a <code>&lt;script&gt;</code> element with a custom <code>type</code> property.</p>
+<div class="highlight"><pre>// comment
+<span class="nt">&lt;ul</span> <span class="na">id=</span><span class="s">&quot;mylist&quot;</span><span class="nt">&gt;</span><span class="c">&lt;!--&lt;li id=&quot;item%s&quot;&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;--&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+</pre></div>
 
-<pre><code>// comment
-&lt;ul id=&quot;mylist&quot;&gt;&lt;!--&lt;li id=&quot;item%s&quot;&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;--&gt;
-&lt;/ul&gt;
-
-/* script element, remember to strip any leading white space 
+<pre><code>/* script element, remember to strip any leading white space 
 that may be in the template, because template text is  
-on the line after the opening &lt;script&gt; tag */
+on the line after the opening script tag */
 &lt;script type=&quot;text/x-my-template&quot; id=&quot;list-item&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;
 &lt;/script&gt;</code></pre>

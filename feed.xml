@@ -3,9 +3,99 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2013-10-31T19:51:38+08:00</updated>
+    <updated>2013-11-01T23:48:04+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[Keyword &quot;this&quot; in Javascript]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/keyword-this-in-javascript"/>
+        <published>2013-11-01T00:00:00+08:00</published>
+        <updated>2013-11-01T23:48:04+08:00</updated>
+        <id>http://tinple.me/tech/keyword-this-in-javascript</id>
+        <category scheme="http://tinple.me/tag/this/" term="this" label="this" />
+        <category scheme="http://tinple.me/tag/javascript/" term="javascript" label="javascript" />
+        <category scheme="http://tinple.me/tag/oop/" term="oop" label="oop" />
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <p>I always get tripped up by the <code>this</code> keyword in <code>Javascript</code>.And everytime when I &ldquo;understand&rdquo; it, I still feel confused about
+it next time.Hence, this post is here.</p>
+<p>In fact, <code>this</code> follows a relatively small set of simple rules.</p>
+
+<h2 id="toc_0">Gloabal context</h2>
+<p>In the global execution context, <code>this</code> refers to the <strong>global object</strong>, whether in strict mode or not.</p>
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nb">document</span> <span class="o">===</span> <span class="nb">document</span><span class="p">);</span> <span class="c1">// true</span>
+
+<span class="c1">// In browser, the global object is the ```window``` object</span>
+<span class="c1">// In Node.js, it&#39;s just called the &quot;global object&quot;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span> <span class="o">===</span> <span class="nb">window</span><span class="p">);</span> <span class="c1">// true</span>
+
+<span class="k">this</span><span class="p">.</span><span class="nx">a</span> <span class="o">=</span> <span class="mi">37</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// 37</span>
+</pre></div>
+
+<h2 id="toc_1">Function context</h2>
+<p>A function&#39;s <code>this</code> keyword may behaves a little differently in <code>Javascript</code> compared to other languages.
+And there are three cases where the value of <code>this</code> changes.</p>
+
+<h3 id="toc_2">Method invocations</h3>
+<p>When a function is called as a method of an object, its <code>this</code> refers to the object the method is called on.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">creditCard</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">money</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">increment</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="mi">8888</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">// dot notation</span>
+<span class="nx">creditCard</span><span class="p">.</span><span class="nx">increment</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span>  <span class="c1">// 8888</span>
+
+<span class="c1">// bracket notation</span>
+<span class="nx">creditCard</span><span class="p">[</span><span class="s1">&#39;increment&#39;</span><span class="p">]();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// 17776</span>
+
+<span class="cm">/*****call the same function directly*****/</span>
+<span class="kd">var</span> <span class="nx">moreMoney</span> <span class="o">=</span> <span class="nx">creditCard</span><span class="p">.</span><span class="nx">increment</span><span class="p">;</span>
+<span class="nx">moreMoney</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// 17776</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// NAN</span>
+</pre></div>
+<p>Note that when we call the same function directly, <code>this</code> refers to the global object instead of <code>creditCard</code> object.</p>
+<div class="highlight"><pre><span class="c1">// window.money += 8888, but window.money is undefined </span>
+<span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="mi">8888</span><span class="p">;</span>
+</pre></div>
+<p>And what&#39;s more, this rule also works on the prototype chain.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">moneyUp</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">increment</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="mi">8888</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">creditCard</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">moneyUp</span><span class="p">);</span>
+<span class="nx">creditCard</span><span class="p">.</span><span class="nx">money</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">.</span><span class="nx">increment</span><span class="p">());</span>
+</pre></div>
+
+<h3 id="toc_3">The new operator</h3>
+<p>And when a function is used as a <strong>constructor</strong>(with the <code>new</code> keyword), its <code>this</code> is set to the newly created object.</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">CreditCard</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">=</span> <span class="mi">8888</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">savedMoney</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CreditCard</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">savedMoney</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// 8888</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">money</span><span class="p">);</span>  <span class="c1">// ReferenceError</span>
+
+<span class="c1">// And without new, </span>
+<span class="c1">// this refers to the global object</span>
+<span class="kd">var</span> <span class="nx">savedMoney_</span> <span class="o">=</span> <span class="nx">CreditCard</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">savedMoney_</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// undefined</span>
+</pre></div>
+
+<h3 id="toc_4">Call and apply</h3>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[Monthly review for Oct.2013]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/life/monthly-review-for-oct-2013"/>
@@ -49,7 +139,7 @@
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/maintainable-javascript-2"/>
         <published>2013-10-30T00:00:00+08:00</published>
-        <updated>2013-10-31T19:51:38+08:00</updated>
+        <updated>2013-11-01T09:07:33+08:00</updated>
         <id>http://tinple.me/tech/maintainable-javascript-2</id>
         <category scheme="http://tinple.me/tag/javascript/" term="Javascript" label="Javascript" />
         <category scheme="http://tinple.me/tag/maintainable/" term="maintainable" label="maintainable" />
@@ -59,84 +149,98 @@
 <h3 id="toc_0">Avoid Globals</h3>
 <p>Global variables are really special in <code>Javascript</code>, see examples below.</p>
 
-<pre><code>// A &quot;mistake&quot; semicolon creates a global variable
+<script>
+// A "mistake" semicolon creates a global variable
 function doSomething() {
     var count = 10; 
-        title = &quot;Maintainable Javascript&quot;; 
+        title = "Maintainable Javascript"; 
 }
 
 // This global variable affects window.name
 function doAnotherThing() {
     var count = 10;
-        name = &quot;Tinple&quot;; 
-}</code></pre>
+        name = "Tinple"; 
+}
+</script>
+<div class="highlight"><pre><span class="c1">// A &quot;mistake&quot; semicolon creates a global variable</span>
+<span class="kd">function</span> <span class="nx">doSomething</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> 
+        <span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Maintainable Javascript&quot;</span><span class="p">;</span> 
+<span class="p">}</span>
+
+<span class="c1">// This global variable affects window.name</span>
+<span class="kd">function</span> <span class="nx">doAnotherThing</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Tinple&quot;</span><span class="p">;</span> 
+<span class="p">}</span>
+</pre></div>
 <p>And the author recommends that anything that can be defined within the function should be written as such; any data that comes from outside the function should be passed in as an argument. Besides, it is better to use <strong>The One-Global Approach</strong>, like some popular <code>JavaScript libraries</code>.</p>
+<div class="highlight"><pre><span class="c1">// only one gloabal object</span>
+<span class="kd">var</span> <span class="nx">MaintainableJS</span> <span class="o">=</span> <span class="p">{};</span>
 
-<pre><code>// only one gloabal object
-var MaintainableJS = {};
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">page</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">};</span>
 
-MaintainableJS.Book = function(title) {
-    this.title = title;
-    this.page = 1;
-};
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">turnPage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">direction</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">page</span> <span class="o">+=</span> <span class="nx">direction</span><span class="p">;</span>
+<span class="p">};</span>
 
-MaintainableJS.Book.prototype.turnPage = function(direction) {
-    this.page += direction;
-};
-
-MaintainableJS.Chapter1 = new MaintainableJS.Book(&quot;part-one&quot;);
-MaintainableJS.Chapter2 = new MaintainableJS.Book(&quot;part-two&quot;);
-MaintainableJS.Chapter3 = new MaintainableJS.Book(&quot;part-three&quot;);</code></pre>
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Chapter1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;part-one&quot;</span><span class="p">);</span>
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Chapter2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;part-two&quot;</span><span class="p">);</span>
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Chapter3</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;part-three&quot;</span><span class="p">);</span>
+</pre></div>
 
 <h3 id="toc_1">Namespace</h3>
 <p>And you can easily create your own namespaces in <code>JavaScript</code> with objects.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Books</span> <span class="o">=</span> <span class="p">{};</span>
 
-<pre><code>var Books = {};
+<span class="c1">// namespace for this book</span>
+<span class="nx">Books</span><span class="p">.</span><span class="nx">MaintainableJavascript</span> <span class="o">=</span> <span class="p">{};</span>
 
-// namespace for this book
-Books.MaintainableJavascript = {};
-
-//namespace for another book
-Books.HighPerformanceJavascript = {};</code></pre>
+<span class="c1">//namespace for another book</span>
+<span class="nx">Books</span><span class="p">.</span><span class="nx">HighPerformanceJavascript</span> <span class="o">=</span> <span class="p">{};</span>
+</pre></div>
 <p>There are also times when each file is simply adding to a namespace.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">YourGlobal</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">namespace</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ns</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">parts</span> <span class="o">=</span> <span class="nx">ns</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">),</span>
+            <span class="nx">object</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span>
+            <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
 
-<pre><code>var YourGlobal = {
-    namespace: function(ns) {
-        var parts = ns.split(&quot;.&quot;),
-            object = this,
-            i, len;
+        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">object</span><span class="p">[</span><span class="nx">parts</span><span class="p">[</span><span class="nx">i</span><span class="p">]])</span> <span class="p">{</span>
+                <span class="nx">object</span><span class="p">[</span><span class="nx">parts</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{};</span>
+            <span class="p">}</span>
+            <span class="nx">object</span> <span class="o">=</span> <span class="nx">object</span><span class="p">[</span><span class="nx">parts</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+        <span class="p">}</span>
 
-        for (i = 0, len = parts.length; i &lt; len; i++) {
-            if (!object[parts[i]]) {
-                object[parts[i]] = {};
-            }
-            object = object[parts[i]];
-        }
+        <span class="k">return</span> <span class="nx">object</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-        return object;
-    }
-};
+<span class="cm">/*</span>
+<span class="cm">* Creates both YourGlobal.Books and YourGlobal.Books.MaintainableJavaScript.</span>
+<span class="cm">* Neither exists before hand, so each is created from scratch.</span>
+<span class="cm">*/</span>
+<span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;Books.MaintainableJavaScript&quot;</span><span class="p">);</span>
 
-/*
-* Creates both YourGlobal.Books and YourGlobal.Books.MaintainableJavaScript.
-* Neither exists before hand, so each is created from scratch.
-*/
-YourGlobal.namespace(&quot;Books.MaintainableJavaScript&quot;);
+<span class="c1">// you can now start using the namespace</span>
+<span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">Books</span><span class="p">.</span><span class="nx">MaintainableJavaScript</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="s2">&quot;Nicholas C. Zakas&quot;</span><span class="p">;</span>
 
-// you can now start using the namespace
-YourGlobal.Books.MaintainableJavaScript.author = &quot;Nicholas C. Zakas&quot;;
+<span class="cm">/*</span>
+<span class="cm">* Leaves YourGlobal.Books alone and adds HighPerformanceJavaScript to it.</span>
+<span class="cm">* This leaves YourGlobal.Books.MaintainableJavaScript intact.</span>
+<span class="cm">*/</span>
+<span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;Books.HighPerformanceJavaScript&quot;</span><span class="p">);</span>
 
-/*
-* Leaves YourGlobal.Books alone and adds HighPerformanceJavaScript to it.
-* This leaves YourGlobal.Books.MaintainableJavaScript intact.
-*/
-YourGlobal.namespace(&quot;Books.HighPerformanceJavaScript&quot;);
+<span class="c1">// still a valid reference</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">Books</span><span class="p">.</span><span class="nx">MaintainableJavaScript</span><span class="p">.</span><span class="nx">author</span><span class="p">);</span>
 
-// still a valid reference
-console.log(YourGlobal.Books.MaintainableJavaScript.author);
-
-// You can also start adding new properties right off the method call
-YourGlobal.namespace(&quot;Books&quot;).ANewBook = {};</code></pre>
+<span class="c1">// You can also start adding new properties right off the method call</span>
+<span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;Books&quot;</span><span class="p">).</span><span class="nx">ANewBook</span> <span class="o">=</span> <span class="p">{};</span>
+</pre></div>
 
 <h3 id="toc_2">Modules</h3>
 <p>Sorry, but I will try to understand it entirely later.You can read some documents
@@ -149,52 +253,52 @@ at will.</p>
 
 <h3 id="toc_3">Event Handling</h3>
 <p>Event handling is an important part of any JavaScript application. All JavaScript is tied to the UI through events.And the following rules may improve your code.</p>
+<div class="highlight"><pre><span class="c1">// Rule #1</span>
+<span class="c1">// It is better to separate application logic</span>
+<span class="kd">var</span> <span class="nx">MyApplication</span> <span class="o">=</span> <span class="p">{</span>
 
-<pre><code>// Rule #1
-// It is better to separate application logic
-var MyApplication = {
+    <span class="nx">handleClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">showPopup</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+    <span class="p">},</span>
 
-    handleClick: function(event) {
-        this.showPopup(event);
-    },
+    <span class="nx">showPopup</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">popup</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;popup&quot;</span><span class="p">);</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">clientX</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">clientY</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;reveal&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-    showPopup: function(event) {
-        var popup = document.getElementById(&quot;popup&quot;);
-        popup.style.left = event.clientX + &quot;px&quot;;
-        popup.style.top = event.clientY + &quot;px&quot;;
-        popup.className = &quot;reveal&quot;;
-    }
-};
+<span class="nx">addListener</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">MyApplication</span><span class="p">.</span><span class="nx">handleClick</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+<span class="p">});</span>
 
-addListener(element, &quot;click&quot;, function(event) {
-    MyApplication.handleClick(event);
-});
+<span class="c1">// Rule #2</span>
+<span class="c1">// Do not Pass the Event Object Around</span>
+<span class="kd">var</span> <span class="nx">MyApplication</span> <span class="o">=</span> <span class="p">{</span>
 
-// Rule #2
-// Do not Pass the Event Object Around
-var MyApplication = {
+    <span class="nx">handleClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
 
-    handleClick: function(event) {
+        <span class="c1">// assume DOM Level 2 events support</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
 
-        // assume DOM Level 2 events support
-        event.preventDefault();
-        event.stopPropagation();
+        <span class="c1">// pass to application logic</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">showPopup</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">clientX</span><span class="p">,</span> <span class="nx">event</span><span class="p">.</span><span class="nx">clientY</span><span class="p">);</span>
+    <span class="p">},</span>
 
-        // pass to application logic
-        this.showPopup(event.clientX, event.clientY);
-    },
+    <span class="nx">showPopup</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">popup</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;popup&quot;</span><span class="p">);</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">y</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;reveal&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-    showPopup: function(x, y) {
-        var popup = document.getElementById(&quot;popup&quot;);
-        popup.style.left = x + &quot;px&quot;;
-        popup.style.top = y + &quot;px&quot;;
-        popup.className = &quot;reveal&quot;;
-    }
-};
-
-addListener(element, &quot;click&quot;, function(event) {
-    MyApplication.handleClick(event);
-});</code></pre>
+<span class="nx">addListener</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">MyApplication</span><span class="p">.</span><span class="nx">handleClick</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
 
 <h3 id="toc_4">Avoid Null Comparisons</h3>
 
@@ -206,14 +310,14 @@ but not IE8)</strong></li>
 <li>Use <code>in</code> operator to detect <strong>the presence of a property (hasOwnProperty() to make sure of an instance property)</strong></li>
 <li>Detect <strong>Array</strong></li>
 </ul>
-
-<pre><code>function isArray(value) {
-    if (typeof Array.isArray === &quot;function&quot;) {
-        return Array.isArray(value);
-    } else {
-        return Object.prototype.toString.call(value) === &quot;[object Array]&quot;;
-    }
-}</code></pre>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">isArray</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;[object Array]&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 <p><strong>Maintainable Javascript Part Two over</strong>.</p>
 ]]>
         </content>
@@ -222,7 +326,7 @@ but not IE8)</strong></li>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/maintainable-javascript-1"/>
         <published>2013-10-28T00:00:00+08:00</published>
-        <updated>2013-10-31T19:12:46+08:00</updated>
+        <updated>2013-11-01T12:50:04+08:00</updated>
         <id>http://tinple.me/tech/maintainable-javascript-1</id>
         <category scheme="http://tinple.me/tag/javascript/" term="Javascript" label="Javascript" />
         <category scheme="http://tinple.me/tag/maintainable/" term="maintainable" label="maintainable" />
@@ -257,15 +361,14 @@ following is just my note that I regard it useful, but it may not really meets y
 <h4 id="toc_2">for-in loop</h4>
 <p>As <code>for-in</code> loop returns not only instance properties of an object but also all
 properties it inherits through the prototype.Hence, it is best to filter the <code>for-in</code> loop to only instance properties by using <code>hasOwnProperty()</code>.</p>
-
-<pre><code>var prop;
-
-for (prop in object) {
-    if (object.hasOwnProperty(prop)) {
-        console.log(&quot;Property name is&quot; + prop);
-        console.log(&quot;Property value is&quot; + object[prop]);
-    }
-}</code></pre>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">prop</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="nx">prop</span> <span class="k">in</span> <span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">object</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Property name is&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Property value is&quot;</span> <span class="o">+</span> <span class="nx">object</span><span class="p">[</span><span class="nx">prop</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 <p>And remember do not use <code>for-in</code> to iterate over members of an array.</p>
 
 <h4 id="toc_3">Equality</h4>
@@ -282,30 +385,30 @@ for (prop in object) {
 <li>Keep CSS Out of JavaScript</li>
 <li><strong>Keep JavaScript Out of HTML</strong></li>
 </ul>
-
-<pre><code>// ugly code
-&lt;button onclick=&quot;doSomething()&quot; id=&quot;action-btn&quot;&gt;Click Me&lt;/button&gt;
-
-// use JavaScript methods for adding event handlers
-function addListener(target, type, handler) {
-    if (target.addEventListener) {
-        target.addEventListener(type, handler, false);
-    } else if (target.attachEvent) {
-        target.attachEvent(&quot;on&quot; + type, handler);
-    } else {
-        target[&quot;on&quot; + type] = handler;
-    }
-}
-var btn = document.getElementById(&quot;action-btn&quot;);
-addListener(btn, &quot;click&quot;, doSomething);</code></pre>
+<div class="highlight"><pre>// ugly code
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;doSomething()&quot;</span> <span class="na">id=</span><span class="s">&quot;action-btn&quot;</span><span class="nt">&gt;</span>Click Me<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="highlight"><pre><span class="c1">// use JavaScript methods for adding event handlers</span>
+<span class="kd">function</span> <span class="nx">addListener</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">target</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">target</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">(</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">target</span><span class="p">[</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="nx">handler</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">btn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;action-btn&quot;</span><span class="p">);</span>
+<span class="nx">addListener</span><span class="p">(</span><span class="nx">btn</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">doSomething</span><span class="p">);</span>
+</pre></div>
 
 <ul>
 <li><strong>Keep HTML Out of JavaScript</strong></li>
 </ul>
-
-<pre><code>// Bad 
-var div = document.getElementById(&quot;my-div&quot;);
-div.innerHTML = &quot;&lt;h3&gt;Error&lt;/h3&gt;&lt;p&gt;Invalid e-mail address.&lt;/p&gt;&quot;;</code></pre>
+<div class="highlight"><pre><span class="c1">// Bad </span>
+<span class="kd">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;my-div&quot;</span><span class="p">);</span>
+<span class="nx">div</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&lt;h3&gt;Error&lt;/h3&gt;&lt;p&gt;Invalid e-mail address.&lt;/p&gt;&quot;</span><span class="p">;</span>
+</pre></div>
 <p>Embedding HTML strings inside your JavaScript is a bad practice for a number of
 reasons.And there are several ways to accomplish this in a loosely coupled manner.</p>
 
@@ -314,53 +417,53 @@ reasons.And there are several ways to accomplish this in a loosely coupled manne
 additional markup, it is much more convenient for single-page applications than 
 multiple-page applications. But when using this method, you should pay attention 
 to <code>XSS</code> attack, and it requires lots of transcode and decode strategy between client and server to defense.</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">loadDialog</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">oncomplete</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+    <span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;/js/dialog/&quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 
-<pre><code>function loadDialog(name, oncomplete) {
-    var xhr = new XMLHttpRequest();
-    xhr.open(&quot;get&quot;, &quot;/js/dialog/&quot; + name, true);
+    <span class="nx">xhr</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
-    xhr.onreadystatechange = function() {
+        <span class="k">if</span> <span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
 
-        if (xhr.readyState == 4 &amp;&amp; xhr.status == 200) {
+            <span class="kd">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;dlg-holder&quot;</span><span class="p">);</span>
+            <span class="nx">div</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
+            <span class="nx">oncomplete</span><span class="p">();</span>
 
-            var div = document.getElementById(&quot;dlg-holder&quot;);
-            div.innerHTML = xhr.responseText;
-            oncomplete();
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c1">// wrong handler</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
 
-        } else {
-            // wrong handler
-        }
-    };
-
-    xhr.send(null);
-}</code></pre>
+    <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 
 <h4 id="toc_7">2.Simple Client-Side Templates</h4>
 <p>Client-side Templates are markup pieces with slots that must be filled by JavaScript in order to be complete.For example:</p>
-
-<pre><code>&lt;li&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;</code></pre>
+<div class="highlight"><pre><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;%s&quot;</span><span class="nt">&gt;</span>%s<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</pre></div>
 <p>And you can make templates accessible to Javascript by embedding them directly
 in the HTML page.Maybe a function will make it.</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">sprintf</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">text</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/%s/g</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="o">?</span> <span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="p">});</span>
+<span class="p">}</span>
 
-<pre><code>function sprintf(text) {
-    var i = 1, args = arguments;
-    return text.replace(/%s/g, function() {
-        return (i &lt; args.length) ? args[i++] : &quot;&quot;;
-    });
-}
-
-// usage
-var result = sprintf(templateText, &quot;/item/4&quot;, &quot;Fourth item&quot;);</code></pre>
+<span class="c1">// usage</span>
+<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">sprintf</span><span class="p">(</span><span class="nx">templateText</span><span class="p">,</span> <span class="s2">&quot;/item/4&quot;</span><span class="p">,</span> <span class="s2">&quot;Fourth item&quot;</span><span class="p">);</span>
+</pre></div>
 <p>It is ok to include the templates as an comment or embed templates into an HTML
 page by using a <code>&lt;script&gt;</code> element with a custom <code>type</code> property.</p>
+<div class="highlight"><pre>// comment
+<span class="nt">&lt;ul</span> <span class="na">id=</span><span class="s">&quot;mylist&quot;</span><span class="nt">&gt;</span><span class="c">&lt;!--&lt;li id=&quot;item%s&quot;&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;--&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+</pre></div>
 
-<pre><code>// comment
-&lt;ul id=&quot;mylist&quot;&gt;&lt;!--&lt;li id=&quot;item%s&quot;&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;--&gt;
-&lt;/ul&gt;
-
-/* script element, remember to strip any leading white space 
+<pre><code>/* script element, remember to strip any leading white space 
 that may be in the template, because template text is  
-on the line after the opening &lt;script&gt; tag */
+on the line after the opening script tag */
 &lt;script type=&quot;text/x-my-template&quot; id=&quot;list-item&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;
 &lt;/script&gt;</code></pre>
@@ -375,7 +478,7 @@ on the line after the opening &lt;script&gt; tag */
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/homework-for-c-plus"/>
         <published>2013-10-16T00:00:00+08:00</published>
-        <updated>2013-10-17T20:14:28+08:00</updated>
+        <updated>2013-11-01T09:21:07+08:00</updated>
         <id>http://tinple.me/tech/homework-for-c-plus</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <h2 id="toc_0">For 2013-10-17 C plus homework</h2>
@@ -383,156 +486,156 @@ on the line after the opening &lt;script&gt; tag */
 <h3 id="toc_1">Answer:</h3>
 
 <h4 id="toc_2">Question 1:</h4>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<pre><code>#include &lt;iostream&gt;
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-using namespace std;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;请输入两个整数&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">;</span>
 
-int main() {
-    int a, b;
-    cout &lt;&lt; &quot;请输入两个整数&quot; &lt;&lt; endl;
-    cin &gt;&gt; a &gt;&gt; b;
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span> <span class="n">elseif</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;两个数相等&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    if (a &gt; b) {
-        cout&lt;&lt; a &lt;&lt; endl;
-    } elseif (a &lt; b) {
-        cout &lt;&lt; b &lt;&lt; endl;
-    } else {
-        cout &lt;&lt; &quot;两个数相等&quot; &lt;&lt; endl;
-    }
-
-    return 0;
-}</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 
 <h4 id="toc_3">Question 2:</h4>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<pre><code>#include &lt;iostream&gt;
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-using namespace std;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 
-int main() {
+    <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;请输入两个数，第一个为整数，第二个为浮点数&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">;</span>
 
-    int a;
-    double b;
-    cout &lt;&lt; &quot;请输入两个数，第一个为整数，第二个为浮点数&quot; &lt;&lt; endl;
-    cin &gt;&gt; a &gt;&gt; b;
+    <span class="k">if</span><span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span> <span class="n">elseif</span> <span class="p">(</span><span class="n">a</span><span class="o">&lt;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+       <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;两个数相等&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    if(a &gt; b) {
-        cout &lt;&lt; a &lt;&lt; endl;
-    } elseif (a&lt;b) {
-        cout &lt;&lt; b &lt;&lt; endl;
-    } else {
-       cout &lt;&lt; &quot;两个数相等&quot; &lt;&lt; endl;
-    }
-
-    return 0;
-}</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 
 <h4 id="toc_4">Question 3:</h4>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<pre><code>#include &lt;iostream&gt;
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-using namespace std;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 
-int main() {
+   <span class="kt">double</span> <span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;请输入摄氏温度&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">c</span><span class="p">;</span>
 
-   double f, c;
-   cout &lt;&lt; &quot;请输入摄氏温度&quot; &lt;&lt; endl;
-   cin &gt;&gt; c;
+   <span class="n">f</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="mf">9.0</span> <span class="o">/</span> <span class="mf">5.0</span> <span class="o">+</span> <span class="mf">21.0</span><span class="p">;</span>
 
-   f = c * 9.0 / 5.0 + 21.0;
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;转换为华氏温度&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">f</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 
-   cout &lt;&lt; &quot;转换为华氏温度&quot; &lt;&lt; f &lt;&lt; endl;
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 
-   return 0;
-
-}</code></pre>
+<span class="p">}</span>
+</pre></div>
 
 <h4 id="toc_5">Question 4.1:</h4>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<pre><code>#include &lt;iostream&gt;
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-using namespace std;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 
-int main() {
+   <span class="kt">double</span> <span class="n">miles</span><span class="p">,</span> <span class="n">kilometres</span><span class="p">;</span>
+   <span class="k">const</span> <span class="kt">double</span> <span class="n">N</span> <span class="o">=</span> <span class="mf">1.60934</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;请输入metres&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">kilometres</span><span class="p">;</span>
+   <span class="n">miles</span> <span class="o">=</span> <span class="n">kilometres</span> <span class="o">/</span> <span class="n">N</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;转换miles为&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">miles</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 
-   double miles, kilometres;
-   const double N = 1.60934;
-   cout &lt;&lt; &quot;请输入metres&quot; &lt;&lt; endl;
-   cin &gt;&gt; kilometres;
-   miles = kilometres / N;
-   cout &lt;&lt; &quot;转换miles为&quot; &lt;&lt; endl;
-   cout &lt;&lt; miles &lt;&lt; endl;
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 
-   return 0;
-
-}</code></pre>
+<span class="p">}</span>
+</pre></div>
 
 <h4 id="toc_6">Question 4.2:</h4>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<pre><code>#include &lt;iostream&gt;
+<span class="cp">#define N 1.60934</span>
 
-#define N 1.60934
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-using namespace std;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 
-int main() {
+   <span class="kt">double</span> <span class="n">miles</span><span class="p">,</span> <span class="n">metres</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;请输入metres&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">metres</span><span class="p">;</span>
+   <span class="n">miles</span> <span class="o">=</span> <span class="n">metres</span> <span class="o">/</span> <span class="n">N</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;转换miles为&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">miles</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 
-   double miles, metres;
-   cout &lt;&lt; &quot;请输入metres&quot; &lt;&lt; endl;
-   cin &gt;&gt; metres;
-   miles = metres / N;
-   cout &lt;&lt; &quot;转换miles为&quot; &lt;&lt; endl;
-   cout &lt;&lt; miles &lt;&lt; endl;
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 
-   return 0;
-
-}</code></pre>
+<span class="p">}</span>
+</pre></div>
 
 <h4 id="toc_7">Question 5:</h4>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<pre><code>#include &lt;iostream&gt;
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-using namespace std;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 
-int main() {
+   <span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="n">t</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;请输入一个整数&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num</span><span class="p">;</span>
 
-   int num, t;
-   cout &lt;&lt; &quot;请输入一个整数&quot; &lt;&lt; endl;
-   cin &gt;&gt; num;
+   <span class="n">t</span> <span class="o">=</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">10000</span><span class="p">;</span>
+   <span class="n">num</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1111</span><span class="p">;</span>
 
-   t = num % 10000;
-   num = num - t + 1111;
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;右四位变为1111&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+   <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">num</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 
-   cout &lt;&lt; &quot;右四位变为1111&quot; &lt;&lt; endl;
-   cout &lt;&lt; num &lt;&lt; endl;
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 
-   return 0;
-
-}</code></pre>
+<span class="p">}</span>
+</pre></div>
 
 <h2 id="toc_8">For 2013-10-16 C plus homework</h2>
 
 <h3 id="toc_9">链接错误</h3>
+<div class="highlight"><pre><span class="cp">#include&lt;iostream&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-<pre><code>#include&lt;iostream&gt;
-using namespace std;
-
-int main_fake() {
-    cout &lt;&lt; &quot;Hello World!&quot; &lt;&lt; endl;
-    return 0;
-}</code></pre>
+<span class="kt">int</span> <span class="nf">main_fake</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Hello World!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 <p><strong>MSVCRTD.lib(crtexe.obj) : error LNK2019: 无法解析的外部符号 <em>main，该符号在函数 _</em>_tmainCRTStartup 中被引用</strong></p>
 
 <h3 id="toc_10">编译错误</h3>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
-
-int main() {
-    cout2 &lt;&lt; &quot;Hello World!&quot; &lt;&lt; endl;
-    return 0;
-}</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">cout2</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Hello World!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 <p><strong>cout2: 未声明的标识符</strong></p>
 
 <h3 id="toc_11">运行错误 - 缺少运行库</h3>
@@ -543,7 +646,7 @@ int main() {
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/securing-web-application-1"/>
         <published>2013-10-10T00:00:00+08:00</published>
-        <updated>2013-10-29T21:20:10+08:00</updated>
+        <updated>2013-11-01T09:19:53+08:00</updated>
         <id>http://tinple.me/tech/securing-web-application-1</id>
         <category scheme="http://tinple.me/tag/security/" term="security" label="security" />
         <category scheme="http://tinple.me/tag/defence/" term="defence" label="defence" />
@@ -558,34 +661,34 @@ and at first they should apply but the <strong>privilege field</strong> in datab
 users logining in platform is 0(same as false), I may change it to
 1 few days later.</p>
 <p>And if I design my table structure like this(I use mysql):</p>
+<div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">EXAMPLE</span> <span class="p">(</span>
+    <span class="n">ID</span>   <span class="nb">INTEGER</span> <span class="n">UNSIGNED</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+    <span class="n">USERNAME</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">PASSWORD</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">PRIVILEGE</span> <span class="n">TINYINT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="mi">0</span><span class="p">,</span>
 
-<pre><code>CREATE TABLE EXAMPLE (
-    ID   INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-    USERNAME VARCHAR(40) NOT NULL,
-    PASSWORD VARCHAR(40) NOT NULL,
-    PRIVILEGE TINYINT(1) DEFAULT 0,
-
-    PRIMARY KEY (ID)
-);</code></pre>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">ID</span><span class="p">)</span>
+<span class="p">);</span>
+</pre></div>
 <p>And my form page receives datas which are posted and immediately inserted into database without any filter: </p>
+<div class="highlight"><pre><span class="x">$username = $_POST[&#39;username&#39;];</span>
+<span class="x">$pwd = $_POST[&#39;password&#39;];</span>
 
-<pre><code>$username = $_POST['username'];
-$pwd = $_POST['password'];
+<span class="x">//..some database connection codes</span>
+<span class="x">$query = &quot;INSERT INTO EXAMPLE VALUES(&#39;$username&#39;, &#39;$pwd&#39;, 0)&quot;;</span>
+<span class="x">//$dbc is a mysql connection return</span>
+<span class="x">mysqli_query($dbc, $query);</span>
 
-//..some database connection codes
-$query = &quot;INSERT INTO EXAMPLE VALUES('$username', '$pwd', 0)&quot;;
-//$dbc is a mysql connection return
-mysqli_query($dbc, $query);
-
-//any other codes</code></pre>
+<span class="x">//any other codes</span>
+</pre></div>
 <p>If someone put <code>passwor&#39;, 1) --</code> into password field, the sql query will be 
 <code>INSERT INTO EXAMPLE VALUES(&#39;someone&#39;, &#39;password&#39;, 1) -- &#39;, 0)</code>, and the double-hyphen comment causes the rest of the line of SQL code to be ignored!Hence,
 his privilege will be 1.And this attack is known as an <strong>SQL Injection</strong>.</p>
 <p>And something we could do to defense it is filter any datas that user can write into
 database, an example defence:</p>
-
-<pre><code>$username = mysqli_real_escape($dbc, trim($_POST['username']));
-$pwd = mysqli_real_escape($dbc, trim($_POST['password']));</code></pre>
+<div class="highlight"><pre><span class="x">$username = mysqli_real_escape($dbc, trim($_POST[&#39;username&#39;]));</span>
+<span class="x">$pwd = mysqli_real_escape($dbc, trim($_POST[&#39;password&#39;]));</span>
+</pre></div>
 <p>Sure, you can alse use <strong>regular expression</strong> to filter it.Besides, the privilege field could be designed to <code>DEFAULT 0</code> so that it would not be inserted any more, or just revoke the <code>INSERT privilege(field)</code> privilege in mysql for users, like we will talk below. </p>
 
 <h2 id="toc_1">Mysql privileges</h2>
@@ -594,9 +697,10 @@ But I am not professional, just use it to combine with <code>PHP</code>.
 I didn&#39;t care the mysql privileges when I executed a sql statement, just let it runned as I expected.</p>
 <p>And now I realized the <strong>big potential</strong> problem that I have made. I didn&#39;t set privileges accurately for mysql users.</p>
 <p>Above example again.This time we create another mysql user named user_example at begin.And we could set this mysql user only few privileges when users apply:</p>
-
-<pre><code>//[...] should be replaced depends on you
-GRANT INSERT(`USERNAME`, `PASSWORD`) ON `[database]`.`EXAMPLE` TO `user_example`@[ip_address];</code></pre>
+<div class="highlight"><pre><span class="o">//</span><span class="p">[...]</span> <span class="n">should</span> <span class="n">be</span> <span class="n">replaced</span> <span class="n">depends</span> <span class="k">on</span> <span class="n">you</span>
+<span class="k">GRANT</span> <span class="k">INSERT</span><span class="p">(</span><span class="o">`</span><span class="n">USERNAME</span><span class="o">`</span><span class="p">,</span> <span class="o">`</span><span class="n">PASSWORD</span><span class="o">`</span><span class="p">)</span> <span class="k">ON</span> <span class="o">`</span><span class="p">[</span><span class="k">database</span><span class="p">]</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">EXAMPLE</span><span class="o">`</span> 
+<span class="k">TO</span> <span class="o">`</span><span class="n">user_example</span><span class="o">`@</span><span class="p">[</span><span class="n">ip_address</span><span class="p">];</span>
+</pre></div>
 <p>Like this, users will not be able to do something like INSERT privilege field into database.And if you have a backstage to manage platform, you may also set the second mysql user privilege accurately, just use two mysql users and <strong>ensure their respective privilege</strong> in your web application, accurating privileges to your every table field.And it means a lot about security to your web application.</p>
 
 <h2 id="toc_2">CSRF &amp;&amp; Token defense</h2>

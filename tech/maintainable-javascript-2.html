@@ -60,84 +60,98 @@
 <h3 id="toc_0">Avoid Globals</h3>
 <p>Global variables are really special in <code>Javascript</code>, see examples below.</p>
 
-<pre><code>// A &quot;mistake&quot; semicolon creates a global variable
+<script>
+// A "mistake" semicolon creates a global variable
 function doSomething() {
     var count = 10; 
-        title = &quot;Maintainable Javascript&quot;; 
+        title = "Maintainable Javascript"; 
 }
 
 // This global variable affects window.name
 function doAnotherThing() {
     var count = 10;
-        name = &quot;Tinple&quot;; 
-}</code></pre>
+        name = "Tinple"; 
+}
+</script>
+<div class="highlight"><pre><span class="c1">// A &quot;mistake&quot; semicolon creates a global variable</span>
+<span class="kd">function</span> <span class="nx">doSomething</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> 
+        <span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Maintainable Javascript&quot;</span><span class="p">;</span> 
+<span class="p">}</span>
+
+<span class="c1">// This global variable affects window.name</span>
+<span class="kd">function</span> <span class="nx">doAnotherThing</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Tinple&quot;</span><span class="p">;</span> 
+<span class="p">}</span>
+</pre></div>
 <p>And the author recommends that anything that can be defined within the function should be written as such; any data that comes from outside the function should be passed in as an argument. Besides, it is better to use <strong>The One-Global Approach</strong>, like some popular <code>JavaScript libraries</code>.</p>
+<div class="highlight"><pre><span class="c1">// only one gloabal object</span>
+<span class="kd">var</span> <span class="nx">MaintainableJS</span> <span class="o">=</span> <span class="p">{};</span>
 
-<pre><code>// only one gloabal object
-var MaintainableJS = {};
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">page</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">};</span>
 
-MaintainableJS.Book = function(title) {
-    this.title = title;
-    this.page = 1;
-};
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">turnPage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">direction</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">page</span> <span class="o">+=</span> <span class="nx">direction</span><span class="p">;</span>
+<span class="p">};</span>
 
-MaintainableJS.Book.prototype.turnPage = function(direction) {
-    this.page += direction;
-};
-
-MaintainableJS.Chapter1 = new MaintainableJS.Book(&quot;part-one&quot;);
-MaintainableJS.Chapter2 = new MaintainableJS.Book(&quot;part-two&quot;);
-MaintainableJS.Chapter3 = new MaintainableJS.Book(&quot;part-three&quot;);</code></pre>
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Chapter1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;part-one&quot;</span><span class="p">);</span>
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Chapter2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;part-two&quot;</span><span class="p">);</span>
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Chapter3</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;part-three&quot;</span><span class="p">);</span>
+</pre></div>
 
 <h3 id="toc_1">Namespace</h3>
 <p>And you can easily create your own namespaces in <code>JavaScript</code> with objects.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Books</span> <span class="o">=</span> <span class="p">{};</span>
 
-<pre><code>var Books = {};
+<span class="c1">// namespace for this book</span>
+<span class="nx">Books</span><span class="p">.</span><span class="nx">MaintainableJavascript</span> <span class="o">=</span> <span class="p">{};</span>
 
-// namespace for this book
-Books.MaintainableJavascript = {};
-
-//namespace for another book
-Books.HighPerformanceJavascript = {};</code></pre>
+<span class="c1">//namespace for another book</span>
+<span class="nx">Books</span><span class="p">.</span><span class="nx">HighPerformanceJavascript</span> <span class="o">=</span> <span class="p">{};</span>
+</pre></div>
 <p>There are also times when each file is simply adding to a namespace.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">YourGlobal</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">namespace</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ns</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">parts</span> <span class="o">=</span> <span class="nx">ns</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">),</span>
+            <span class="nx">object</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span>
+            <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
 
-<pre><code>var YourGlobal = {
-    namespace: function(ns) {
-        var parts = ns.split(&quot;.&quot;),
-            object = this,
-            i, len;
+        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">object</span><span class="p">[</span><span class="nx">parts</span><span class="p">[</span><span class="nx">i</span><span class="p">]])</span> <span class="p">{</span>
+                <span class="nx">object</span><span class="p">[</span><span class="nx">parts</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{};</span>
+            <span class="p">}</span>
+            <span class="nx">object</span> <span class="o">=</span> <span class="nx">object</span><span class="p">[</span><span class="nx">parts</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+        <span class="p">}</span>
 
-        for (i = 0, len = parts.length; i &lt; len; i++) {
-            if (!object[parts[i]]) {
-                object[parts[i]] = {};
-            }
-            object = object[parts[i]];
-        }
+        <span class="k">return</span> <span class="nx">object</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-        return object;
-    }
-};
+<span class="cm">/*</span>
+<span class="cm">* Creates both YourGlobal.Books and YourGlobal.Books.MaintainableJavaScript.</span>
+<span class="cm">* Neither exists before hand, so each is created from scratch.</span>
+<span class="cm">*/</span>
+<span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;Books.MaintainableJavaScript&quot;</span><span class="p">);</span>
 
-/*
-* Creates both YourGlobal.Books and YourGlobal.Books.MaintainableJavaScript.
-* Neither exists before hand, so each is created from scratch.
-*/
-YourGlobal.namespace(&quot;Books.MaintainableJavaScript&quot;);
+<span class="c1">// you can now start using the namespace</span>
+<span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">Books</span><span class="p">.</span><span class="nx">MaintainableJavaScript</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="s2">&quot;Nicholas C. Zakas&quot;</span><span class="p">;</span>
 
-// you can now start using the namespace
-YourGlobal.Books.MaintainableJavaScript.author = &quot;Nicholas C. Zakas&quot;;
+<span class="cm">/*</span>
+<span class="cm">* Leaves YourGlobal.Books alone and adds HighPerformanceJavaScript to it.</span>
+<span class="cm">* This leaves YourGlobal.Books.MaintainableJavaScript intact.</span>
+<span class="cm">*/</span>
+<span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;Books.HighPerformanceJavaScript&quot;</span><span class="p">);</span>
 
-/*
-* Leaves YourGlobal.Books alone and adds HighPerformanceJavaScript to it.
-* This leaves YourGlobal.Books.MaintainableJavaScript intact.
-*/
-YourGlobal.namespace(&quot;Books.HighPerformanceJavaScript&quot;);
+<span class="c1">// still a valid reference</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">Books</span><span class="p">.</span><span class="nx">MaintainableJavaScript</span><span class="p">.</span><span class="nx">author</span><span class="p">);</span>
 
-// still a valid reference
-console.log(YourGlobal.Books.MaintainableJavaScript.author);
-
-// You can also start adding new properties right off the method call
-YourGlobal.namespace(&quot;Books&quot;).ANewBook = {};</code></pre>
+<span class="c1">// You can also start adding new properties right off the method call</span>
+<span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;Books&quot;</span><span class="p">).</span><span class="nx">ANewBook</span> <span class="o">=</span> <span class="p">{};</span>
+</pre></div>
 
 <h3 id="toc_2">Modules</h3>
 <p>Sorry, but I will try to understand it entirely later.You can read some documents
@@ -150,52 +164,52 @@ at will.</p>
 
 <h3 id="toc_3">Event Handling</h3>
 <p>Event handling is an important part of any JavaScript application. All JavaScript is tied to the UI through events.And the following rules may improve your code.</p>
+<div class="highlight"><pre><span class="c1">// Rule #1</span>
+<span class="c1">// It is better to separate application logic</span>
+<span class="kd">var</span> <span class="nx">MyApplication</span> <span class="o">=</span> <span class="p">{</span>
 
-<pre><code>// Rule #1
-// It is better to separate application logic
-var MyApplication = {
+    <span class="nx">handleClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">showPopup</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+    <span class="p">},</span>
 
-    handleClick: function(event) {
-        this.showPopup(event);
-    },
+    <span class="nx">showPopup</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">popup</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;popup&quot;</span><span class="p">);</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">clientX</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">clientY</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;reveal&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-    showPopup: function(event) {
-        var popup = document.getElementById(&quot;popup&quot;);
-        popup.style.left = event.clientX + &quot;px&quot;;
-        popup.style.top = event.clientY + &quot;px&quot;;
-        popup.className = &quot;reveal&quot;;
-    }
-};
+<span class="nx">addListener</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">MyApplication</span><span class="p">.</span><span class="nx">handleClick</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+<span class="p">});</span>
 
-addListener(element, &quot;click&quot;, function(event) {
-    MyApplication.handleClick(event);
-});
+<span class="c1">// Rule #2</span>
+<span class="c1">// Do not Pass the Event Object Around</span>
+<span class="kd">var</span> <span class="nx">MyApplication</span> <span class="o">=</span> <span class="p">{</span>
 
-// Rule #2
-// Do not Pass the Event Object Around
-var MyApplication = {
+    <span class="nx">handleClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
 
-    handleClick: function(event) {
+        <span class="c1">// assume DOM Level 2 events support</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
 
-        // assume DOM Level 2 events support
-        event.preventDefault();
-        event.stopPropagation();
+        <span class="c1">// pass to application logic</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">showPopup</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">clientX</span><span class="p">,</span> <span class="nx">event</span><span class="p">.</span><span class="nx">clientY</span><span class="p">);</span>
+    <span class="p">},</span>
 
-        // pass to application logic
-        this.showPopup(event.clientX, event.clientY);
-    },
+    <span class="nx">showPopup</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">popup</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;popup&quot;</span><span class="p">);</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">y</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;reveal&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-    showPopup: function(x, y) {
-        var popup = document.getElementById(&quot;popup&quot;);
-        popup.style.left = x + &quot;px&quot;;
-        popup.style.top = y + &quot;px&quot;;
-        popup.className = &quot;reveal&quot;;
-    }
-};
-
-addListener(element, &quot;click&quot;, function(event) {
-    MyApplication.handleClick(event);
-});</code></pre>
+<span class="nx">addListener</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">MyApplication</span><span class="p">.</span><span class="nx">handleClick</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
 
 <h3 id="toc_4">Avoid Null Comparisons</h3>
 
@@ -207,14 +221,14 @@ but not IE8)</strong></li>
 <li>Use <code>in</code> operator to detect <strong>the presence of a property (hasOwnProperty() to make sure of an instance property)</strong></li>
 <li>Detect <strong>Array</strong></li>
 </ul>
-
-<pre><code>function isArray(value) {
-    if (typeof Array.isArray === &quot;function&quot;) {
-        return Array.isArray(value);
-    } else {
-        return Object.prototype.toString.call(value) === &quot;[object Array]&quot;;
-    }
-}</code></pre>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">isArray</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;[object Array]&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 <p><strong>Maintainable Javascript Part Two over</strong>.</p>
 
     </div>
