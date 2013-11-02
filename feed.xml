@@ -3,9 +3,58 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2013-11-01T23:48:04+08:00</updated>
+    <updated>2013-11-02T17:39:04+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[ISA Training Part Two]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/isa-training-2"/>
+        <published>2013-11-02T00:00:00+08:00</published>
+        <updated>2013-11-02T17:39:04+08:00</updated>
+        <id>http://tinple.me/tech/isa-training-2</id>
+        <category scheme="http://tinple.me/tag/development/" term="development" label="development" />
+        <category scheme="http://tinple.me/tag/isa/" term="isa" label="isa" />
+        <category scheme="http://tinple.me/tag/web/" term="web" label="web" />
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <p>Everytime when you open your own browser, you just step into a part of <strong>Web</strong> field.And just have a glance of those web pages on the browser.</p>
+
+<ul>
+<li><a href="http://weibo.com">weibo</a></li>
+<li><a href="http://www.zhihu.com">zhihu</a></li>
+<li><a href="http://taobao.com">taobao</a></li>
+</ul>
+<p>Look at their design, layout and user experience, you may find some different stuffs, and recall what if we visit those websites on a Remote-device?Besides, you see, the nature of them varies, SNS, Social Q &amp; A and C2C.</p>
+<p>And nowadays, much more like desktop system web applications appear, like <a href="http://web2.qq.com">webqq</a>, and one more amazing thing, <a href="http://copy.sh/v24/">x86-Simulator</a>.You just can not image it!</p>
+<p>However, <strong>no pain, no gain</strong>.Maybe it is really difficult for us to do the stuffs above.But we can hold it step by step, just see those single nice pages, it only requires your imagination.Or maybe you prefer to develop a web game, see the simple tetris game I coded long ago.Yep, you can also finish your own web application game! Even more helpful things like hduhelp.</p>
+<p><strong>Only time and determination require!</strong></p>
+<p>I will show you some skills you may love to learn, you can learn these skills following the order.</p>
+
+<ul>
+<li>HTML &amp; CSS</li>
+<li>Javascript</li>
+<li>NodeJs</li>
+<li>And maybe more other skills..(we will talk about it later)</li>
+</ul>
+<p>Wait, there are some useful tools I want to show you as well.</p>
+
+<ul>
+<li><a href="http://127.0.0.1:8080/#/title">Web Slide controlled remotely</a></li>
+<li><a href="http://www.zybuluo.com/mdeditor">online markdown editor</a></li>
+<li><a href="http://lab.lepture.com/liquidluck/">liquidluck</a></li>
+</ul>
+<p>Also some really nice stuffs we usually use, you may touch later if you want to insist on.</p>
+
+<ul>
+<li><a href="https://www.github.com">github</a></li>
+<li><a href="http://stackoverflow.com">stackoverflow</a></li>
+<li><a href="https://www.yinxiang.com/">evernote</a></li>
+<li>Git</li>
+</ul>
+<p>And if you have intersts about those things I refer, just find me directly and I will 
+tell you more after.Do not be shy!</p>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[Keyword &quot;this&quot; in Javascript]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/keyword-this-in-javascript"/>
@@ -776,12 +825,12 @@ application, and just try to make preventions to protect it!</p>
 ]]>
         </content>
     </entry><entry>
-        <title type="html"><![CDATA[Just ISA Talk]]></title>
+        <title type="html"><![CDATA[ISA Training Part One]]></title>
         <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/isa-talk"/>
+        <link href="http://tinple.me/tech/isa-training-1"/>
         <published>2013-09-27T00:00:00+08:00</published>
-        <updated>2013-09-28T13:29:16+08:00</updated>
-        <id>http://tinple.me/tech/isa-talk</id>
+        <updated>2013-11-02T13:00:44+08:00</updated>
+        <id>http://tinple.me/tech/isa-training-1</id>
         <category scheme="http://tinple.me/tag/development/" term="development" label="development" />
         <category scheme="http://tinple.me/tag/isa/" term="isa" label="isa" />
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
