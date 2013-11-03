@@ -3,14 +3,30 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2013-11-02T17:39:04+08:00</updated>
+    <updated>2013-11-03T18:07:15+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[纪念杭州国际马拉松]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/memory-marathon"/>
+        <published>2013-11-03T00:00:00+08:00</published>
+        <updated>2013-11-03T18:07:15+08:00</updated>
+        <id>http://tinple.me/memory-marathon</id>
+        <category scheme="http://tinple.me/tag/development/" term="development" label="development" />
+        <category scheme="http://tinple.me/tag/marathon/" term="marathon" label="marathon" />
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <p>第一次参加马拉松，12.8公里，在杭州。</p>
+<p>即便你一直在跑，总是有人在你前面，有人在你后面。只不过当你停下来的时候，在你前面的人就多了，哪怕你只是放缓脚步。马拉松如此，很多时候，生活也是如此。</p>
+<p>谨以此纪念，明年再来。</p>
+<p>P.S. 今天偶遇某人多次:D</p>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[ISA Training Part Two]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/isa-training-2"/>
         <published>2013-11-02T00:00:00+08:00</published>
-        <updated>2013-11-02T17:39:04+08:00</updated>
+        <updated>2013-11-02T18:06:09+08:00</updated>
         <id>http://tinple.me/tech/isa-training-2</id>
         <category scheme="http://tinple.me/tag/development/" term="development" label="development" />
         <category scheme="http://tinple.me/tag/isa/" term="isa" label="isa" />
