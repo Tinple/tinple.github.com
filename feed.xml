@@ -3,7 +3,7 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2013-11-06T10:58:45+08:00</updated>
+    <updated>2013-11-06T11:12:13+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
         <title type="html"><![CDATA[纪念杭州国际马拉松]]></title>
@@ -75,7 +75,7 @@ tell you more after.Do not be shy!</p>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/keyword-this-in-javascript"/>
         <published>2013-11-01T00:00:00+08:00</published>
-        <updated>2013-11-06T10:58:45+08:00</updated>
+        <updated>2013-11-06T11:12:13+08:00</updated>
         <id>http://tinple.me/tech/keyword-this-in-javascript</id>
         <category scheme="http://tinple.me/tag/this/" term="this" label="this" />
         <category scheme="http://tinple.me/tag/javascript/" term="javascript" label="javascript" />
@@ -211,12 +211,11 @@ set to the DOM element on which the listener is placed.</p>
 
 <h3 id="toc_9">Eval breaks all the rules</h3>
 <p>As the code evaluated inside <code>eval</code> is its own type of 
-executable code, the rules of determining what <code>this</code> refers to inside of eval code are a little more complex.
-<code>javascript
-//depends on browser
-eval.call({val: 0}, &quot;console.log(this.val)&quot;);
-</code>
-And you can read more about <code>eval</code> <a href="http://perfectionkills.com/global-eval-what-are-the-options/">here</a>.</p>
+executable code, the rules of determining what <code>this</code> refers to inside of eval code are a little more complex.</p>
+<div class="highlight"><pre><span class="c1">//depends on browser</span>
+<span class="nb">eval</span><span class="p">.</span><span class="nx">call</span><span class="p">({</span><span class="nx">val</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span> <span class="s2">&quot;console.log(this.val)&quot;</span><span class="p">);</span>
+</pre></div>
+<p>And you can read more about <code>eval</code> <a href="http://perfectionkills.com/global-eval-what-are-the-options/">here</a>.</p>
 <p><strong>References:</strong></p>
 
 <ul>
