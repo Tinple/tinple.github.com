@@ -3,9 +3,112 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2013-11-06T11:12:13+08:00</updated>
+    <updated>2013-12-08T16:44:13+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[Monthly review for Nov.2013]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/life/monthly-review-for-nov-2013"/>
+        <published>2013-11-30T00:00:00+08:00</published>
+        <updated>2013-12-08T16:44:13+08:00</updated>
+        <id>http://tinple.me/life/monthly-review-for-nov-2013</id>
+        <category scheme="http://tinple.me/tag/month-review/" term="month-review" label="month-review" />
+        <category scheme="http://tinple.me/tag/life/" term="life" label="life" />
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">Tech:</h2>
+
+<ol>
+<li><p>月初买了本《Node.js 入门经典》，在准备比赛闲暇看了大部分内容，感受最深的是如果这辈子不接触下Node.JS都不好意思说异步了。这丫简直太强大了！倒是这个月忙着比赛的事情没太多实践过，寒假要好好学下。</p></li>
+<li><p> 初步浅阅了《Javascript模式》，讲的很深入，大部分内容跟乌龟书讲的差不多。不过也深受俾益。</p></li>
+<li><p> 借着项目回顾了暑假学的Python笔记，回想起了很多，下个月也是正式接触Python的Web编程。P.S.：PHP，Python，Node.JS天啊。。我觉得自己是个疯子。</p></li>
+<li><p>这个月再一次在stackoverflow上被吐槽提问不明确，问题不清晰。也是意识到自己用英文表述问题的缺陷（沟通）。也是因此开始积极参与到<a href="http://stackoverflow.com">stackoverflow</a>中去。</p></li>
+<li><p> 一次攻防大赛让自己学到了许多零零散散的东西，比如服务器的iptables，Linux下高效的工作方式，以及其他种种。也是尝试自己做了几道题，深感佩服黑客们强大的思维。P.S.：据说服务器上收获了好多马。。。</p></li>
+</ol>
+
+<h2 id="toc_1">Work:</h2>
+
+<ol>
+<li><p> 这个月初赛和决赛的圆满举办，坚信<strong>teamwork</strong>的确是我所喜欢且愿意为团队积极投入进去的。一方面是自己的责任感与担当，一方面是团队合作成功带来的兴奋与成就感，也不再是孤军奋战，尤其是任何一个人都是团队的核心的时候。</p></li>
+<li><p>  大二上班级还是成功举办了秋游，虽然相比前两次的确不怎么样，但还是能凑齐26个人实属不易。也是由此引发对一个集体的思考，在初期火候旺盛的情况下如何才能最大化的保住后期的火候呢？的确是需要很强大的管理能力。</p></li>
+<li><p>再一次向新生培训，但结果自己不是很满意，一来准备匆匆心不在焉，二来的确是自己的表达能力需要锻炼。做技术的，自己人沟通互相了解是一点，向小白讲述让他明白又是另一点，这很重要。</p></li>
+</ol>
+
+<h2 id="toc_2">Life:</h2>
+
+<ol>
+<li><p>这个月白天几乎大部分时间花在了比赛上，晚上倒还是很早地就回寝睡了，寝室差点就成了只是一个休息的地方。愧疚。筹备比赛的日子倒还是挺滋润的。</p></li>
+<li><p>双十一前一天。我脱单了？</p></li>
+<li><p>比赛结束后的月末休息了一阵，想仔细回味记录下这几个月的忙碌，却也又是浮躁地最终还是没去写，只是头脑里闪现出许多片段。还没找到接下来奋斗的点，倒也悠哉悠哉。</p></li>
+</ol>
+
+<h2 id="toc_3">End:</h2>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Salt Cryptography]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/salt"/>
+        <published>2013-11-14T00:00:00+08:00</published>
+        <updated>2013-11-15T19:11:15+08:00</updated>
+        <id>http://tinple.me/tech/salt</id>
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <p>Last three months ago, I made a single page web application to let users register their own team. As the password usually users fill in will make some inconvenience in our
+cyber ​​security competition, I took a service to send a email which including an automatic generation password. And what I do is adding salt in password to confirm the security.</p>
+<p>So what&#39;s called salt?</p>
+
+<blockquote>
+<p>In cryptography, a salt is random data that are used as an additional input to a one-way function that hashes a password or passphrase.</p>
+</blockquote>
+<p>And a new salt is randomly generated for each password. In my apply page, the 
+salt and the password are concatenated and processed with a cryptographic hash function, and the resulting output (but not the original password) is sent to users email while the salt and the original password is stored in a database. </p>
+<p>Hashing allows for later authentication while defending against compromise of the plaintext password in the event that the database is somehow compromised. And
+in this way, the output password will be somehow entirely safe although the original password may be cracked.</p>
+<p>All right, it is time to begin. In <code>PHP</code>, the code like this:</p>
+
+<pre><code>$length = 32;
+$mode = 0;
+switch ($mode) 
+{
+    case '1':
+    $str = '1234567890';
+    break;
+    case '2':
+    $str = 'abcdefghijklmnopqrstuvwxyz';
+    break;
+    case '3':
+    $str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    break;
+    default:
+    $str = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    break;
+}
+$pass = '';
+$l = strlen($str) - 1;
+$num = 0;
+for($i = 0;$i &lt; $length;$i++){
+    $num = rand(0, $l);
+    $a = $str[$num];
+    $pass .= $a;
+}
+
+$saltLength = 6;
+$salt = '';
+for ($a = 0; $a &lt; $saltLength; $a++) {
+        $salt .= chr(mt_rand(97,122));    
+}
+
+echo 'Salt:' . $salt;
+echo '&lt;br&gt;';
+echo 'Original Password:' . $pass;  
+echo '&lt;br&gt;';
+// Simply add the salt to the end
+echo 'Outping:' . md5(sha1($pass.$salt));</code></pre>
+<p>That&#39;s all. And next you can do what you want to do, maybe send the output password to users via email or some other things.</p>
+<p>Remember that it is common for a web application to store in a database the hash value of a user&#39;s password. Without a salt, a successful SQL injection attack may yield easily crackable passwords. You can read more on <a href="http://en.wikipedia.org/wiki/Salt_%28cryptography%29">wiki</a> about the beneficial of the salt.</p>
+<p>Have fun :D</p>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[纪念杭州国际马拉松]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/life/memory-marathon"/>
