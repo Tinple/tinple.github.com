@@ -3,7 +3,7 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2013-12-08T16:44:13+08:00</updated>
+    <updated>2013-12-18T21:26:55+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
         <title type="html"><![CDATA[Monthly review for Nov.2013]]></title>
@@ -710,14 +710,1095 @@ on the line after the opening script tag */
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/homework-for-c-plus"/>
         <published>2013-10-16T00:00:00+08:00</published>
-        <updated>2013-11-01T09:21:07+08:00</updated>
+        <updated>2013-12-18T21:26:55+08:00</updated>
         <id>http://tinple.me/tech/homework-for-c-plus</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <h2 id="toc_0">For 2013-10-17 C plus homework</h2>
+            <![CDATA[ <h2 id="toc_0">For Ninth C plus experiment</h2>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
-<h3 id="toc_1">Answer:</h3>
+<span class="n">class</span> <span class="n">Comp</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">Comp</span><span class="p">(</span><span class="kt">double</span> <span class="n">real</span><span class="p">,</span> <span class="kt">double</span> <span class="n">vrt</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_real</span> <span class="o">=</span> <span class="n">real</span><span class="p">;</span>
+        <span class="n">m_vrt</span> <span class="o">=</span> <span class="n">vrt</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">operator</span> <span class="o">-=</span><span class="p">(</span><span class="n">Comp</span> <span class="o">&amp;</span><span class="n">sub</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Set</span><span class="p">(</span><span class="n">m_real</span> <span class="o">-</span> <span class="n">sub</span><span class="p">.</span><span class="n">m_real</span><span class="p">,</span> <span class="n">m_vrt</span> <span class="o">-</span> <span class="n">sub</span><span class="p">.</span><span class="n">m_vrt</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">Set</span><span class="p">(</span><span class="kt">double</span> <span class="n">real</span><span class="p">,</span> <span class="kt">double</span> <span class="n">vrt</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_real</span> <span class="o">=</span> <span class="n">real</span><span class="p">;</span>
+        <span class="n">m_vrt</span> <span class="o">=</span> <span class="n">vrt</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">Show</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">std</span> <span class="o">::</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_real</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;.&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m_vrt</span> <span class="o">&lt;&lt;</span> <span class="n">std</span> <span class="o">::</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
 
-<h4 id="toc_2">Question 1:</h4>
+<span class="nl">private:</span>
+    <span class="kt">double</span> <span class="n">m_real</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">m_vrt</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Comp</span> <span class="n">c1</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="n">c2</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span>
+    <span class="n">c2</span> <span class="o">-=</span> <span class="n">c1</span><span class="p">;</span>
+    <span class="n">c2</span><span class="p">.</span><span class="n">Show</span><span class="p">();</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">&quot;pause&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cp">#include &lt;iostream&gt;</span>
+
+<span class="n">class</span> <span class="n">Array</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">Array</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">a</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">Array</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">virtual</span><span class="o">~</span> <span class="n">Array</span><span class="p">()</span> <span class="p">{};</span>
+
+    <span class="kt">void</span> <span class="n">show</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span> <span class="o">::</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">std</span> <span class="o">::</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">SetArray</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">a</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">Array</span> <span class="n">operator</span> <span class="o">+</span><span class="p">(</span><span class="n">Array</span> <span class="o">&amp;</span><span class="n">cArray</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Array</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">temp</span><span class="p">.</span><span class="n">m_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">this</span><span class="o">-&gt;</span><span class="n">m_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">cArray</span><span class="p">.</span><span class="n">m_a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">friend</span> <span class="kt">void</span> <span class="n">operator</span> <span class="o">+=</span><span class="p">(</span><span class="n">Array</span> <span class="o">&amp;</span><span class="n">t1</span><span class="p">,</span> <span class="n">Array</span> <span class="o">&amp;</span><span class="n">t2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">t1</span><span class="p">.</span><span class="n">m_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">t1</span><span class="p">.</span><span class="n">m_a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">t2</span><span class="p">.</span><span class="n">m_a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_a</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">};</span>
+    <span class="n">Array</span> <span class="n">arr1</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">arr2</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">arr3</span><span class="p">;</span>
+    <span class="n">arr3</span> <span class="o">=</span> <span class="n">arr1</span> <span class="o">+</span> <span class="n">arr2</span><span class="p">;</span>
+    <span class="n">std</span> <span class="o">::</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Overload operator = : </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="n">std</span> <span class="o">::</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;arr3 = &quot;</span><span class="p">;</span>
+    <span class="n">arr3</span><span class="p">.</span><span class="n">show</span><span class="p">();</span>
+    <span class="n">arr1</span> <span class="o">+=</span> <span class="n">arr2</span><span class="p">;</span>
+    <span class="n">std</span> <span class="o">::</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Overload operator += :</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="n">std</span> <span class="o">::</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;arr1 = &quot;</span><span class="p">;</span>
+    <span class="n">arr1</span><span class="p">.</span><span class="n">show</span><span class="p">();</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">&quot;pause&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cm">/**********************/</span>
+<span class="cp">#include &lt;iostream&gt;</span>
+<span class="n">class</span> <span class="n">Money</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">Money</span><span class="p">(</span><span class="kt">int</span> <span class="n">yuan</span><span class="p">,</span> <span class="kt">int</span> <span class="n">jiao</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fen</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_yuan</span> <span class="o">=</span> <span class="n">yuan</span><span class="p">;</span>
+        <span class="n">m_jiao</span> <span class="o">=</span> <span class="n">jiao</span><span class="p">;</span>
+        <span class="n">m_fen</span> <span class="o">=</span> <span class="n">fen</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">Money</span><span class="p">()</span> <span class="p">{};</span>
+    <span class="n">virtual</span><span class="o">~</span> <span class="n">Money</span><span class="p">()</span> <span class="p">{};</span>
+    <span class="kt">void</span> <span class="n">operator</span> <span class="o">--</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">this</span><span class="o">-&gt;</span><span class="n">m_yuan</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">operator</span> <span class="o">--</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">operator</span><span class="o">--</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">show</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">std</span> <span class="o">::</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">m_yuan</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m_jiao</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m_fen</span> <span class="o">&lt;&lt;</span> <span class="n">std</span> <span class="o">::</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_yuan</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">m_jiao</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">m_fen</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Money</span> <span class="n">m1</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">m2</span><span class="p">,</span> <span class="n">m3</span><span class="p">;</span>
+    <span class="n">m1</span><span class="p">.</span><span class="n">show</span><span class="p">();</span>
+    <span class="o">--</span><span class="n">m1</span><span class="p">;</span>
+    <span class="n">m2</span> <span class="o">=</span> <span class="n">m1</span><span class="p">;</span>
+    <span class="n">m2</span><span class="p">.</span><span class="n">show</span><span class="p">();</span>
+    <span class="n">m1</span><span class="o">--</span><span class="p">;</span>
+    <span class="n">m3</span> <span class="o">=</span> <span class="n">m1</span><span class="p">;</span>
+    <span class="n">m3</span><span class="p">.</span><span class="n">show</span><span class="p">();</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">&quot;pause&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2 id="toc_1">For Eighth C plus experiment</h2>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+
+<span class="n">class</span> <span class="n">CStereoShape</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">CStereoShape</span><span class="p">()</span> <span class="p">{};</span>
+    <span class="n">virtual</span> <span class="o">~</span><span class="n">CStereoShape</span><span class="p">()</span> <span class="p">{};</span>
+    <span class="n">virtual</span> <span class="kt">double</span> <span class="n">GetArea</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">virtual</span> <span class="kt">double</span> <span class="n">GetVolume</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">class</span> <span class="n">CCube</span> <span class="o">:</span> <span class="n">public</span> <span class="n">CStereoShape</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">CCube</span><span class="p">(</span><span class="kt">double</span> <span class="n">length</span><span class="p">,</span> <span class="kt">double</span> <span class="n">width</span><span class="p">,</span> <span class="kt">double</span> <span class="n">height</span><span class="p">);</span>
+    <span class="n">virtual</span> <span class="o">~</span><span class="n">CCube</span><span class="p">()</span> <span class="p">{};</span>
+    <span class="kt">void</span> <span class="nf">SetData</span><span class="p">(</span><span class="kt">double</span> <span class="n">length</span><span class="p">,</span> <span class="kt">double</span> <span class="n">width</span><span class="p">,</span> <span class="kt">double</span> <span class="n">height</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_length</span> <span class="o">=</span> <span class="n">length</span><span class="p">;</span>
+        <span class="n">m_width</span> <span class="o">=</span> <span class="n">width</span><span class="p">;</span>
+        <span class="n">m_height</span> <span class="o">=</span> <span class="n">height</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">double</span> <span class="nf">GetArea</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">m_length</span> <span class="o">*</span> <span class="n">m_width</span> <span class="o">+</span> <span class="n">m_width</span> <span class="o">*</span> <span class="n">m_height</span> <span class="o">+</span> <span class="n">m_length</span> <span class="o">*</span> <span class="n">m_height</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">double</span> <span class="n">GetVolume</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_height</span> <span class="o">*</span> <span class="n">m_width</span> <span class="o">*</span> <span class="n">m_length</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">double</span> <span class="n">m_length</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">m_width</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">m_height</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">CCube</span> <span class="o">::</span> <span class="n">CCube</span><span class="p">(</span><span class="kt">double</span> <span class="n">length</span><span class="p">,</span> <span class="kt">double</span> <span class="n">width</span><span class="p">,</span> <span class="kt">double</span> <span class="n">height</span><span class="p">)</span><span class="o">:</span>
+<span class="n">m_length</span><span class="p">(</span><span class="n">length</span><span class="p">),</span> <span class="n">m_width</span><span class="p">(</span><span class="n">width</span><span class="p">),</span> <span class="n">m_height</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> 
+<span class="p">{</span>
+
+<span class="p">}</span>
+
+<span class="n">class</span> <span class="n">CSphere</span> <span class="o">:</span> <span class="n">public</span> <span class="n">CStereoShape</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">CSphere</span><span class="p">(</span><span class="kt">double</span> <span class="n">r</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_r</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">virtual</span> <span class="o">~</span><span class="n">CSphere</span><span class="p">()</span> <span class="p">{};</span>
+    <span class="kt">void</span> <span class="nf">SetRadius</span><span class="p">(</span><span class="kt">double</span> <span class="n">r</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_r</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">double</span> <span class="n">GetArea</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">4</span> <span class="o">*</span> <span class="mf">3.14</span> <span class="o">*</span> <span class="n">m_r</span> <span class="o">*</span> <span class="n">m_r</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">double</span> <span class="n">GetVolume</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">4</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="mf">3.14</span> <span class="o">*</span> <span class="n">m_r</span> <span class="o">*</span> <span class="n">m_r</span> <span class="o">*</span> <span class="n">m_r</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">double</span> <span class="n">m_r</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">CCube</span> <span class="n">a_cube</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+    <span class="n">CSphere</span> <span class="n">c_sphere</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+    <span class="n">CStereoShape</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">a_cube</span><span class="p">;</span>
+
+    <span class="n">std</span> <span class="o">::</span> <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="s">&quot;CCube Area: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">GetArea</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span> <span class="o">::</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">std</span> <span class="o">::</span> <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="s">&quot;CCube Volume: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">GetVolume</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span> <span class="o">::</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">c_sphere</span><span class="p">;</span>
+    <span class="n">std</span> <span class="o">::</span> <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="s">&quot;CSphere Area: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">GetArea</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span> <span class="o">::</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">std</span> <span class="o">::</span> <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="s">&quot;CSphere Volume: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">GetVolume</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span> <span class="o">::</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">system</span><span class="p">(</span><span class="s">&quot;pause&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2 id="toc_2">For Seventh C plus experiment</h2>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;string&gt;</span>
+
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="n">class</span> <span class="n">MyDate</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">year</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">month</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">day</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="n">MyDate</span><span class="p">(){}</span>
+    <span class="kt">int</span> <span class="n">getMonth</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">month</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">input</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input a date: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">year</span><span class="o">&gt;&gt;</span><span class="n">month</span><span class="o">&gt;&gt;</span><span class="n">day</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">MyDate</span> <span class="n">diffYear</span><span class="p">(</span><span class="k">const</span> <span class="n">MyDate</span> <span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">MyDate</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="n">sum</span><span class="p">.</span><span class="n">month</span> <span class="o">=</span> <span class="p">(</span><span class="n">year</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">month</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">sum</span><span class="p">.</span><span class="n">year</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">sum</span><span class="p">.</span><span class="n">month</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">print</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">year</span><span class="o">&lt;&lt;</span><span class="s">&quot;years&quot;</span><span class="o">&lt;&lt;</span> <span class="n">month</span><span class="o">&lt;&lt;</span><span class="s">&quot;months&quot;</span><span class="o">&lt;&lt;</span> <span class="n">day</span><span class="o">&lt;&lt;</span><span class="s">&quot;days&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">class</span> <span class="n">Person</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+    <span class="n">string</span> <span class="n">id</span><span class="p">;</span>
+    <span class="n">string</span> <span class="n">phonenumber</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="n">Person</span><span class="p">(){};</span>
+    <span class="kt">void</span> <span class="nf">input</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input name, ID and phonenumber: &quot;</span><span class="p">;</span>
+        <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">name</span><span class="o">&gt;&gt;</span><span class="n">id</span><span class="o">&gt;&gt;</span><span class="n">phonenumber</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="nf">print</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">name</span><span class="o">&lt;&lt;</span><span class="s">&quot; &quot;</span><span class="o">&lt;&lt;</span> <span class="n">id</span><span class="o">&lt;&lt;</span><span class="s">&quot; &quot;</span><span class="o">&lt;&lt;</span> <span class="n">phonenumber</span><span class="o">&lt;&lt;</span><span class="s">&quot; &quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">class</span> <span class="n">Student</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">string</span> <span class="n">grade</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span> <span class="n">g</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span> <span class="n">n</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span> <span class="n">iD</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span> <span class="n">ph</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">){}</span>
+    <span class="kt">void</span> <span class="n">input</span><span class="p">(</span><span class="n">Person</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input grade(Freshman、Sophomore、Junior or Senior): &quot;</span><span class="p">;</span>
+        <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">grade</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">print</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">grade</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">class</span> <span class="n">Employee</span> <span class="o">:</span> <span class="n">public</span> <span class="n">Person</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="n">string</span> <span class="n">office</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">salary</span><span class="p">;</span>
+    <span class="n">MyDate</span> <span class="n">DateHired</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="n">Employee</span><span class="p">(){};</span>
+    <span class="kt">void</span> <span class="nf">input</span><span class="p">(</span><span class="n">Person</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">,</span> <span class="n">MyDate</span> <span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input office name, salary: &quot;</span><span class="o">&lt;&lt;</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">office</span><span class="o">&gt;&gt;</span><span class="n">salary</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="nf">print</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;office: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">office</span><span class="o">&lt;&lt;</span><span class="s">&quot;, salary: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">salary</span><span class="o">&lt;&lt;</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">class</span> <span class="n">Faculty</span> <span class="o">:</span> <span class="n">public</span> <span class="n">Employee</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">rant</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">BasicWages</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">Wages</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="n">Faculty</span><span class="p">(){};</span>
+    <span class="kt">void</span> <span class="nf">input</span><span class="p">(</span><span class="n">Employee</span> <span class="o">&amp;</span> <span class="n">p</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input rant(Professor = 3、 AssociateProfessor = 2、AssistantProfessor = 1)and BasicWages:&quot;</span><span class="o">&lt;&lt;</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">rant</span><span class="o">&gt;&gt;</span><span class="n">BasicWages</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">double</span> <span class="nf">CoutWages</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">Wages</span> <span class="o">=</span> <span class="n">rant</span> <span class="o">*</span> <span class="n">BasicWages</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="nf">print</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">rant</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">class</span> <span class="n">Staff</span> <span class="o">:</span> <span class="n">public</span> <span class="n">Employee</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">double</span> <span class="n">Wages</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">BasicWages</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">Allowance</span><span class="p">;</span>
+    <span class="n">string</span> <span class="n">position</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="n">Staff</span><span class="p">(){};</span>
+    <span class="kt">void</span> <span class="nf">input</span><span class="p">(</span><span class="n">Employee</span> <span class="o">&amp;</span> <span class="n">p</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input BasicWages, Allowance and position: &quot;</span><span class="o">&lt;&lt;</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">BasicWages</span><span class="o">&gt;&gt;</span><span class="n">Allowance</span><span class="o">&gt;&gt;</span><span class="n">position</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">double</span> <span class="nf">CoutWages</span><span class="p">(</span><span class="n">MyDate</span> <span class="o">&amp;</span> <span class="n">d</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">s</span><span class="p">;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">getMonth</span><span class="p">();</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">BasicWages</span> <span class="o">+</span> <span class="n">s</span> <span class="o">*</span> <span class="n">Allowance</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="nf">print</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Wages:&quot;</span><span class="o">&lt;&lt;</span><span class="n">Wages</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Person</span> <span class="n">person</span><span class="p">;</span>
+    <span class="n">Student</span> <span class="n">student</span><span class="p">;</span>
+    <span class="n">Employee</span> <span class="n">employee</span><span class="p">;</span>
+    <span class="n">Faculty</span> <span class="n">faculty</span><span class="p">;</span>
+    <span class="n">Staff</span> <span class="n">staff</span><span class="p">;</span>
+    <span class="n">MyDate</span> <span class="n">DateStart</span><span class="p">,</span> <span class="n">DateEnd</span><span class="p">;</span>
+    <span class="n">MyDate</span> <span class="n">Total</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Student:&quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">person</span><span class="p">.</span><span class="n">input</span><span class="p">();</span>
+    <span class="n">student</span><span class="p">.</span><span class="n">input</span><span class="p">(</span><span class="n">person</span><span class="p">);</span>
+    <span class="n">person</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    <span class="n">student</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Faculty:&quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">person</span><span class="p">.</span><span class="n">input</span><span class="p">();</span>
+    <span class="n">employee</span><span class="p">.</span><span class="n">input</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">Total</span><span class="p">);</span>
+    <span class="n">faculty</span><span class="p">.</span><span class="n">input</span><span class="p">(</span><span class="n">employee</span><span class="p">);</span>
+    <span class="n">person</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    <span class="n">employee</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    <span class="n">faculty</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Staff:&quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">person</span><span class="p">.</span><span class="n">input</span><span class="p">();</span>
+    <span class="n">employee</span><span class="p">.</span><span class="n">input</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">Total</span><span class="p">);</span>
+    <span class="n">staff</span><span class="p">.</span><span class="n">input</span><span class="p">(</span><span class="n">employee</span><span class="p">);</span>
+    <span class="n">DateStart</span><span class="p">.</span><span class="n">input</span><span class="p">();</span>
+    <span class="n">DateStart</span><span class="p">.</span><span class="n">diffYear</span><span class="p">(</span><span class="n">DateEnd</span><span class="p">);</span>
+    <span class="n">DateEnd</span><span class="p">.</span><span class="n">input</span><span class="p">();</span>
+    <span class="n">Total</span> <span class="o">=</span> <span class="n">DateStart</span><span class="p">.</span><span class="n">diffYear</span><span class="p">(</span><span class="n">DateEnd</span><span class="p">);</span>
+    <span class="n">staff</span><span class="p">.</span><span class="n">CoutWages</span><span class="p">(</span><span class="n">Total</span><span class="p">);</span>
+    <span class="n">person</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    <span class="n">employee</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    <span class="n">staff</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2 id="toc_3">For Sixth C plus experiment</h2>
+<p>1:</p>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="n">class</span> <span class="n">CPoint</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">CPoint</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">);</span>
+    <span class="n">virtual</span> <span class="o">~</span><span class="n">CPoint</span><span class="p">()</span> <span class="p">{};</span>
+    <span class="kt">void</span> <span class="n">GetX</span><span class="p">(</span><span class="kt">int</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">m_x</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">GetY</span><span class="p">(</span><span class="kt">int</span> <span class="o">&amp;</span><span class="n">y</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">m_y</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">SetX</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">SetY</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_y</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_x</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">m_y</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">CPoint</span> <span class="o">::</span> <span class="n">CPoint</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span><span class="o">:</span>
+<span class="n">m_x</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">m_y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;CPoint x: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m_x</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; y: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m_y</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">CPoint</span> <span class="n">m_class</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+    <span class="n">m_class</span><span class="p">.</span><span class="n">GetX</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;x = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">m_class</span><span class="p">.</span><span class="n">SetX</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+    <span class="n">m_class</span><span class="p">.</span><span class="n">GetX</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;x = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">&quot;pause&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>2:</p>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="n">class</span> <span class="n">CPoint</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">CPoint</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">);</span>
+    <span class="n">virtual</span> <span class="o">~</span><span class="n">CPoint</span><span class="p">()</span> <span class="p">{};</span>
+    <span class="kt">int</span> <span class="n">GetX</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_x</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">GetY</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_y</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">SetX</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">SetY</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_y</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">m_x</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">m_y</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">CPoint</span> <span class="o">::</span> <span class="n">CPoint</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span><span class="o">:</span>
+<span class="n">m_x</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">m_y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;CPoint x: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m_x</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; y: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m_y</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">class</span> <span class="n">CRectangle</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">CRectangle</span><span class="p">(</span><span class="k">const</span> <span class="n">CPoint</span> <span class="o">&amp;</span><span class="n">Lpoint</span><span class="p">,</span> <span class="k">const</span> <span class="n">CPoint</span> <span class="o">&amp;</span><span class="n">Rpoint</span><span class="p">);</span>
+    <span class="n">virtual</span> <span class="o">~</span><span class="n">CRectangle</span><span class="p">()</span> <span class="p">{};</span>
+    <span class="kt">void</span> <span class="nf">SetLPoint</span><span class="p">(</span><span class="k">const</span> <span class="n">CPoint</span> <span class="o">&amp;</span><span class="n">Lpoint</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_Lpoint</span> <span class="o">=</span> <span class="n">Lpoint</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="nf">SetRPoint</span><span class="p">(</span><span class="k">const</span> <span class="n">CPoint</span> <span class="o">&amp;</span><span class="n">Rpoint</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_Rpoint</span> <span class="o">=</span> <span class="n">Rpoint</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="nf">GetPerimeter</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">m_Rpoint</span><span class="p">.</span><span class="n">GetX</span><span class="p">()</span> <span class="o">-</span> <span class="n">m_Lpoint</span><span class="p">.</span><span class="n">GetX</span><span class="p">())</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">m_Rpoint</span><span class="p">.</span><span class="n">GetY</span><span class="p">()</span> <span class="o">-</span> <span class="n">m_Lpoint</span><span class="p">.</span><span class="n">GetY</span><span class="p">());</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="nf">GetArea</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">m_Rpoint</span><span class="p">.</span><span class="n">GetX</span><span class="p">()</span> <span class="o">-</span> <span class="n">m_Lpoint</span><span class="p">.</span><span class="n">GetX</span><span class="p">())</span> <span class="o">*</span> <span class="p">(</span><span class="n">m_Rpoint</span><span class="p">.</span><span class="n">GetY</span><span class="p">()</span> <span class="o">-</span> <span class="n">m_Lpoint</span><span class="p">.</span><span class="n">GetY</span><span class="p">());</span>
+    <span class="p">}</span>
+
+<span class="nl">private:</span>
+    <span class="n">CPoint</span> <span class="n">m_Lpoint</span><span class="p">,</span> <span class="n">m_Rpoint</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">CRectangle</span> <span class="o">::</span> <span class="n">CRectangle</span><span class="p">(</span><span class="k">const</span> <span class="n">CPoint</span> <span class="o">&amp;</span><span class="n">Lpoint</span><span class="p">,</span> <span class="k">const</span> <span class="n">CPoint</span> <span class="o">&amp;</span><span class="n">Rpoint</span><span class="p">)</span><span class="o">:</span>
+<span class="n">m_Lpoint</span><span class="p">(</span><span class="n">Lpoint</span><span class="p">),</span> <span class="n">m_Rpoint</span><span class="p">(</span><span class="n">Rpoint</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Lpoint: x = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m_Lpoint</span><span class="p">.</span><span class="n">GetX</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; y = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m_Lpoint</span><span class="p">.</span><span class="n">GetY</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Rpoint: x = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m_Rpoint</span><span class="p">.</span><span class="n">GetX</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; y = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m_Rpoint</span><span class="p">.</span><span class="n">GetY</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">CPoint</span> <span class="n">Lpoint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">Rpoint</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+    <span class="n">CRectangle</span> <span class="o">*</span><span class="n">mRect</span> <span class="o">=</span> <span class="n">new</span> <span class="n">CRectangle</span><span class="p">(</span><span class="n">Lpoint</span><span class="p">,</span> <span class="n">Rpoint</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;The Rectangle&#39;s Perimeter is &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">mRect</span><span class="o">-&gt;</span><span class="n">GetPerimeter</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;The Rectangle&#39;s area is &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">mRect</span><span class="o">-&gt;</span><span class="n">GetArea</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">Lpoint</span><span class="p">.</span><span class="n">SetX</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+    <span class="n">Lpoint</span><span class="p">.</span><span class="n">SetY</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+    <span class="n">Rpoint</span><span class="p">.</span><span class="n">SetX</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+    <span class="n">Rpoint</span><span class="p">.</span><span class="n">SetY</span><span class="p">(</span><span class="mi">9</span><span class="p">);</span>
+    <span class="n">mRect</span><span class="o">-&gt;</span><span class="n">SetLPoint</span><span class="p">(</span><span class="n">Lpoint</span><span class="p">);</span>
+    <span class="n">mRect</span><span class="o">-&gt;</span><span class="n">SetRPoint</span><span class="p">(</span><span class="n">Rpoint</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;The Rectangle&#39;s Perimeter is &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">mRect</span><span class="o">-&gt;</span><span class="n">GetPerimeter</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;The Rectangle&#39;s area is &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">mRect</span><span class="o">-&gt;</span><span class="n">GetArea</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">&quot;pause&quot;</span><span class="p">);</span>
+    <span class="n">delete</span> <span class="n">mRect</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2 id="toc_4">For Fifth C plus experiment</h2>
+<p>1:</p>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+
+<span class="n">class</span> <span class="n">Fan</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">speed</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">radius</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">color</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+<span class="nl">public:</span>
+    <span class="kt">void</span> <span class="nf">display</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">show</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Fan</span> <span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input first Fan: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;;</span>
+    <span class="n">first</span><span class="p">.</span><span class="n">show</span><span class="p">();</span>
+    <span class="n">first</span><span class="p">.</span><span class="n">display</span><span class="p">();</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input second Fan: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">second</span><span class="p">.</span><span class="n">show</span><span class="p">();</span>
+    <span class="n">second</span><span class="p">.</span><span class="n">display</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Fan</span><span class="o">::</span><span class="n">show</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Speed: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">speed</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;on or off: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">c</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Radius: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">radius</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Color: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">color</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Fan</span><span class="o">::</span><span class="n">display</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;speed: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">speed</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;on or off: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">c</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;radius: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">radius</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;color: &quot;</span><span class="o">&lt;&lt;</span> <span class="n">color</span><span class="o">&lt;&lt;</span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>2:</p>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="n">class</span> <span class="n">Account</span>
+<span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">int</span> <span class="n">id</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">balance</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">annualInterestRate</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="kt">void</span> <span class="nf">input</span><span class="p">();</span>
+    <span class="kt">double</span> <span class="nf">getMonthlyInterestRate</span><span class="p">();</span>
+    <span class="kt">double</span> <span class="nf">withDraw</span><span class="p">(</span><span class="kt">double</span> <span class="n">Withdrawals</span><span class="p">);</span>
+    <span class="kt">double</span> <span class="nf">deposit</span><span class="p">(</span><span class="kt">double</span> <span class="n">Withdrawals</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Account</span> <span class="n">account</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">MonthlyInterestRate</span><span class="p">,</span> <span class="n">Withdrawals</span><span class="p">,</span> <span class="n">Deposit</span><span class="p">,</span> <span class="n">Blance</span><span class="p">;</span>
+    <span class="n">account</span><span class="p">.</span><span class="n">input</span><span class="p">();</span>
+    <span class="n">MonthlyInterestRate</span> <span class="o">=</span> <span class="n">account</span><span class="p">.</span><span class="n">getMonthlyInterestRate</span><span class="p">();</span>
+    <span class="n">account</span><span class="p">.</span><span class="n">withDraw</span><span class="p">(</span><span class="mi">2500</span><span class="p">);</span>
+    <span class="n">Blance</span> <span class="o">=</span> <span class="n">account</span><span class="p">.</span><span class="n">deposit</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;MonthlyInterestRate: &quot;</span><span class="o">&lt;&lt;</span><span class="n">MonthlyInterestRate</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Balance: &quot;</span><span class="o">&lt;&lt;</span><span class="n">Blance</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">Account</span><span class="o">::</span><span class="n">input</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="mi">1122</span><span class="p">;</span>
+    <span class="n">balance</span> <span class="o">=</span> <span class="mi">20000</span><span class="p">;</span>
+    <span class="n">annualInterestRate</span> <span class="o">=</span> <span class="mf">0.045</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">double</span> <span class="n">Account</span><span class="o">::</span><span class="n">getMonthlyInterestRate</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">annualInterestRate</span><span class="o">/</span><span class="mi">4</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">double</span> <span class="n">Account</span><span class="o">::</span><span class="n">withDraw</span><span class="p">(</span><span class="kt">double</span> <span class="n">Withdrawals</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">balance</span> <span class="o">=</span> <span class="n">balance</span> <span class="o">-</span> <span class="n">Withdrawals</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">double</span> <span class="n">Account</span><span class="o">::</span><span class="n">deposit</span><span class="p">(</span><span class="kt">double</span> <span class="n">Deposit</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">balance</span> <span class="o">+</span> <span class="n">Depo</span>
+</pre></div>
+
+<h2 id="toc_5">For Fourth C plus experiment</h2>
+<p>1:</p>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;cmath&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">converByAddress</span><span class="p">(</span><span class="k">struct</span> <span class="n">CartesianCoordinates</span> <span class="o">*</span> <span class="n">coordinate</span><span class="p">,</span> <span class="k">struct</span> <span class="n">PolarCoordinate</span> <span class="n">polar</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">converByReference</span><span class="p">(</span><span class="k">struct</span> <span class="n">CartesianCoordinates</span> <span class="o">&amp;</span> <span class="n">coordinate</span><span class="p">,</span> <span class="k">struct</span> <span class="n">PolarCoordinate</span> <span class="n">polar</span><span class="p">);</span>
+<span class="k">struct</span> <span class="n">PolarCoordinate</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">radius</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">phaseAngle</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">struct</span> <span class="n">CartesianCoordinates</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">x</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="c1">//Passing by address.</span>
+    <span class="k">struct</span> <span class="n">CartesianCoordinates</span> <span class="n">crtsByAddress</span><span class="p">,</span> <span class="n">crtsByReference</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">PolarCoordinate</span> <span class="n">polar</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Input the radius of polar coordinates : &quot;</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">polar</span><span class="p">.</span><span class="n">radius</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Input the phase angle of polar coordinates : &quot;</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">polar</span><span class="p">.</span><span class="n">phaseAngle</span><span class="p">;</span>
+    <span class="n">converByAddress</span><span class="p">(</span><span class="o">&amp;</span><span class="n">crtsByAddress</span><span class="p">,</span> <span class="n">polar</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;The value computed by passing address : ( &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">crtsByAddress</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;,&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">crtsByAddress</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;).</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span> 
+    <span class="n">converByReference</span><span class="p">(</span><span class="n">crtsByReference</span><span class="p">,</span> <span class="n">polar</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;The value computed by passing address : ( &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">crtsByReference</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;,&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">crtsByReference</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;).</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span> 
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">converByAddress</span><span class="p">(</span><span class="k">struct</span> <span class="n">CartesianCoordinates</span> <span class="o">*</span> <span class="n">coordinate</span><span class="p">,</span> <span class="k">struct</span> <span class="n">PolarCoordinate</span> <span class="n">polar</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">coordinate</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">polar</span><span class="p">.</span><span class="n">radius</span><span class="p">)</span> <span class="o">*</span> <span class="n">polar</span><span class="p">.</span><span class="n">phaseAngle</span><span class="p">;</span>
+    <span class="n">coordinate</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">polar</span><span class="p">.</span><span class="n">radius</span><span class="p">)</span> <span class="o">*</span> <span class="n">polar</span><span class="p">.</span><span class="n">phaseAngle</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">converByReference</span><span class="p">(</span><span class="k">struct</span> <span class="n">CartesianCoordinates</span> <span class="o">&amp;</span> <span class="n">coordinate</span><span class="p">,</span> <span class="k">struct</span> <span class="n">PolarCoordinate</span> <span class="n">polar</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">coordinate</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">polar</span><span class="p">.</span><span class="n">radius</span><span class="p">)</span> <span class="o">*</span> <span class="n">polar</span><span class="p">.</span><span class="n">phaseAngle</span><span class="p">;</span>
+    <span class="n">coordinate</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">polar</span><span class="p">.</span><span class="n">radius</span><span class="p">)</span> <span class="o">*</span> <span class="n">polar</span><span class="p">.</span><span class="n">phaseAngle</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>2:</p>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">Complex</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">r</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">v</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="kt">void</span> <span class="nf">product</span><span class="p">(</span><span class="kt">double</span><span class="p">,</span> <span class="kt">double</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">product</span><span class="p">(</span><span class="k">struct</span> <span class="n">Complex</span><span class="p">,</span> <span class="k">struct</span> <span class="n">Complex</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">Complex</span> <span class="n">complex1</span><span class="p">,</span> <span class="n">complex2</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Please input complex number 1: &quot;</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">complex1</span><span class="p">.</span><span class="n">r</span> <span class="o">&gt;&gt;</span> <span class="n">complex1</span><span class="p">.</span><span class="n">v</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Please input complex number 2: &quot;</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">complex2</span><span class="p">.</span><span class="n">r</span> <span class="o">&gt;&gt;</span> <span class="n">complex2</span><span class="p">.</span><span class="n">v</span><span class="p">;</span>
+    <span class="n">product</span><span class="p">(</span><span class="n">complex1</span><span class="p">,</span> <span class="n">complex2</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Please input 2 double type numbers: &quot;</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span><span class="p">;</span>
+    <span class="n">product</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">product</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">product</span><span class="p">(</span><span class="k">struct</span> <span class="n">Complex</span> <span class="n">complex1</span><span class="p">,</span> <span class="k">struct</span> <span class="n">Complex</span> <span class="n">complex2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">complex1</span><span class="p">.</span><span class="n">r</span> <span class="o">*</span> <span class="n">complex2</span><span class="p">.</span><span class="n">r</span> <span class="o">-</span> <span class="n">complex1</span><span class="p">.</span><span class="n">v</span> <span class="o">*</span> <span class="n">complex2</span><span class="p">.</span><span class="n">v</span>
+    <span class="o">&lt;&lt;</span> <span class="s">&quot;,&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">complex1</span><span class="p">.</span><span class="n">r</span> <span class="o">*</span> <span class="n">complex2</span><span class="p">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">complex1</span><span class="p">.</span><span class="n">v</span> <span class="o">*</span> <span class="n">complex2</span><span class="p">.</span><span class="n">r</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>3:</p>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;cmath&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">computeday</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
+<span class="kt">double</span> <span class="nf">compute_physiological_index</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+<span class="kt">double</span> <span class="nf">compute_emotional_index</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+<span class="kt">double</span> <span class="nf">compute_mentality_index</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">value</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Year : &quot;</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">year</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Month : &quot;</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">month</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Day : &quot;</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">day</span><span class="p">;</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">computeday</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">);</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">compute_physiological_index</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">+</span> <span class="n">compute_emotional_index</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">+</span> <span class="n">compute_mentality_index</span><span class="p">(</span><span class="n">count</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Value :&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">computeday</span><span class="p">(</span><span class="kt">int</span> <span class="n">year</span><span class="p">,</span> <span class="kt">int</span> <span class="n">month</span><span class="p">,</span> <span class="kt">int</span> <span class="n">day</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">year</span> <span class="o">*</span> <span class="mi">365</span> <span class="o">+</span> <span class="n">month</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">day</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">double</span> <span class="nf">compute_physiological_index</span><span class="p">(</span><span class="kt">int</span> <span class="n">count</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">sin</span><span class="p">(</span><span class="n">count</span><span class="o">%</span><span class="mi">28</span> <span class="o">/</span> <span class="mf">28.0</span> <span class="o">*</span> <span class="n">asin</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">double</span> <span class="nf">compute_emotional_index</span><span class="p">(</span><span class="kt">int</span> <span class="n">count</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">sin</span><span class="p">(</span><span class="n">count</span><span class="o">%</span><span class="mi">23</span> <span class="o">/</span> <span class="mf">23.0</span> <span class="o">*</span> <span class="n">asin</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">double</span> <span class="nf">compute_mentality_index</span><span class="p">(</span><span class="kt">int</span> <span class="n">count</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">sin</span><span class="p">(</span><span class="n">count</span><span class="o">%</span><span class="mi">33</span> <span class="o">/</span> <span class="mf">33.0</span> <span class="o">*</span> <span class="n">asin</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2 id="toc_6">For Third C plus experiment</h2>
+<p>1:</p>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">SUM</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">numberOfClass</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">student</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">score</span><span class="p">[</span><span class="n">numberOfClass</span><span class="p">];</span>
+    <span class="n">string</span> <span class="n">stuNumber</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">averageByPrt</span><span class="p">(</span><span class="k">struct</span> <span class="n">student</span> <span class="o">*</span> <span class="n">stu</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">averageByPrt_2</span><span class="p">(</span><span class="k">struct</span> <span class="n">student</span> <span class="o">*</span> <span class="n">stu</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This version is called by struct name</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">student</span> <span class="o">*</span> <span class="n">stu</span><span class="p">;</span>
+    <span class="n">stu</span> <span class="o">=</span> <span class="n">new</span> <span class="n">student</span><span class="p">[</span><span class="n">SUM</span><span class="p">];</span>
+    <span class="c1">//Input information</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">SUM</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;The number of student &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">stu</span><span class="o">+</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">stuNumber</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">numberOfClass</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Score &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">stu</span><span class="o">+</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">score</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Way 1:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="n">averageByPrt</span><span class="p">(</span><span class="n">stu</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Way 2:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="n">averageByPrt_2</span><span class="p">(</span><span class="n">stu</span><span class="p">);</span>
+    <span class="n">delete</span> <span class="p">[]</span> <span class="n">stu</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">averageByPrt</span><span class="p">(</span><span class="k">struct</span> <span class="n">student</span> <span class="o">*</span> <span class="n">stu</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">student</span> <span class="o">*</span><span class="n">stuTmp</span><span class="p">;</span>
+    <span class="n">stuTmp</span> <span class="o">=</span> <span class="n">stu</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">SUM</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">numberOfClass</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="n">stuTmp</span><span class="o">-&gt;</span><span class="n">score</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="o">++</span><span class="n">stuTmp</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Average score of student &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">score</span> <span class="o">/</span> <span class="n">numberOfClass</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">stuTmp</span> <span class="o">=</span> <span class="n">stu</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numberOfClass</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">SUM</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="n">stuTmp</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">score</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Average score of class &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">score</span> <span class="o">/</span> <span class="n">SUM</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">averageByPrt_2</span><span class="p">(</span><span class="k">struct</span> <span class="n">student</span> <span class="o">*</span> <span class="n">stu</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">SUM</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">numberOfClass</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="p">(</span><span class="n">stu</span><span class="o">+</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">score</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Average score of student &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">score</span> <span class="o">/</span> <span class="n">numberOfClass</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numberOfClass</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">SUM</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="p">(</span><span class="n">stu</span><span class="o">+</span><span class="n">j</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">score</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Average score of class &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">score</span> <span class="o">/</span> <span class="n">SUM</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>2:</p>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;iomanip&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">addMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">matrix1</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">matrix2</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">multiplyMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">matrix1</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">matrix2</span><span class="p">);</span>
+<span class="kt">int</span> <span class="n">columnSize1</span><span class="p">,</span> <span class="n">columnSize2</span><span class="p">,</span> <span class="n">rowSize1</span><span class="p">,</span> <span class="n">rowSize2</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="k">const</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">matrix1</span><span class="p">,</span> <span class="o">*</span><span class="n">matrix2</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Input column size of multipmatrix 1 : &quot;</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">columnSize1</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Input row size of matrix 1 : &quot;</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">rowSize1</span><span class="p">;</span>
+    <span class="n">matrix1</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">int</span><span class="p">(</span><span class="n">columnSize1</span> <span class="o">*</span> <span class="n">rowSize1</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Input the numbers of matrix1:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span>  <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">columnSize1</span> <span class="o">*</span> <span class="n">rowSize1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="o">*</span><span class="p">(</span><span class="n">matrix1</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Input column size of matrix 2 : &quot;</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">columnSize2</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Input row size of matrix 2 : &quot;</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">rowSize2</span><span class="p">;</span>
+    <span class="n">matrix2</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">int</span><span class="p">(</span><span class="n">columnSize2</span> <span class="o">*</span> <span class="n">rowSize2</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Input the numbers of matrix2:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span>  <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">columnSize2</span> <span class="o">*</span> <span class="n">rowSize2</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="o">*</span><span class="p">(</span><span class="n">matrix2</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">addMatrix</span><span class="p">(</span><span class="n">matrix1</span><span class="p">,</span> <span class="n">matrix2</span><span class="p">);</span>
+    <span class="n">multiplyMatrix</span><span class="p">(</span><span class="n">matrix1</span><span class="p">,</span> <span class="n">matrix2</span><span class="p">);</span>
+    <span class="n">delete</span> <span class="n">matrix1</span><span class="p">;</span>
+    <span class="n">delete</span> <span class="n">matrix2</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">addMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">matrix1</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">matrix2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">columnSize1</span> <span class="o">!=</span> <span class="n">columnSize2</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">rowSize1</span> <span class="o">!=</span> <span class="n">rowSize2</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This 2 Matrixs can&#39;t be added.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//int * matrix;</span>
+    <span class="c1">//matrix = new int(columnSize1 * rowSize1);</span>
+
+    <span class="c1">// *(matrix + i) = *(matrix1 + i) + *(matrix2 + i);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Answer of addMatrix():</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">columnSize1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">rowSize1</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">setw</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="p">(</span><span class="n">matrix1</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">rowSize1</span> <span class="o">+</span> <span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="o">*</span><span class="p">(</span><span class="n">matrix2</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">rowSize1</span> <span class="o">+</span> <span class="n">j</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">multiplyMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">matrix1</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">matrix2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rowSize1</span> <span class="o">!=</span> <span class="n">columnSize2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;This 2 Matrixs can&#39;t be multiplied.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="o">*</span> <span class="n">matrix</span><span class="p">;</span>
+    <span class="n">matrix</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">int</span><span class="p">(</span><span class="n">columnSize1</span> <span class="o">*</span> <span class="n">rowSize2</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">columnSize1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">rowSize2</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">*</span><span class="p">(</span><span class="n">matrix</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">columnSize1</span> <span class="o">+</span> <span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">rowSize1</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+                <span class="o">*</span><span class="p">(</span><span class="n">matrix</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="n">columnSize1</span><span class="o">+</span><span class="n">j</span><span class="p">)</span> <span class="o">+=</span> <span class="o">*</span><span class="p">(</span><span class="n">matrix1</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="n">columnSize1</span><span class="o">+</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="n">matrix2</span><span class="o">+</span><span class="n">k</span><span class="o">*</span><span class="n">columnSize2</span><span class="o">+</span><span class="n">j</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Answer of multiplyMatrix():</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">columnSize1</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">rowSize2</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">setw</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="p">(</span><span class="n">matrix</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="n">columnSize1</span> <span class="o">+</span> <span class="n">j</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+</pre></div>
+
+<h2 id="toc_7">For Second C plus experiment</h2>
+<p>1:</p>
+<div class="highlight"><pre><span class="cp">#include&lt;iostream&gt;</span>
+
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">time</span><span class="p">,</span> <span class="n">wage</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">sum_wage</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input employee’s work time and      wage_per_hour:&quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span><span class="n">time</span><span class="o">&gt;&gt;</span><span class="n">wage</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">time</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">sum_wage</span> <span class="o">=</span> <span class="n">time</span> <span class="o">*</span> <span class="n">wage</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">time</span> <span class="o">&lt;</span> <span class="mi">60</span> <span class="o">&amp;&amp;</span> <span class="n">time</span> <span class="o">&gt;=</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">sum_wage</span> <span class="o">=</span> <span class="mi">40</span> <span class="o">*</span> <span class="n">wage</span> <span class="o">+</span> <span class="p">(</span><span class="n">time</span> <span class="o">-</span> <span class="mi">40</span><span class="p">)</span> <span class="o">*</span> <span class="n">wage</span> <span class="o">*</span> <span class="mf">1.5</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">sum_wage</span> <span class="o">=</span> <span class="mi">40</span> <span class="o">*</span> <span class="n">wage</span> <span class="o">+</span> <span class="mi">20</span> <span class="o">*</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">wage</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">time</span> <span class="o">-</span> <span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="n">wage</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;The employee’s wage:&quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">sum_wage</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>2:</p>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">ComputeDay</span><span class="p">(</span><span class="kt">int</span> <span class="n">year</span><span class="p">,</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">day</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">year</span><span class="p">;</span>
+    <span class="n">string</span> <span class="n">month</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;January&quot;</span><span class="p">,</span> <span class="s">&quot;February&quot;</span><span class="p">,</span> <span class="s">&quot;March&quot;</span><span class="p">,</span> <span class="s">&quot;April&quot;</span><span class="p">,</span> <span class="s">&quot;May&quot;</span><span class="p">,</span> <span class="s">&quot;June&quot;</span><span class="p">,</span> <span class="s">&quot;July&quot;</span><span class="p">,</span> <span class="s">&quot;August&quot;</span><span class="p">,</span> <span class="s">&quot;September&quot;</span><span class="p">,</span> <span class="s">&quot;October&quot;</span><span class="p">,</span> <span class="s">&quot;November&quot;</span><span class="p">,</span> <span class="s">&quot;December&quot;</span><span class="p">};</span>
+    <span class="n">string</span> <span class="n">week</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&quot;Sunday&quot;</span><span class="p">,</span> <span class="s">&quot;Monday&quot;</span><span class="p">,</span> <span class="s">&quot;Tuesday&quot;</span><span class="p">,</span> <span class="s">&quot;Wednesday&quot;</span><span class="p">,</span> <span class="s">&quot;Thursday&quot;</span><span class="p">,</span> <span class="s">&quot;Friday&quot;</span><span class="p">,</span> <span class="s">&quot;Saturday&quot;</span><span class="p">};</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Pleaseinput the year:&quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">year</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input the day of week in &quot;</span><span class="o">&lt;&lt;</span> <span class="n">year</span> <span class="o">&lt;&lt;</span><span class="s">&quot;:&quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">day</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">month</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span><span class="s">&quot; 1,&quot;</span><span class="o">&lt;&lt;</span> <span class="n">year</span> <span class="o">&lt;&lt;</span><span class="s">&quot;is &quot;</span><span class="o">&lt;&lt;</span> <span class="n">week</span><span class="p">[</span><span class="n">day</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">12</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ComputeDay</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">month</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">&quot; 1, &quot;</span><span class="o">&lt;&lt;</span> <span class="n">year</span><span class="o">&lt;&lt;</span><span class="s">&quot; is &quot;</span><span class="o">&lt;&lt;</span> <span class="n">week</span><span class="p">[</span><span class="n">day</span><span class="p">]</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">ComputeDay</span><span class="p">(</span><span class="kt">int</span> <span class="n">year</span><span class="p">,</span> <span class="kt">int</span> <span class="o">&amp;</span> <span class="n">day</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">((</span><span class="n">year</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">year</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">day</span> <span class="o">=</span> <span class="p">(</span><span class="n">day</span> <span class="o">+</span> <span class="mi">29</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">day</span> <span class="o">=</span> <span class="p">(</span><span class="n">day</span> <span class="o">+</span> <span class="mi">28</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="o">||</span><span class="n">i</span> <span class="o">==</span> <span class="mi">4</span><span class="o">||</span><span class="n">i</span> <span class="o">==</span> <span class="mi">6</span><span class="o">||</span><span class="n">i</span> <span class="o">==</span> <span class="mi">8</span><span class="o">||</span><span class="n">i</span> <span class="o">==</span> <span class="mi">9</span><span class="o">||</span><span class="n">i</span> <span class="o">==</span> <span class="mi">11</span><span class="p">)</span>
+        <span class="n">day</span> <span class="o">=</span> <span class="p">(</span><span class="n">day</span> <span class="o">+</span> <span class="mi">31</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">day</span> <span class="o">=</span> <span class="p">(</span><span class="n">day</span> <span class="o">+</span> <span class="mi">30</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">day</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>3:</p>
+<div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;iomanip&gt;</span>
+<span class="cp">#include &lt;cmath&gt;</span>
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">Numberof_Month</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">LoadAmout</span><span class="p">,</span> <span class="n">AnnualInterest_Rate</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">MonthlyPayment</span><span class="p">,</span> <span class="n">TotalPayment</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">Interest</span><span class="p">,</span> <span class="n">Principal</span><span class="p">,</span> <span class="n">Blance</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input LoadAmout:&quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">LoadAmout</span><span class="p">;</span>
+    <span class="n">Blance</span> <span class="o">=</span> <span class="n">LoadAmout</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input Numberof_Month:&quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">Numberof_Month</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Please input AnnualInterest_Rate:&quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">AnnualInterest_Rate</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">Numberof_Month</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">/</span><span class="n">pow</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">AnnualInterest_Rate</span><span class="o">/</span><span class="n">Numberof_Month</span><span class="p">),</span> <span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">MonthlyPayment</span> <span class="o">=</span> <span class="n">LoadAmout</span> <span class="o">/</span> <span class="n">sum</span><span class="p">;</span>
+    <span class="n">TotalPayment</span> <span class="o">=</span> <span class="n">MonthlyPayment</span> <span class="o">*</span> <span class="n">Numberof_Month</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;MonthlyPaymenåt: &quot;</span><span class="o">&lt;&lt;</span><span class="n">MonthlyPayment</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;TotalPayment: &quot;</span><span class="o">&lt;&lt;</span><span class="n">TotalPayment</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Payment#     Interest     Principal     Blance&quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">Numberof_Month</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Interest</span> <span class="o">=</span> <span class="n">Blance</span> <span class="o">*</span> <span class="n">AnnualInterest_Rate</span> <span class="o">/</span> <span class="n">Numberof_Month</span><span class="p">;</span>
+        <span class="n">Principal</span> <span class="o">=</span> <span class="n">MonthlyPayment</span> <span class="o">-</span> <span class="n">Interest</span><span class="p">;</span>
+        <span class="n">Blance</span> <span class="o">=</span> <span class="n">Blance</span> <span class="o">-</span> <span class="n">Principal</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">setiosflags</span><span class="p">(</span><span class="n">ios</span><span class="o">::</span><span class="n">fixed</span><span class="p">);</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span><span class="s">&quot;     &quot;</span><span class="o">&lt;&lt;</span><span class="n">Interest</span><span class="o">&lt;&lt;</span><span class="s">&quot;     &quot;</span><span class="o">&lt;&lt;</span><span class="n">Principal</span><span class="o">&lt;&lt;</span><span class="s">&quot;     &quot;</span><span class="o">&lt;&lt;</span><span class="n">Blance</span><span class="o">&lt;&lt;</span><span class="s">&quot;     &quot;</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2 id="toc_8">For First C plus experiment</h2>
+
+<h3 id="toc_9">Answer:</h3>
+
+<h4 id="toc_10">Question 1:</h4>
 <div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
 <span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
@@ -739,7 +1820,7 @@ on the line after the opening script tag */
 <span class="p">}</span>
 </pre></div>
 
-<h4 id="toc_3">Question 2:</h4>
+<h4 id="toc_11">Question 2:</h4>
 <div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
 <span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
@@ -763,7 +1844,7 @@ on the line after the opening script tag */
 <span class="p">}</span>
 </pre></div>
 
-<h4 id="toc_4">Question 3:</h4>
+<h4 id="toc_12">Question 3:</h4>
 <div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
 <span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
@@ -783,7 +1864,7 @@ on the line after the opening script tag */
 <span class="p">}</span>
 </pre></div>
 
-<h4 id="toc_5">Question 4.1:</h4>
+<h4 id="toc_13">Question 4.1:</h4>
 <div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
 <span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
@@ -803,7 +1884,7 @@ on the line after the opening script tag */
 <span class="p">}</span>
 </pre></div>
 
-<h4 id="toc_6">Question 4.2:</h4>
+<h4 id="toc_14">Question 4.2:</h4>
 <div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
 <span class="cp">#define N 1.60934</span>
@@ -824,7 +1905,7 @@ on the line after the opening script tag */
 <span class="p">}</span>
 </pre></div>
 
-<h4 id="toc_7">Question 5:</h4>
+<h4 id="toc_15">Question 5:</h4>
 <div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 
 <span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
@@ -846,9 +1927,9 @@ on the line after the opening script tag */
 <span class="p">}</span>
 </pre></div>
 
-<h2 id="toc_8">For 2013-10-16 C plus homework</h2>
+<h2 id="toc_16">For 2013-10-16 C plus homework</h2>
 
-<h3 id="toc_9">链接错误</h3>
+<h3 id="toc_17">链接错误</h3>
 <div class="highlight"><pre><span class="cp">#include&lt;iostream&gt;</span>
 <span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
@@ -859,7 +1940,7 @@ on the line after the opening script tag */
 </pre></div>
 <p><strong>MSVCRTD.lib(crtexe.obj) : error LNK2019: 无法解析的外部符号 <em>main，该符号在函数 _</em>_tmainCRTStartup 中被引用</strong></p>
 
-<h3 id="toc_10">编译错误</h3>
+<h3 id="toc_18">编译错误</h3>
 <div class="highlight"><pre><span class="cp">#include &lt;iostream&gt;</span>
 <span class="n">using</span> <span class="n">namespace</span> <span class="n">std</span><span class="p">;</span>
 
@@ -870,7 +1951,7 @@ on the line after the opening script tag */
 </pre></div>
 <p><strong>cout2: 未声明的标识符</strong></p>
 
-<h3 id="toc_11">运行错误 - 缺少运行库</h3>
+<h3 id="toc_19">运行错误 - 缺少运行库</h3>
 ]]>
         </content>
     </entry><entry>
