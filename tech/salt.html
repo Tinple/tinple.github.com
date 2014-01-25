@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Salt Cryptography - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=7f42a" />
+    <link rel="stylesheet" href="/static/pygments.css?v=c6adc" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/salt" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Salt Cryptography</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2013-11-14T00:00:00+08:00" pubdate>
+            <a href="/2013/">2013-11-14</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <p>Last three months ago, I made a single page web application to let users register their own team. As the password usually users fill in will make some inconvenience in our
+cyber ​​security competition, I took a service to send a email which including an automatic generation password. And what I do is adding salt in password to confirm the security.</p>
+<p>So what&#39;s called salt?</p>
+
+<blockquote>
+<p>In cryptography, a salt is random data that are used as an additional input to a one-way function that hashes a password or passphrase.</p>
+</blockquote>
+<p>And a new salt is randomly generated for each password. In my apply page, the 
+salt and the password are concatenated and processed with a cryptographic hash function, and the resulting output (but not the original password) is sent to users email while the salt and the original password is stored in a database. </p>
+<p>Hashing allows for later authentication while defending against compromise of the plaintext password in the event that the database is somehow compromised. And
+in this way, the output password will be somehow entirely safe although the original password may be cracked.</p>
+<p>All right, it is time to begin. In <code>PHP</code>, the code like this:</p>
+
+<pre><code>$length = 32;
+$mode = 0;
+switch ($mode) 
+{
+    case '1':
+    $str = '1234567890';
+    break;
+    case '2':
+    $str = 'abcdefghijklmnopqrstuvwxyz';
+    break;
+    case '3':
+    $str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    break;
+    default:
+    $str = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    break;
+}
+$pass = '';
+$l = strlen($str) - 1;
+$num = 0;
+for($i = 0;$i &lt; $length;$i++){
+    $num = rand(0, $l);
+    $a = $str[$num];
+    $pass .= $a;
+}
+
+$saltLength = 6;
+$salt = '';
+for ($a = 0; $a &lt; $saltLength; $a++) {
+        $salt .= chr(mt_rand(97,122));    
+}
+
+echo 'Salt:' . $salt;
+echo '&lt;br&gt;';
+echo 'Original Password:' . $pass;  
+echo '&lt;br&gt;';
+// Simply add the salt to the end
+echo 'Outping:' . md5(sha1($pass.$salt));</code></pre>
+<p>That&#39;s all. And next you can do what you want to do, maybe send the output password to users via email or some other things.</p>
+<p>Remember that it is common for a web application to store in a database the hash value of a user&#39;s password. Without a salt, a successful SQL injection attack may yield easily crackable passwords. You can read more on <a href="http://en.wikipedia.org/wiki/Salt_%28cryptography%29">wiki</a> about the beneficial of the salt.</p>
+<p>Have fun :D</p>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Salt Cryptography';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://facebook.com/Tinple">Facebook</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+      <p class="copyright">
+      <span class="software">
+        Powered by <a href="http://lab.lepture.com/liquidluck/">Felix Felicis</a> 3.8.1,
+      </span>
+      <span class="theme">
+        Theme <a href="https://github.com/lepture/liquidluck-theme-moment" rel="nofollow">moment</a> 2.0 by <a href="http://lepture.com">Hsiaoming Yang</a>
+      </span>
+      </p>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>

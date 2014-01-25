@@ -1,0 +1,648 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Homework for matlab - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=7f42a" />
+    <link rel="stylesheet" href="/static/pygments.css?v=c6adc" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/homework-for-matlab" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Homework for matlab</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2013-10-16T00:00:00+08:00" pubdate>
+            <a href="/2013/">2013-10-16</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <h2 id="toc_0">Chapter IV</h2>
+<p>4.2</p>
+
+<pre><code>ii=-9:0.5:9;
+t=ii &gt;= 0;
+y=-3.*ii(t).^2+5;
+t=ii &lt; 0;
+y=3.*ii(t).^2+5;</code></pre>
+<p>4.4</p>
+
+<pre><code>subplot(2,1,1);
+x=0.1:.1:3;
+y=x.^2-3.*x+2;
+plot(x,y,'r--','LineWidth',3);
+subplot(2,1,2);
+x=0.1:.1:3;
+for&gt;     y(i)=x(i)^2-3*x(i)+2; 
+end
+plot(x,y,'r--','LineWidth',3);</code></pre>
+<p>4.6</p>
+
+<pre><code>x=1;
+for&gt;     x = x+1;
+end;
+运行65537次
+
+
+x=1;
+for&gt;     x = x+1;
+end;
+运行1次
+
+
+x=1;
+for&gt;     x = x+1;
+end;
+运行2次
+
+
+x=1;
+for&gt;     x = x+1;
+end;
+运行6次</code></pre>
+<p>4.8</p>
+
+<pre><code>a:
+ires =&gt; ires = ires + 1;
+end
+运行0次
+
+
+b:
+b.&gt; while ires &lt;= 200
+ires =&gt; while ires &gt; 200
+ires =&gt; %for&gt; %temp =&gt; %y(ii) = temp(2);
+%end
+ii=1;
+while&gt;     temp = input('Enter [x y] pair: ');
+   &gt;     else 
+        x(ii) =&gt;         ii = ii+1;
+       &gt;     end;
+end
+sum_x = 0;
+sum_y = 0;
+sum_x2 = 0;
+sum_xy = 0;
+for&gt; sum_x = sum_x + x(ii);
+sum_y =&gt; sum_xy = sum_xy + x(ii) * y(ii);
+end
+x_bar =&gt; slope = (sum_xy - sum_x * y_bar) / ( sum_x2 - sum_x * x_bar);
+y_int =&gt; fprintf(' Intercept (b) = %8.3f\n', y_int);
+fprintf(' No&gt; plot(x,y,'bo');
+hold&gt; xmax = max(x);
+ymin =&gt; plot([xmin xmax],[ymin ymax],'r','LineWidth',2);
+hold&gt; while x&lt;1
+   &gt;     fprintf('y=%f\n',y);
+    x =&gt; t=0:3:24;
+i1=(2*i0).^t;
+i2=(2*i0).^(t/1.5);
+subplot(2,1,1);
+plot(t,i1,'or-',t,i2,'ob--');
+legend('A','B');
+subplot(2,1,2);
+loglog(t,i1,'or-',t,i2,'ob--');
+legend('A','B');
+ia24=(2*i0)^24;
+ib24=(2*i0)^(24/1.5);
+fprintf('24小时之后A、B培养基的病毒数分别为%d，%d',ia24,ib24);</code></pre>
+<p>4.10</p>
+<p>可以用logical 函数给一个数组加上一个逻辑属性</p>
+<p>可以通过任何的数学运算去除。例如，如果我们在c 数组加0，数组的值不会改变，而它的逻辑属性将会消失</p>
+<p>4.12</p>
+<p>加速度越小落地位移越长。
+加速度变化对最佳抛出角度无影响。</p>
+<p>4.14</p>
+
+<pre><code>disp('This program performs a leastsquares fit of an ');
+disp('input data set to a straight line.');
+%n_points = input('Enter the number of input [x y] points: ');
+%for ii = 1:n_points
+%temp = input('Enter [x y] pair: ');
+%x(ii) = temp(1);
+%y(ii) = temp(2);
+%end
+ii=1;
+while ii ~=0
+    temp = input('Enter [x y] pair: ');
+    if(isempty(temp))
+        ii = 0;
+    else 
+        x(ii) = temp(1);
+        y(ii) = temp(2);
+        ii = ii+1;
+        n_points =ii-1;
+    end;
+end
+sum_x = 0;
+sum_y = 0;
+sum_x2 = 0;
+sum_xy = 0;
+for ii = 1:n_points
+sum_x = sum_x + x(ii);
+sum_y = sum_y + y(ii);
+sum_x2 = sum_x2 + x(ii)^2;
+sum_xy = sum_xy + x(ii) * y(ii);
+end
+x_bar = sum_x / n_points;
+y_bar = sum_y / n_points;
+slope = (sum_xy - sum_x * y_bar) / ( sum_x2 - sum_x * x_bar);
+y_int = y_bar - slope * x_bar;
+disp('Regression coefficients for the leastsquares line:');
+fprintf(' Slope (m) = %8.3f\n', slope);
+fprintf(' Intercept (b) = %8.3f\n', y_int);
+fprintf(' No of points = %8d\n', n_points);
+plot(x,y,'bo');
+hold on;
+xmin = min(x);
+xmax = max(x);
+ymin = slope * xmin + y_int;
+ymax = slope * xmax + y_int;
+plot([xmin xmax],[ymin ymax],'r','LineWidth',2);
+hold off;
+title ('\bfLeastSquaresFit');
+xlabel('\bf\itx');
+ylabel('\bf\ity');
+legend('Input data','Fitted line');
+grid on</code></pre>
+<p>4.16</p>
+<p>4.18</p>
+
+<pre><code>x = input('input number x&lt;1');
+while x&lt;1
+    y= log(1/(1-x));
+    fprintf('y=%f\n',y);
+    x = input('input number x&lt;1: ');
+end</code></pre>
+<p>4.22</p>
+
+<pre><code>i0=1;
+t=0:3:24;
+i1=(2*i0).^t;
+i2=(2*i0).^(t/1.5);
+subplot(2,1,1);
+plot(t,i1,'or-',t,i2,'ob--');
+legend('A','B');
+subplot(2,1,2);
+loglog(t,i1,'or-',t,i2,'ob--');
+legend('A','B');
+ia24=(2*i0)^24;
+ib24=(2*i0)^(24/1.5);
+fprintf('24小时之后A、B培养基的病毒数分别为%d，%d',ia24,ib24);</code></pre>
+<p>4.24</p>
+
+<pre><code>x=input('请输入一个数：（以负数结束输入）');
+sum=0;
+n=0;
+m=1;
+while(x&gt;=0)
+   &gt;     m=m*x;
+    x=input('请输入下一个数：');
+   &gt; end
+ss=sum/n;
+jh=m^(1/n);
+fprintf('算术平均数为%f\n几何平均数为%f\n',ss,jh);</code></pre>
+<p>4.26</p>
+
+<pre><code>x=input('请输入一个数：（以负数结束输入）');
+sum=0;
+n=0;
+m=1;
+ds=0;
+while(x&gt;=0)
+   &gt;     m=m*x;
+   &gt;     x=input('请输入下一个数：');
+   &gt; end
+th=n/ds;
+ss=sum/n;
+jh=m^(1/n);
+fprintf('算术平均数为%f\n几何平均数为%f\n调和平均数为',ss,jh,th);</code></pre>
+<p>4.28</p>
+
+<pre><code>x=input('请输入设备的组成部分数量');
+while x&lt;=0
+   &gt; end
+ds=0;
+for&gt;     fprintf('请输入第%d部分的平均无故障时间',ii);
+   &gt;     ds=1/subsystem+ds;
+end
+MTBF=1/ds;
+fprintf('设备平均无故障时间为%f',MTBF);</code></pre>
+
+<h2 id="toc_1">Chapter III</h2>
+<p>3.2 </p>
+<p>下面的语句用来判断一个人的体温是否处于危险状态（温度用的是华氏计量）。这些语句是否正确？如果不正确，指出错在那里？</p>
+
+<pre><code>if temp &lt; 97.5
+disp('Temperature below normal');
+elseif temp &gt; 97.5
+disp('Temperature normal');
+elseif temp &gt; 99.5
+disp('Temperature slightly high');
+elseif temp &gt; 103.0
+disp('Temperature dangerously high');
+end</code></pre>
+<p>不正确， end一般放在据temp&lt;0 最近的地方。</p>
+<p>3.4</p>
+<p>在例3.3 中我们编写了一个程序用以计算f(x,y)的值。这个函数的定义如下</p>
+
+<pre><code>f(x,y) =
+x + y x ≥ 0 and y ≥ 0
+x + y2 x ≥ 0 and y &lt; 0
+x2 + y x &lt; 0 and y ≥ 0
+x2 + y2 x &lt; 0 and y &lt; 0</code></pre>
+<p>在这里我们要求用if 的嵌套结构来编写这个程序。</p>
+
+<pre><code>x = input('Enter the x coefficient: ');
+y = input('Enter the y coefficient: ');
+if x &gt;= 0 &amp; y &gt;= 0
+   fun = x + y;
+elseif x&gt;=0 &amp; y &lt; 0
+   fun = x + y^2;
+elseif x &lt; 0 &amp; y &gt;= 0
+   fun = x^2 + y;
+else
+   fun = x^2 + y^2;
+end</code></pre>
+<p>3.6</p>
+<p>编写一个程序允许使用者输入一个字符串，这个字符必须是一个星期中的一天(即
+&ldquo;Sunday&rdquo;,&ldquo;Monday&rdquo;,&ldquo;Tuesday&quot;等)，应用switch 结构把这些字符串转化为相应的数字，以星期天为第一天，以星期六为最后一天。如果输入不是这七个字符串中的一个，那么输出提示信息。</p>
+
+<pre><code>week = input('Please input a day in a week: ','s');
+switch week
+   case 'Sunday'
+       sprintf('%s', 'Ò»ÐÇÆÚµÄµÚÒ»Ìì')
+   case 'Monday'
+       sprintf('%s', '一个星期的第一天')
+   case 'Tuesday'
+       sprintf('%s', '一个星期的第二天')
+   case 'Wednesday'
+       sprintf('%s', '一个星期的第三天')
+   case 'Thursday'
+       sprintf('%s', '一个星期的第四天')
+   case 'Friday'
+       sprintf('%s', '一个星期的第五天')
+   case 'Saturday'
+       sprintf('%s', '一个星期的第六天')
+   otherwise
+       sprintf('ERROR!')
+end</code></pre>
+<p>3.8</p>
+<p>天线增益模式。一个抛物面微波接收天线的接受增益G是关于执物面的反射角度θ的函数，
+G(θ) = |sinc4θ| (-π/2 ≤ θ ≤π2) 其中sincx=sinx/x。用极坐标画出G 的图象。</p>
+
+<pre><code>theta=-pi/2:0.1:pi/2;
+g=sin(theta*4)./4./theta;
+polar(theta,g);</code></pre>
+<p>3.10</p>
+
+<pre><code>figure(1);
+subplot(2,1,1);
+t=0:0.1:4;
+f=(0.5-0.25*i)*t-1.0;
+plot(t,abs(f),'b-');
+subplot(2,1,2);
+plot(t,angle(f)*180/pi,'r--');</code></pre>
+<p>3.12</p>
+
+<pre><code>clear all;
+k=0.5;
+theta=0:0.1:6*pi;
+r=k*theta;
+polar(theta,r);</code></pre>
+<p>3.14</p>
+
+<pre><code>clear all;
+p=1e6;
+N=2*pi;
+b=0:0.01:N;
+a=input('请输入轨道参数e：');
+r=p./(1-a.*cos(b));
+polar(b, r);
+title('卫星轨迹图');
+rmax=max(r);
+rmin=min(r);</code></pre>
+<p>第一颗卫星运动轨迹是圆，到地球最近距离是1000000，最远距离是1000000</p>
+<p>第二颗卫星运动轨迹是椭圆，到地球最近距离是800000，最远距离是1333333.333333</p>
+<p>第三颗卫星运动轨迹是椭圆，到地球最近距离是666666.666667，最远距离是2000000</p>
+
+<h2 id="toc_2">Chapter II</h2>
+<p>2.2</p>
+<p>a.合法  b.不合法  c.合法  d.不合法  e.不合法</p>
+<p>在Matlab中定义变量，第一个字符必须是字母，之后可以是字母，数字或下划线，最好不要超过32个字符，因为只认可前32个字符。</p>
+<p>2.4</p>
+
+<pre><code>&gt;&gt;array1=[1.1 0.0 2.1-3.5 6.0;0.0 1.1 -6.6 2.8 3.4;2.1 0.1 0.3 -0.4 1.3 ;-1.4 5.1 0.0 1.10.0]
+
+array1 = 
+
+1.1000         0    2.1000  -3.5000    6.0000
+
+0    1.1000   -6.6000   2.8000    3.4000
+
+2.1000    0.1000    0.3000  -0.4000    1.3000
+
+-1.4000    5.1000         0   1.1000         0
+
+&gt;&gt;array1(3,:)
+
+ans =
+
+2.1000    0.1000    0.3000  -0.4000    1.3000
+
+&gt;&gt; array1(:,3)
+
+ans =
+
+2.1000
+
+-6.6000
+
+0.3000
+
+0
+
+&gt;&gt;array1(1:2:3,[3 3 4])
+
+ans =
+
+2.1000    2.1000   -3.5000
+
+0.3000    0.3000   -0.4000
+
+&gt;&gt; array1([1 1],:)
+
+ans =
+
+1.1000         0    2.1000  -3.5000    6.0000
+
+1.1000         0    2.1000  -3.5000    6.0000</code></pre>
+<p>2.6</p>
+
+<pre><code>&gt;&gt;  a = [2 -2;-1 2],b =[1, -1;0, 2], c = [1; -2], d = eye(2)
+
+a =
+
+2    -2
+
+-1     2
+
+b =
+
+1    -1
+
+0     2
+
+c =
+
+1
+
+-2
+
+d =
+
+1     0
+
+0     1
+
+&gt; result= a*b
+
+result =
+
+2    -6
+
+-1     5
+
+&gt;&gt; result = a.*d
+
+result =
+
+2     0
+
+0     2
+
+&gt;&gt; result = a*c
+
+result =
+
+6
+
+-5
+
+&gt;&gt; result = a.*c
+
+Error using  .*
+
+Matrix dimensions must agree.
+
+&gt;&gt; result = a.*d
+
+result =
+
+2     0
+
+0     2
+
+&gt;&gt; result = a\b
+
+result =
+
+1.0000    1.0000
+
+0.5000    1.5000
+
+&gt;&gt; result = a.\b
+
+result =
+
+0.5000    0.5000
+
+0    1.0000
+
+&gt;&gt; result = a.^b
+
+result =
+
+2.0000   -0.5000
+
+1.0000    4.0000</code></pre>
+<p>2.8</p>
+
+<pre><code>&gt;&gt; (3-5i)*(-4+6i)
+
+ans =
+
+18.0000 +38.0000i
+
+&gt;&gt; (cos(1.2))^(-1)
+
+ans =
+
+2.7597</code></pre>
+<p>2.10</p>
+
+<pre><code>v0= input('v0=');
+
+h0= input('h0=');
+
+t= -10:0.01:10;
+
+h= 0.5.*(-9.81).*t.^2+v0.*t+h0;
+
+v=(-9.81).*t+v0;
+
+plot(t,h,'r--', t,v,'g');
+
+axis([-10,10, -50, 50]);
+
+xlabel('t');
+
+ylabel('hand v');
+
+legend('h','v')
+
+&gt;&gt; untitled2
+
+v0=10
+
+h0=10</code></pre>
+<p>2.12</p>
+
+<pre><code>p2= input('请输入一个功率p2:');
+
+p1= 0.001;
+
+dB=10*log10(p2/1000/p1);
+
+fprintf('dB=%fdBm\n',dB);
+
+p3= 1:100;
+
+dBm= 10*log10(p3/1000/p1);
+
+subplot(2,1, 1);
+
+plot(p3,dBm);
+
+title('线性轴图');
+
+xlabel('p3');
+
+ylabel('dBm');
+
+gridon;
+
+subplot(2,1, 2);
+
+semilogx(p3,dBm);
+
+title('对数－线性轴图');
+
+xlabel('p3');
+
+ylabel('dBm');
+
+gridon;</code></pre>
+<p>2.14</p>
+<p>程序：</p>
+
+<pre><code>F=input('F=');
+k=input('k=');
+x=F/k;
+E=1/2*k*(x^2);
+fprintf('x=%f,E=%f',x,E);</code></pre>
+<p>输入：F=20 k=500</p>
+<p>输出：x=0.040000,E=0.400000 </p>
+<p>弹簧的劲度系数越大，弹簧的弹力越大，所以是弹簧4</p>
+<p>2.16</p>
+<p>a:</p>
+
+<pre><code>f=0.1:100:2000000;
+L=0.0001;
+C=0.00000000025;
+R=50;
+Vo=0.01;
+w=2*pi.*f;
+Vr=R*Vo./(((R^2)+(w.*L-1./(w.*C)).^2).^(1/2));
+plot(f,Vr);</code></pre>
+<p>b:将f=1000000*1.1，则Vr=0.0041V</p>
+<p>c:9.4*105和1.08*106</p>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Homework for matlab';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://facebook.com/Tinple">Facebook</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+      <p class="copyright">
+      <span class="software">
+        Powered by <a href="http://lab.lepture.com/liquidluck/">Felix Felicis</a> 3.8.1,
+      </span>
+      <span class="theme">
+        Theme <a href="https://github.com/lepture/liquidluck-theme-moment" rel="nofollow">moment</a> 2.0 by <a href="http://lepture.com">Hsiaoming Yang</a>
+      </span>
+      </p>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>
