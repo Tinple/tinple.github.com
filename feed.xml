@@ -3,8 +3,7 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-<<<<<<< HEAD
-    <updated>2014-02-25T22:00:41+08:00</updated>
+    <updated>2014-02-25T22:11:09+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
         <title type="html"><![CDATA[Bitwise Operators in javascript]]></title>
@@ -104,30 +103,16 @@ And the datas in this post are tested in <a href="https://code.google.com/p/v8/"
 ]]>
         </content>
     </entry><entry>
-=======
-    <updated>2014-01-25T23:12:49+08:00</updated>
-    <id>http://tinple.me/</id>
-    <entry>
->>>>>>> 79cfeebf891b9d441a1bdf4249fd6229e6d4f529
         <title type="html"><![CDATA[Using jade template engine]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/using-jade-template-engine"/>
         <published>2014-01-22T00:00:00+08:00</published>
-<<<<<<< HEAD
-        <updated>2014-02-25T22:00:41+08:00</updated>
+        <updated>2014-02-25T22:11:09+08:00</updated>
         <id>http://tinple.me/tech/using-jade-template-engine</id>
         <category scheme="http://tinple.me/tag/jade/" term="jade" label="jade" />
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <p>These days I touched a node template engine <code>jade</code>. I loved it at once because its <code>zencoding</code> grammar really attracts me.</p>
 <p>Unlike other template engine such as <code>EJS</code> and <code>handlebars</code>, <code>jade</code> has its own elegancy and lots of features. Firstly, you can install it via npm: <code>npm install jade -g</code> or <code>npm install jade</code>. And if you install it globally, try to detect whether the <code>$NODE_PATH</code> includes the location that npm installs globally or not.</p>
-=======
-        <updated>2014-01-25T23:12:49+08:00</updated>
-        <id>http://tinple.me/tech/using-jade-template-engine</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p>These days I touched a node template engine <code>jade</code>. I loved it at once because  its <code>zencoding</code> grammar really attracts me. </p>
-<p>Unlike other template engine such as <code>EJS</code> and <code>handlebars</code>, <code>jade</code> has its own elegancy and lots of features. Firstly, you can install
-it via npm: <code>npm install jade -g</code> or <code>npm install jade</code>. And if you install it globally, try to detect whether the <code>$NODE_PATH</code> includes the location that npm installs globally or not.</p>
->>>>>>> 79cfeebf891b9d441a1bdf4249fd6229e6d4f529
 
 <pre><code>@tinple ➜  ~  which node
 /usr/local/bin/node
@@ -135,14 +120,9 @@ it via npm: <code>npm install jade -g</code> or <code>npm install jade</code>. A
 /usr/local/bin/npm
 @tinple ➜  ~  echo $NODE_PATH
 /usr/local/lib/node_modules</code></pre>
-<<<<<<< HEAD
 <p>If your <code>$NODE_PATH</code> is null, try to add</p>
 
 <pre><code>export NODE_PATH=/usr/local/lib/node_modules</code></pre>
-=======
-<p>If your <code>$NODE_PATH</code> is null, try to add </p>
-<p><code>export NODE_PATH=/usr/local/lib/node_modules</code> </p>
->>>>>>> 79cfeebf891b9d441a1bdf4249fd6229e6d4f529
 <p>to your <code>.bash_profile</code> or <code>.zshrc</code>. The path is not absolute, it depends on your node directory.</p>
 <p>Jade is a clean, whitespace sensitive syntax for writing html. Just ignore the process that how to turn <code>.jade</code> to <code>.html</code> at begin. Pay attention to its succinct writemode, for example, file <code>demo.jade</code>:</p>
 
@@ -172,11 +152,7 @@ html(lang=&quot;en&quot;)
     name: 'Tinple',
     love: true
 }</code></pre>
-<<<<<<< HEAD
 <p>Finally it becomes:</p>
-=======
-<p>Finally it becomes: </p>
->>>>>>> 79cfeebf891b9d441a1bdf4249fd6229e6d4f529
 
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
@@ -194,17 +170,10 @@ html(lang=&quot;en&quot;)
         &lt;p&gt;A couple&lt;/p&gt;
     &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-<<<<<<< HEAD
 <p>And there are many other features <a href="http://naltatis.github.io/jade-syntax-docs/">there</a>, you can learn it by yourself. Next talking about its <code>api</code>, <code>command line</code> and <code>browser-support</code>, yes, jade supports them.</p>
 
 <h2 id="toc_0">Command Line</h2>
 <p>When <code>jade</code> is installed, you can run with <code>jade --help</code> to look for the usage. For the above example, you can run with</p>
-=======
-<p>And there are many other features <a href="http://naltatis.github.io/jade-syntax-docs/">there</a>, you can learn it by yourself.  Next talking about its <code>api</code>, <code>command line</code> and <code>browser-support</code>, yes, jade supports them.</p>
-
-<h2 id="toc_0">Command Line</h2>
-<p>When <code>jade</code> is installed, you can run with <code>jade --help</code> to look for the usage. For the above example, you can run with </p>
->>>>>>> 79cfeebf891b9d441a1bdf4249fd6229e6d4f529
 
 <pre><code>jade --obj demo.json demo.jade</code></pre>
 <p>demo.json:</p>
@@ -214,18 +183,10 @@ html(lang=&quot;en&quot;)
     &quot;name&quot;: &quot;Tinple&quot;,
     &quot;love&quot;: true
 }</code></pre>
-<<<<<<< HEAD
 <p>Then the std push the data <code>rendered demo.html</code>. And that&#39;s the result. Also, you can use other command options to meet your own requirements.</p>
 
 <h2 id="toc_1">API</h2>
 <p>Jade offers <code>api</code> to developers. For full API, see <a href="http://jade-lang.com/api/">there</a>. Below is the simple usage for compile, render string or a file.</p>
-=======
-<p>Then the std push the data <code>rendered demo.html</code>. And that&#39;s the result.
-Also, you can use other command options to meet your own requirements.</p>
-
-<h2 id="toc_1">API</h2>
-<p>Jade offers <code>api</code> to developers. For full API, see <a href="http://jade-lang.com/api">there</a>. Below is the simple usage for compile, render string or a file.</p>
->>>>>>> 79cfeebf891b9d441a1bdf4249fd6229e6d4f529
 <p>runDemo.js:</p>
 
 <pre><code>var jade = require('jade'),
@@ -266,19 +227,11 @@ console.log(html);</code></pre>
 <p>The latest version of jade can be download for the browser. And it only supports the very latest browsers. I strongly recommended that you pre-compile your jade templates to JavaScript and then just use the runtime.js library on the client. So how does <code>client-side template</code> works? The whole workflow looks like this:</p>
 
 <ol>
-<<<<<<< HEAD
 <li><p>Edit <code>.jade</code> file</p></li>
 <li><p>Compile template files to JavaScript</p></li>
 <li><p>Include runtime.js file</p></li>
 </ol>
 <p>So edit demo.jade first, we can copy it easily. Then run with</p>
-=======
-<li>Edit <code>.jade</code> file</li>
-<li>Compile template files to JavaScript</li>
-<li>Include runtime.js file</li>
-</ol>
-<p>So edit demo.jade first, we can copy it easily. Then run with </p>
->>>>>>> 79cfeebf891b9d441a1bdf4249fd6229e6d4f529
 
 <pre><code>jade --client --no-debug demo.jade</code></pre>
 <p>you will get a file <code>demo.js</code> which is JavaScript function that you call with values you want to render your template with and func returns you HTML that you just need to put somewhere on page. Now you just need to include that Jade runtime plus this file that got generated via:</p>
@@ -292,14 +245,9 @@ console.log(html);</code></pre>
 <p>File <code>runtime.js</code> is in your jade source code directory.</p>
 
 <h2 id="toc_3">END</h2>
-<<<<<<< HEAD
 <p><code>jade</code> is nice, not only <code>express</code> uses it but also there are many more developers push the contributions about the jade on <a href="https://github.com/">github</a>, this essay just introduces a little, for more reading, like its feature(mixin, filter, include…etc), api, implementations or many other, visiting <a href="https://github.com/visionmedia/jade/">jade</a>.</p>
 
 <h3 id="toc_4">References:</h3>
-=======
-<p><code>jade</code> is nice, not only <code>express</code> uses it but also there are many more developers push the contributions about the jade on <a href="http://www.github.com">github</a>, this essay just introduces a little, for more reading, like its feature(mixin, filter, include&hellip;etc), api, implementations or many other, visiting <a href="https://github.com/visionmedia/jade/">jade</a>.</p>
-<p><strong>References:</strong></p>
->>>>>>> 79cfeebf891b9d441a1bdf4249fd6229e6d4f529
 
 <ul>
 <li><a href="http://jade-lang.com/">jade</a></li>
