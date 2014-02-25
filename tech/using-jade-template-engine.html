@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Using jade template engine - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=7f42a" />
+    <link rel="stylesheet" href="/static/pygments.css?v=c6adc" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/using-jade-template-engine" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Using jade template engine</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2014-01-22T00:00:00+08:00" pubdate>
+            <a href="/2014/">2014-01-22</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <p>These days I touched a node template engine <code>jade</code>. I loved it at once because its <code>zencoding</code> grammar really attracts me.</p>
+<p>Unlike other template engine such as <code>EJS</code> and <code>handlebars</code>, <code>jade</code> has its own elegancy and lots of features. Firstly, you can install it via npm: <code>npm install jade -g</code> or <code>npm install jade</code>. And if you install it globally, try to detect whether the <code>$NODE_PATH</code> includes the location that npm installs globally or not.</p>
+
+<pre><code>@tinple ➜  ~  which node
+/usr/local/bin/node
+@tinple ➜  ~  which npm
+/usr/local/bin/npm
+@tinple ➜  ~  echo $NODE_PATH
+/usr/local/lib/node_modules</code></pre>
+<p>If your <code>$NODE_PATH</code> is null, try to add</p>
+
+<pre><code>export NODE_PATH=/usr/local/lib/node_modules</code></pre>
+<p>to your <code>.bash_profile</code> or <code>.zshrc</code>. The path is not absolute, it depends on your node directory.</p>
+<p>Jade is a clean, whitespace sensitive syntax for writing html. Just ignore the process that how to turn <code>.jade</code> to <code>.html</code> at begin. Pay attention to its succinct writemode, for example, file <code>demo.jade</code>:</p>
+
+<pre><code>doctype html
+html(lang=&quot;en&quot;)
+  head
+    title= pageTitle
+  body
+    h1 Hello #{name}
+    ul#books
+      li.A
+        a(href=&quot;#book-a&quot;) Book A
+      li.B
+        a(href=&quot;#book-b&quot;) Book B
+    // comment
+    p.
+      Tinple and Kristine
+
+    if love
+      p A couple
+    else
+      p Single man</code></pre>
+<p>and locals:</p>
+
+<pre><code>var locals = {
+    pageTitle: 'Jade',
+    name: 'Tinple',
+    love: true
+}</code></pre>
+<p>Finally it becomes:</p>
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+    &lt;head&gt;
+        &lt;title&gt;Jade&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;Hello Tinple&lt;/h1&gt;
+        &lt;ul id=&quot;books&quot;&gt;
+            &lt;li class=&quot;A&quot;&gt;&lt;a href=&quot;#book-a&quot;&gt;Book A&lt;/a&gt;&lt;/li&gt;
+            &lt;li class=&quot;B&quot;&gt;&lt;a href=&quot;#book-b&quot;&gt;Book B&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;!-- comment--&gt;
+        &lt;p&gt;Tinple and Kristine&lt;/p&gt;
+        &lt;p&gt;A couple&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>And there are many other features <a href="http://naltatis.github.io/jade-syntax-docs/">there</a>, you can learn it by yourself. Next talking about its <code>api</code>, <code>command line</code> and <code>browser-support</code>, yes, jade supports them.</p>
+
+<h2 id="toc_0">Command Line</h2>
+<p>When <code>jade</code> is installed, you can run with <code>jade --help</code> to look for the usage. For the above example, you can run with</p>
+
+<pre><code>jade --obj demo.json demo.jade</code></pre>
+<p>demo.json:</p>
+
+<pre><code>{
+    &quot;pageTitle&quot;: &quot;Jade&quot;,
+    &quot;name&quot;: &quot;Tinple&quot;,
+    &quot;love&quot;: true
+}</code></pre>
+<p>Then the std push the data <code>rendered demo.html</code>. And that&#39;s the result. Also, you can use other command options to meet your own requirements.</p>
+
+<h2 id="toc_1">API</h2>
+<p>Jade offers <code>api</code> to developers. For full API, see <a href="http://jade-lang.com/api/">there</a>. Below is the simple usage for compile, render string or a file.</p>
+<p>runDemo.js:</p>
+
+<pre><code>var jade = require('jade'),
+    fs = require('fs');
+
+var options = {
+    pretty: true,
+    debug: true,
+    compileDebug: true
+}
+
+var locals = {
+    pageTitle: 'Jade',
+    name: 'Tinple',
+    love: true
+}
+
+// three ways, just choose one
+
+// compile
+fs.readFile('demo.jade', 'utf8', function (err, data) {
+    if (err) throw err;
+    console.log(data);
+    var fn = jade.compile(data, options);
+    var html = fn(locals);
+    console.log(html);
+});
+
+// render, pseudocode
+var html = jade.render('string of jade', merge(options, locals));
+
+// renderFile
+var html = jade.renderFile('demo.jade', locals);
+console.log(html);</code></pre>
+<p>Choose any way, if just like me, just render the file, then run with <code>node runDemo.js</code>, and you will see the result in your terminal. For more details like the options or other function arguments, try to read the document api.</p>
+
+<h2 id="toc_2">Browsers Support</h2>
+<p>The latest version of jade can be download for the browser. And it only supports the very latest browsers. I strongly recommended that you pre-compile your jade templates to JavaScript and then just use the runtime.js library on the client. So how does <code>client-side template</code> works? The whole workflow looks like this:</p>
+
+<ol>
+<li><p>Edit <code>.jade</code> file</p></li>
+<li><p>Compile template files to JavaScript</p></li>
+<li><p>Include runtime.js file</p></li>
+</ol>
+<p>So edit demo.jade first, we can copy it easily. Then run with</p>
+
+<pre><code>jade --client --no-debug demo.jade</code></pre>
+<p>you will get a file <code>demo.js</code> which is JavaScript function that you call with values you want to render your template with and func returns you HTML that you just need to put somewhere on page. Now you just need to include that Jade runtime plus this file that got generated via:</p>
+
+<pre><code>&lt;script src='runtime.js'&gt;&lt;/script&gt;
+&lt;script src='demo.js'&gt;&lt;/script&gt;
+&lt;script src='http://code.jquery.com/jquery-1.10.2.min.js'&gt;&lt;/script&gt;
+&lt;script&gt;
+    $('body').append(template({pageTitle: 'Jade',name: 'Tinple', love: true}));
+&lt;/script&gt;</code></pre>
+<p>File <code>runtime.js</code> is in your jade source code directory.</p>
+
+<h2 id="toc_3">END</h2>
+<p><code>jade</code> is nice, not only <code>express</code> uses it but also there are many more developers push the contributions about the jade on <a href="https://github.com/">github</a>, this essay just introduces a little, for more reading, like its feature(mixin, filter, include…etc), api, implementations or many other, visiting <a href="https://github.com/visionmedia/jade/">jade</a>.</p>
+
+<h3 id="toc_4">References:</h3>
+
+<ul>
+<li><a href="http://jade-lang.com/">jade</a></li>
+<li><a href="https://github.com/visionmedia/jade">jade-github</a></li>
+<li><a href="http://stackoverflow.com/questions/12594541/npm-global-install-cannot-find-module">npm-global-install</a></li>
+<li><a href="http://goranperetin.com/post/26701804893/client-side-templating-with-jade-and-node-js#notes">client-side-jade</a></li>
+</ul>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        <a href="/tag/jade/">jade</a>
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Using jade template engine';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://facebook.com/Tinple">Facebook</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+      <p class="copyright">
+      <span class="software">
+        Powered by <a href="http://lab.lepture.com/liquidluck/">Felix Felicis</a> 3.8.1,
+      </span>
+      <span class="theme">
+        Theme <a href="https://github.com/lepture/liquidluck-theme-moment" rel="nofollow">moment</a> 2.0 by <a href="http://lepture.com">Hsiaoming Yang</a>
+      </span>
+      </p>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Bitwise Operators in javascript - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=7f42a" />
+    <link rel="stylesheet" href="/static/pygments.css?v=c6adc" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/bitwise-operators-in-javascript" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Bitwise Operators in javascript</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2014-02-25T00:00:00+08:00" pubdate>
+            <a href="/2014/">2014-02-25</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <p>Last two days, I touched frequently with <strong>Bitwise Operators</strong> in <code>Javascript</code>, but I did not figure out what the exactly it is and got 
+confused. Hence, after google many related resources, this post here to
+try to introduce the Bitwise Operators and some efficient skills using in codes. </p>
+<p>In Javascript compiler, Bitwise Operators treat their operands as a sequence
+of 32 bits, just zeros or ones. And the maximum and minimum integers are
+2147483647 and -2147483648, which represented through a 32bit signed number.</p>
+
+<h2 id="toc_0">Signed 32-bit integers</h2>
+
+<pre><code>var maximum = 2147483647;
+maximum.toString(2); // 1111111111111111111111111111111
+var minimum = -2147483648;
+minimum.toString(2); // -10000000000000000000000000000000</code></pre>
+<p>Notes that the maximum and minimum above in <code>Javascript</code>. Things 
+may get strang if you exceed the scope. And if you lack the basis, go to 
+<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Signed_32-bit_integers">MDN</a> to learn more.</p>
+
+<h2 id="toc_1">Bitwise Operators</h2>
+<p>In <code>Javascript</code>, the bitwise operators convert the operands to 32-bit
+integers and express it a series of bits. Each bit correspond its bit, and the 
+result in constructed bitwise. </p>
+
+<h2 id="toc_2">Bitwise Operands</h2>
+<p>As we know, <code>Javascript</code> is a weak typing programming language. Actually, all values can be bitwise operand, for example, a function or a string. However, I guess, <code>javascript</code> will convert the operand to int or long at first internally according to its engine. Some values like function or string  which can not be correctly converted will be 0.</p>
+
+<pre><code>// 88.88 -&gt; 88, 88 | 0 -&gt; 88
+console.log(88.88 | 0); // 88
+// '88.88' -&gt; 88, 88 | 0 -&gt; 88
+console.log('88.88' | 0); // 88
+// 'sss' -&gt; 0, 0 | 1 -&gt; 1
+console.log('sss' | 1); // 1
+// [] -&gt; 0, 0 &amp; -1 -&gt; 0
+console.log([] &amp; -1); // 0</code></pre>
+
+<h2 id="toc_3">Skills with Bitwise Operators</h2>
+<p>Your codes with nice usage of bitwise operators will be much more
+efficient. And the situation below you may meet frequently.</p>
+
+<pre><code>// x represents the number under the scope of maximum and minimum
+// x &amp; 0 will return 0
+console.log(Math.random() * 2147483647 &amp; 0); // 0
+console.log(Math.random() * -2147483648 &amp; 0); // 0
+// x &amp; -1 will return x
+console.log(Math.random() * 2147483647 &amp; -1); // random number x
+console.log(Math.random() * -2147483648 &amp; -1); // random number x
+// x | 0 will return x
+console.log(Math.random() * 2147483647 | 0); // random number x
+console.log(Math.random() * -2147483648 | 0); // random number x
+// x | -1 will return -1
+console.log(Math.random() * 2147483647 | -1); // -1
+console.log(Math.random() * -2147483648 | -1); // -1
+
+// Even or Odd, Odd returns 1, Even returns 0
+console.log(1111 &amp; 1);  // 1
+console.log(2222 &amp; 1);  // 0
+
+// ~x will return -(x + 1)
+console.log(~(Math.random() * 2147483647)); // -(x + 1)
+
+// x ^ 0 will return x, x ^ -1 will return ~x
+console.log(Math.random() * 2147483647 ^ 0); // random number x
+console.log(Math.random() * 2147483647 ^ -1); // ~x
+
+// x &lt;&lt; y will return x * 2 ^ y (^ is power)
+console.log(8 &lt;&lt; 4); // 128
+
+// replace name.indexOf(subName) === 3
+var name = 'Tinple';
+var subName = 'ple';
+if (~name.indexOf(subName)) {
+    // if true
+} else {
+    // if else
+}</code></pre>
+
+<h2 id="toc_4">END</h2>
+<p>Using bitwise operator correctly will enhance your code performance.
+And the datas in this post are tested in <a href="https://code.google.com/p/v8/">V8</a>, if exist some errors, welcome to point it! </p>
+
+<h3 id="toc_5">References:</h3>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators">MDN</a></li>
+<li><a href="http://www.cnblogs.com/rubylouvre/p/3183616.html">rubylouvre</a></li>
+</ul>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        <a href="/tag/javascript/">javascript</a><a href="/tag/bitwiseoperator/">bitwiseOperator</a>
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Bitwise Operators in javascript';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://facebook.com/Tinple">Facebook</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+      <p class="copyright">
+      <span class="software">
+        Powered by <a href="http://lab.lepture.com/liquidluck/">Felix Felicis</a> 3.8.1,
+      </span>
+      <span class="theme">
+        Theme <a href="https://github.com/lepture/liquidluck-theme-moment" rel="nofollow">moment</a> 2.0 by <a href="http://lepture.com">Hsiaoming Yang</a>
+      </span>
+      </p>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>
