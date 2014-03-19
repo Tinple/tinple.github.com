@@ -3,14 +3,76 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2014-02-25T22:11:09+08:00</updated>
+    <updated>2014-03-19T20:42:34+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[Learn about unicode]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/learn-about-unicode"/>
+        <published>2014-03-18T00:00:00+08:00</published>
+        <updated>2014-03-19T20:42:34+08:00</updated>
+        <id>http://tinple.me/tech/learn-about-unicode</id>
+        <category scheme="http://tinple.me/tag/unicode/" term="unicode" label="unicode" />
+        <category scheme="http://tinple.me/tag/character-encoding/" term="character encoding" label="character encoding" />
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <p>Actually, I have been confused about <code>character encoding</code> for a long time, and really can not figure out the relation with <code>Unicode</code> and <code>UTF-8</code>. And after my whole afternoon effort, googling many information and reading lots of posts, finally I get a preliminary understanding about it. I will try my best to explain it distinctly.</p>
+
+<h2 id="toc_0">Before Unicode</h2>
+<p>It would be a long story to explain how unicode comes. Before its existence,
+a character encoding named <strong>ASCII</strong> was created by America, is trying to rule the relation with English and Binary. And one byte corresponds one character. For more detail, see <a href="http://en.wikipedia.org/wiki/ASCII">there</a>.</p>
+<p>However, <strong>ASCII</strong> only includes 128 characters encoding. As for other languages, it is not enough. Hence, many charsets based on ASCII appears like <strong>ISO 8859</strong>,  trying to extend more characters encoding to express more language.</p>
+
+<h2 id="toc_1">Unicode</h2>
+<p>There are many encoding existing all over the world. And it would be handy if there is a encoding includes all characters, and every character corresponds one unique encoding. Hence, <code>Unicode</code> exists, trying to make it. <code>Unicode</code> is a <strong>charset</strong> which can include more than one millionsymbols, and every character encoding is unique. And <code>Unicode</code> identifies characters by a name and an interger number called its code point. For example, © is named &ldquo;copyright sign&rdquo; and has <code>U+00A9</code> - <code>0xA9</code> can bewritten as <code>169</code> in decimal - as its code point.</p>
+<p>On <a href="http://en.wikipedia.org/wiki/Unicode">Unicode wiki</a>, we can learn that the Unicode code space is divided into seventeen planes of 2^16 code points each. Some of these code points have not yet been assigned character values, some are reserved for private use, and some are permanently reserved as non-characters. The code points in each 
+plane have the hexadecimal values <code>xy0000</code> to <code>xyFFFF</code>, where <code>xy</code> is a hex value from <code>00</code> to <code>10</code>, signifying which plane 
+the values belong to. Usually we use the first plane(xy is 00) most, which called the <strong><em>Basic Multilingual Plane</em></strong> or <strong><em>BMP</em></strong>. It contains the code points from <code>U+0000</code> to <code>U+FFFF</code>. And it may express one character more than one byte.</p>
+
+<h2 id="toc_2">Problem</h2>
+<p>However, <code>Unicode</code> is just a symbol set, which doesn&#39;t rule how to
+save binary code. Although <code>Unicode</code> like <code>U+4E25</code> can even 
+express a Chinese character like <code>严</code>, how can computer regard it as 
+<code>ASCII</code> or <code>Unicode</code>? </p>
+<p>As we know, an english alphabet just needs one byte, if we rule <code>Unicode</code> uniformly, it can cause many waste. </p>
+
+<h2 id="toc_3">Implement</h2>
+<p>Hence, based on such problem, many implementations appear try to make it, like <code>UTF-8</code>, <code>UTF-16</code>, <code>UCS-2</code> and many more.</p>
+
+<h3 id="toc_4">UTF-16 &amp;&amp; UCS-2</h3>
+<p><code>UTF-16</code> is an implement which express a character using two or four bytes, while <code>UCS-2</code> just uses two bytes.</p>
+
+<h3 id="toc_5">UTF-8</h3>
+<p>Actually, <code>UTF-8</code> is the most popular one in internet. It is flexible
+to express a character using one to four bytes, and can change the length
+of byte according to different character. Next is a rule of the <code>UTF-8</code> encoding.</p>
+
+<pre><code>/*
+Unicode             | UTF-8
+hexadecimal         | binary
+0000 0000-0000 007F | 0xxxxxxx     One byte
+0000 0080-0000 07FF | 110xxxxx 10xxxxxx    Two bytes
+0000 0800-0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx    Three bytes
+0001 0000-0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx 
+*/</code></pre>
+
+<h2 id="toc_6">End</h2>
+<p>This is just my little learning about unicode, if you want to learn more details, visit <a href="en.wikipedia.org/wiki/Unicode">wiki</a> to have fun.</p>
+
+<h2 id="toc_7">Reference</h2>
+
+<ul>
+<li><a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html">ASCII,UTF-8,Unicode</a></li>
+<li><a href="en.wikipedia.org/wiki/UTF-16">UTF-8</a></li>
+<li><a href="en.wikipedia.org/wiki/Unicode">Unicode</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[Bitwise Operators in javascript]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/bitwise-operators-in-javascript"/>
         <published>2014-02-25T00:00:00+08:00</published>
-        <updated>2014-02-25T21:12:37+08:00</updated>
+        <updated>2014-02-26T09:27:02+08:00</updated>
         <id>http://tinple.me/tech/bitwise-operators-in-javascript</id>
         <category scheme="http://tinple.me/tag/javascript/" term="javascript" label="javascript" />
         <category scheme="http://tinple.me/tag/bitwiseoperator/" term="bitwiseOperator" label="bitwiseOperator" />
@@ -107,7 +169,7 @@ And the datas in this post are tested in <a href="https://code.google.com/p/v8/"
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/using-jade-template-engine"/>
         <published>2014-01-22T00:00:00+08:00</published>
-        <updated>2014-02-25T22:11:09+08:00</updated>
+        <updated>2014-02-26T09:26:54+08:00</updated>
         <id>http://tinple.me/tech/using-jade-template-engine</id>
         <category scheme="http://tinple.me/tag/jade/" term="jade" label="jade" />
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
@@ -3167,31 +3229,6 @@ Anyway, liquidluck is just so lovely and I really like it! </p>
 <li>  Find a girlfriend</li>
 </ul>
 <p>暂时想做的事只有这些，新学期也预祝一切顺利。</p>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[Css Zen Garden]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/csszengarden"/>
-        <published>2013-03-05T00:00:00+08:00</published>
-        <updated>2014-01-24T19:26:45+08:00</updated>
-        <id>http://tinple.me/tech/csszengarden</id>
-        <category scheme="http://tinple.me/tag/css/" term="css" label="css" />
-        <category scheme="http://tinple.me/tag/design/" term="design" label="design" />
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p>Nowadays I am learning 《The Zen of CSS Design》，and the <code>CSS Zen Garden</code> 
-is still a world wide development resource site.</p>
-
-<blockquote>
-<p>The goal of the site is to showcase what is possible with CSS-based design. Style sheets contributed by graphic designers from around the world are used to change the visual presentation of a single HTML file, producing hundreds of different designs. Aside from reference to an external CSS file, the HTML markup itself never changes. All visual differences are the result of the CSS.</p>
-</blockquote>
-<p>And below is my note for reading this book.</p>
-
-<h2 id="toc_0">&ldquo;CSS Crib Sheet&rdquo;</h2>
-<p>This is an attempt to make the design process <strong>easier</strong>, and provide a quick reference to check when you run into trouble.</p>
-<p><a href="http://mezzoblue.com/archives/2013/05/07/10_years/">mezzoblue.com/archives/2013/05/07/10_years/</a>
-<a href="http://www.mezzoblue.com/css/cribsheet/">www.mezzoblue.com/css/cribsheet/</a>
-<a href="http://www.complexspiral.com/publications/containing-floats/">www.complexspiral.com/publications/containing-floats/</a></p>
 ]]>
         </content>
     </entry>
