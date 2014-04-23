@@ -3,9 +3,137 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2014-03-19T20:42:34+08:00</updated>
+    <updated>2014-04-20T21:27:51+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[What&#39;s Promises?]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/what-is-promises"/>
+        <published>2014-04-18T00:00:00+08:00</published>
+        <updated>2014-04-20T21:27:51+08:00</updated>
+        <id>http://tinple.me/tech/what-is-promises</id>
+        <category scheme="http://tinple.me/tag/promises/" term="Promises" label="Promises" />
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0"><em>Asynchronous &amp;&amp; Callback</em></h2>
+<p>When <code>Node</code> brings us an asynchronous world, our applications begin to become non-blocking and much faster.
+However, it also makes our code complex and unpredictable.
+See this simple code:</p>
+
+<pre><code>function readJSON(filename, callback) {
+    fs.readFile(filename, 'utf8', function (err, res) {
+        if (err) return callback(err);
+        try {
+            res = JSON.parse(res);
+        } catch (e) {
+            return callback(e);
+        }
+        callback(null, res);
+    });
+}</code></pre>
+<p>The code above is somewhat ugly and we actually can&#39;t make sure what arguments input to callback, and we must do try-catch for <code>JSON.parse</code> to handle the error. Luckily, a solution for asynchronous called <code>Promises</code> help us handle errors naturally and make code clean.</p>
+
+<h2 id="toc_1"><em>Promises</em></h2>
+<p>As its name means, a promise represents the result of an asynchronous operation with three states:</p>
+
+<ul>
+<li>Pending - The initial state</li>
+<li>Fulfilled - A successful operation</li>
+<li>Rejected - A failed operation</li>
+</ul>
+<p>And once a promise is fulfilled or rejected, it is immutable. </p>
+
+<h3 id="toc_2"><em>Begin Promise</em></h3>
+<p>Let&#39;s begin with such codes:</p>
+
+<pre><code>var fs = require('fs')
+  , Promise = require('promise');
+
+function readFile(filename, enc){
+  return new Promise(function (fulfill, reject){
+    fs.readFile(filename, enc, function (err, res){
+      if (err) reject(err);
+      else fulfill(res);
+    });
+  });
+}
+
+function readJSON(filename){
+  return readFile(filename, 'utf8').then(function (res){
+    console.log(JSON.parse(res));
+  }, function (err) {
+    console.log(err);
+  });
+}</code></pre>
+<p>As we can see, we re-write our <code>readJSON</code> function, there is no unpredictable callback and we almost use <code>Promise</code> to finish our code. In our code, we use <code>new Promise</code> to construct the promise, which requires a function called resolver, and the resolver function is passed two arguments: resolve and reject.</p>
+
+<pre><code>new Promise(function (resolve, reject) {})</code></pre>
+
+<h3 id="toc_3"><em>resolve and reject</em></h3>
+<p>The resolve and reject should be called with a single argument, and promise will be fulfilled or rejected with that value. A special situation is when resolve is called with a promise(A) then the returned promise takes on the state of that new promise(A). </p>
+<p>Things go easily in promise, we only need to pass the value to <code>resolve()</code> or <code>reject()</code> to wait for the result and then handle it through <code>then()</code>. We do not care the asynchronous action&#39;s creation time and eventual success or failure, just let asynchronous methods return values like 
+synchronous methods. So what actually <code>then()</code> is?</p>
+
+<h3 id="toc_4"><em>Promise.prototype.then(onFulfilled, onRejected)</em></h3>
+<p>This prototype method follows the <a href="http://promises-aplus.github.io/promises-spec/">Promises/A+ spec</a>. 
+Simply to say, it appends fulfillment and rejection handlers to the promise, and returns a new promise resolving to the return value of the called handler. And it can be chained.</p>
+
+<pre><code>new Promise(function (fulfill, reject){})
+.then(onFulfilled, onRejected)
+.then(onFulfilled, onRejected)
+.then(onFulfilled, onRejected)
+// ...</code></pre>
+
+<h2 id="toc_5">Browser</h2>
+<p>Actually, there is not only node module <a href="https://github.com/then/promise">promise</a> support <code>Promises</code>, in some browser, like Chrome 32 and latest Firefox, have already support it. It is similar to what we write before.</p>
+
+<pre><code>if (window.Promise) {
+    var promise = new Promise(function (resolve, reject) {
+        var request = new XMLHttpRequest();
+        request.open('GET', 'http://api.icndb.com/jokes/random');
+        request.onload = function () {
+            if (request.status == 200) {
+                resolve(request.response);
+            } else {
+                reject(Error(request.statusText));
+            }
+        };
+        request.onerror = function () {
+            reject(Error('Error fetching data'));
+        };
+        request.send();
+    }).then(function (data) {
+        console.log(JSON.parse(data).value.joke);
+    }, function (err) {
+        console.log(err.message);
+    })
+} else {
+    console.log('Promise is not supported')
+}</code></pre>
+
+<h2 id="toc_6">More static methods</h2>
+<p>We have seen how promises help us to do with complex asynchronous code, actually, there are more advanced patterns for promise use and some of the helper methods 
+may make our Promise more concise. I just refer it simply.</p>
+
+<ul>
+<li>Promise.resolve(value)</li>
+<li>Promise.reject(reason)</li>
+<li>Promise.all(iterable)</li>
+<li>Promise.race(iterable)</li>
+</ul>
+<p>If you want to read more, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a> or
+<a href="https://www.promisejs.org/patterns/">Promise/A+</a>.</p>
+
+<h2 id="toc_7">Reference</h2>
+
+<ul>
+<li><a href="https://www.promisejs.org/">Promise/A+</a></li>
+<li><a href="https://github.com/then/promise">then/Promise</a></li>
+<li><a href="http://www.sitepoint.com/overview-javascript-promises/">overview-javascript-promises</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[Learn about unicode]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/learn-about-unicode"/>
@@ -3185,50 +3313,6 @@ And you will see deploy directory created.Everytime when you post an essay and r
 the deploy has updated.And then you can <code>git push</code> to your repo.</p>
 <p>Although I tossed many times and almost got crazy, it really taught me a lot.
 Anyway, liquidluck is just so lovely and I really like it! </p>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[重拾Writing]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/life/pick-up-writing"/>
-        <published>2013-09-01T00:00:00+08:00</published>
-        <updated>2014-01-24T19:26:45+08:00</updated>
-        <id>http://tinple.me/life/pick-up-writing</id>
-        <category scheme="http://tinple.me/tag/life/" term="life" label="life" />
-        <category scheme="http://tinple.me/tag/thought/" term="thought" label="thought" />
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p>想来已经好久没有写下关乎生活的片段，哪怕是一件事，一个人，一句话。</p>
-<p>大一已经恍恍惚惚地溷过去了，显得随意，奔放不羁。期间经历的不多也不少，暑假在家的日子也是时刻去审视这一年来的日子是否能让人念念不忘，是否能让自己觉得不虚度。现在想来随性而过的日子毕竟是凤毛麟角，许多时候性情毕竟和心意相违，而一旦牵连到周遭的事，一年下来也没有几天是能完完全全按着自己既定的轨迹运行。而一旦有了担当的责任与意识，想置身事外便很难了。</p>
-<p>我是个很懒的人，大一大部分的日子是在懒散中消散。许多时候知道这种懒散会慢性循环，而自己却依旧无可奈何，想来这便是意志力的缺乏吧。好在生活并不是一如既往的无解，技术带给了我些许解脱与释怀。许多烦恼与担忧被技术冲澹，许多时候的孤寂也好过多了，毕竟大多人是孤寂的。</p>
-
-<blockquote>
-<p>性格决定命运。</p>
-</blockquote>
-<p>以前不相信这句话，现在也是不太相信的。我想再不济两个性格相似的人也能在夜晚促膝而谈，等待星光点点发亮。我相信永久的孤独是不存在的，许多时候某段时间的孤寂是换回下次的相遇。</p>
-<p>而在看似一切紊乱的生活在暑假得到了些许改善，暑假期间我开始坚持一些事，开始特意抽出一天的某个时段去认认真真地做某件事，像扇贝打卡，看集美剧，锻炼身体。。而接下来我想开始记录些关于生活的文字在自己的独立博客上，技术为辅。其实不太喜欢wordpress，有时候觉得它很臃肿，平时技术字眼也习惯了记载在云笔记上，况且大部分google下都能在他人那里找到类似的，总之技术博客没想花太多心思，wordpress跟心里所期待的博客也大相径庭。后来我知道了静态博客，然后我找到了Felix Felicis。</p>
-
-<blockquote>
-<p>Felix Felicis.</p>
-</blockquote>
-<p>这是最近发现的一个静态博客框架，看着非常喜欢，简洁的URL，单一清爽的moment主题，的确是个安居文字的好处所。我也爱上了开发者lepture的design pattern与writing style。只是最近忙于另外些事，独立博客的事也是一拖再拖，接下来倒是有点时间去折腾下域名购买和主机的一些事。</p>
-<p>很快就开学了。新的学期总是该有些期待与憧憬，过去我总是去试图逃避一些事，现在想想有些倒也无可厚非，但其他的我想自己还是要去尝试。</p>
-<p>新学期想做的事列个序列好了。</p>
-
-<ul>
-<li>  拥有个独立博客，用中文记录life，用English写Tech</li>
-<li>  换个操作系统，开始使用Linux工作</li>
-<li>  想开源，想在Github上有自己的Contributions，并坚持下去</li>
-<li>  坚持读书，不仅仅是Tech，还有财经，理财。。</li>
-<li>  既然决定了走前端，即便技术底子不好，也想多出去跟别人交流，而不是局限于校园</li>
-<li>  坚持读大型框架、库的源码</li>
-<li>  前端安全</li>
-<li>  多读Bible，不能离主太远</li>
-<li>  坚持锻炼身体</li>
-<li>  跟几个要好的小伙伴们去旅行</li>
-<li>  继续坚持扇贝打卡、读新闻、练口语</li>
-<li>  Find a girlfriend</li>
-</ul>
-<p>暂时想做的事只有这些，新学期也预祝一切顺利。</p>
 ]]>
         </content>
     </entry>
