@@ -3,9 +3,143 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2014-04-20T21:27:51+08:00</updated>
+    <updated>2014-05-16T16:59:43+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[Harmony generator , for-of and co]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/harmony-generator-and-co"/>
+        <published>2014-05-15T00:00:00+08:00</published>
+        <updated>2014-05-16T16:59:43+08:00</updated>
+        <id>http://tinple.me/tech/harmony-generator-and-co</id>
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0"><em>Begin</em></h2>
+<p>We talk about the new stuff with <code>harmony</code>, so make sure your <code>harmony mode</code> is enabled. With Chrome, go <code>chrome://flags/</code>, search <code>harmony</code> and enable it. With node, you need <code>0.11.*</code> version, and execute <code>node --harmony</code>. For me, I use <a href="https://github.com/visionmedia/n">n</a> to manage my node version, which is powered by TJ.</p>
+
+<h2 id="toc_1"><em>Generator</em></h2>
+<p>These days I was diving into <code>Harmony generator</code>, it is defined in <code>ES6</code>. So what calls generator? Let&#39;s begin with a simple code.</p>
+
+<pre><code>function* gen() {
+    var index = 0;
+    while(true) {
+        yield index++;
+    }
+}
+var gen = gen();
+gen.next(); // return {value: 0, done: false}
+gen.next(); // return {value: 1, done: false}
+//...</code></pre>
+<p>As you can see, <code>function gen</code> has a method called <strong>next</strong>. This method returns an object with two properties: value and done. The value can be any value, and the done will be read as a boolean to distinguish whether the iterator has already to the end.</p>
+<p>A simple iterator implement:</p>
+
+<pre><code>function gen(array) {
+    var index = 0;
+    return {
+        next: function () {
+            return index &lt; array.length ?
+                {vale: array[index++], done: false} :
+                {done: true};
+        }
+    }
+}</code></pre>
+<p>You may also notice the grammer <code>function*</code>, that&#39;s called <code>generator function</code>, and you can use keyword <code>field</code> there, which works combined with <code>next()</code>. When <code>next</code> is invoked, it starts the execution of the generator. The generator runs until it encounters a <code>yield</code> expression. Then it pauses and the execution goes back to the code that called <code>next</code>.</p>
+<p>You can also pass parameters to <code>next()</code>. It behaves like this:</p>
+
+<pre><code>function* gen() {
+    var index = 0;
+    while (true) {
+        var res = yield index++;
+        console.log(res);
+    }
+}
+/**  yield and next
+ * gen() is invoked by a next.
+ * when execute gen.next(88), the generator runs until
+ * it encounter a yield and pauses, but not give the value
+ * to res. when execute gen.next(888), it goes back to the
+ * code and give the value to res, and the value is the 
+ * parameter passed to next.
+ */
+var gen = gen(); // gen() is not invoked there
+gen.next(88); // {value: 1, done: false} 
+gen.next(888); // 888</code></pre>
+<p>It is like another way to execute callback. However, we can code synchronously to express the asynchronous progress without nested function.</p>
+
+<h2 id="toc_2"><strong>for-of</strong></h2>
+<p>This expression is used to iterate over iterable objects(including Array, Map, Set, arguments object and so on). Just a generator comprehension.</p>
+
+<pre><code>for (let i of [1, 2, 3]) {
+    console.log(i * i); 
+}
+// 1, 4, 9</code></pre>
+
+<h2 id="toc_3"><em>co</em></h2>
+<p><code>co</code> is an ultimate generator made by TJ, using thunks or promises. A simple co example:</p>
+
+<pre><code>var co = require('co');
+var fs = require('fs');
+
+function read(file) {
+  return function(fn){
+    fs.readFile(file, 'utf8', fn);
+  }
+}
+
+co(function *(){
+  var a = yield read('1.txt');
+  var b = yield read('2.txt');
+  var c = yield read('3.txt');
+  console.log([a,b,c]);
+})();</code></pre>
+<p>We pass a generator <code>fn</code> to <code>co</code> and <code>co</code> return a <code>thunk</code>. A <code>thunk</code> is just like the traditional node-style callback whith a signature of: <code>(err, res)</code>.</p>
+
+<pre><code>// read thunk
+function read(path, encoding) {
+    return function (cb) {
+        fs.readFile(path, encoding, cb);
+    }
+}
+//invoke
+read('package.json', 'utf8')(function(err, str){
+    //...
+})</code></pre>
+<p>Actually, in <code>co</code>, the <code>yieldable</code> objects supports thunks, promises, generators, generator functions and array. <code>co</code> will iterate many times until the <code>fn.done</code> is <code>true</code>. A most simple <code>co</code> implement:</p>
+
+<pre><code>function co(GenFunc) {
+  return function(cb) {
+    var gen = GenFunc();
+    (function next() {
+        if (gen.next) {
+            gen.next().done ? cb &amp;&amp; cb() : next();
+        }
+    })();
+  }
+}</code></pre>
+<p><code>co</code> also support passing arguments into the generator.</p>
+
+<pre><code>var exec = require('co-exec');
+co(function *(cmd) {
+  var res = yield exec(cmd);
+  return res;
+})('pwd', done); // done is the callback function</code></pre>
+<p><code>co</code> support error handle as well. And in <a href="https://github.com/visionmedia/co">github</a>, it says:</p>
+
+<blockquote>
+<p>Co is careful to relay any errors that occur back to the generator, including those within the thunk, or from the thunk&#39;s callback.</p>
+</blockquote>
+<p>At last, I&#39;m strongly recommend that you should <strong>read co&#39;s source code</strong>, it is less than 300 lines. Have fun:D</p>
+
+<h2 id="toc_4"><em>Reference</em></h2>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/The_Iterator_protocol">MDN-The-Iterator-protocol</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of">MDN-for-of</a></li>
+<li><a href="http://domenic.me/2013/09/06/es6-iterators-generators-and-iterables/">es6-iterators-generators-and-iterables</a></li>
+<li><a href="https://github.com/visionmedia/co">co</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[What&#39;s Promises?]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/what-is-promises"/>
@@ -3256,63 +3390,6 @@ determination and continually solving the problem.And what I think is that is ca
 <blockquote>
 <p>其实我和大多数人一样,有时候很想做个心理学家,只不过在阴差阳错间,在生活所迫,在性格诱使,在碎碎念间从事了另一项工作。</p>
 </blockquote>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[Tinple.me and liquidluck]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/tinple-me-and-liquidluck"/>
-        <published>2013-09-06T00:00:00+08:00</published>
-        <updated>2014-01-24T19:26:45+08:00</updated>
-        <id>http://tinple.me/tech/tinple-me-and-liquidluck</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p>These days I have been occupied with <a href="http://tinple.me">tinple.me</a> in my leisure.
-And I use liquidluck to build it.Now I want to share the process with you.</p>
-<p>Several days ago, I got the response from <a href="http://lepture.com">lepture</a> that suggested
-me to use Github Pages.Then I googled some information and started to learn git.</p>
-<p>As git is a little difficult to use adeptly, so I am still learning it and I think it is a good 
-start for me to dive myself into open source.But for liquidluck, knowing a little knowledge 
-about git is ample.</p>
-<p>First, you should build a website in liquidluck.You can follow its simple document on 
-<a href="http://liquidluck.readthedocs.org/en/latest/index.html">RTD</a>, it is just easy anyway.
-And you are also prepared git.</p>
-<p>And next you can use git to add your files into VCS(version control system).Turn to your deploy
-directory under the website and init the git.</p>
-
-<pre><code>$ cd website/deploy
-$ git init</code></pre>
-<p>Then add all your files into git and commit it.If you are not similiar with git, I strongly 
-advise you to learn the book Pro_Git on the website, chinese and english version are all available. </p>
-
-<pre><code>$ git add .
-$ git commit -m 'my blog source'</code></pre>
-<p>Now you can see your git status and use remote repository.But at before, you should create a new repo
-named [username].github.com, which calls your personal page(one patterns of github pages) and it should be
-exist only one. Blog is just a shortname, you can use others.</p>
-
-<pre><code>$ git status
-$ git remote add blog https://github.com/username/username.github.com.git
-$ git remote -v
-$ git push blog master</code></pre>
-<p>And type your username and password in github, then you may push your core to github.
-If you see some wrongs, you may <code>git pull</code> the repo first or use <code>git push -f</code>.
-Going to username.github.io , your website made in liquidluck may display.If you see 404,
-you may wait few minutes to let github resolve it and refresh the page.</p>
-<p>The main of things is done now.And if you want to buy yourself a domain, you may go to 
-<a href="http://godaddy.com/">Godaddy</a>, it is greater than any other domain service company.
-For me in China, I used alipay to pay for it.Luckily, I received email from Godaddy 10 minutes around
-after I paid(Actually someone used alipay may wait 48 hours later).And then I used DNSPod to set my
-domain.You can find some information about it on the website.Pay attention to the top domain in github
-when you set your domain resolve.</p>
-<p>And today, I followed the webhook document on liquidluck.There are some small mistakes happening
-when I added webhook.Because I used virtual machine to run the webhook, some other questions
-dizzy me.Anyway to my luck, I fixed it.You can go to <a href="http://liquidluck.readthedocs.org/en/latest/index.html">RTD</a>
-again to see something about webhook and just follow it(I am in github).</p>
-<p>Finally go to the URL you set and if you see ok, the webhook is already successful.
-And you will see deploy directory created.Everytime when you post an essay and refresh the webhook,
-the deploy has updated.And then you can <code>git push</code> to your repo.</p>
-<p>Although I tossed many times and almost got crazy, it really taught me a lot.
-Anyway, liquidluck is just so lovely and I really like it! </p>
 ]]>
         </content>
     </entry>

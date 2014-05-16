@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Harmony generator , for-of and co - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=7f42a" />
+    <link rel="stylesheet" href="/static/pygments.css?v=c6adc" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/harmony-generator-and-co" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Harmony generator , for-of and co</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2014-05-15T00:00:00+08:00" pubdate>
+            <a href="/2014/">2014-05-15</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <h2 id="toc_0"><em>Begin</em></h2>
+<p>We talk about the new stuff with <code>harmony</code>, so make sure your <code>harmony mode</code> is enabled. With Chrome, go <code>chrome://flags/</code>, search <code>harmony</code> and enable it. With node, you need <code>0.11.*</code> version, and execute <code>node --harmony</code>. For me, I use <a href="https://github.com/visionmedia/n">n</a> to manage my node version, which is powered by TJ.</p>
+
+<h2 id="toc_1"><em>Generator</em></h2>
+<p>These days I was diving into <code>Harmony generator</code>, it is defined in <code>ES6</code>. So what calls generator? Let&#39;s begin with a simple code.</p>
+
+<pre><code>function* gen() {
+    var index = 0;
+    while(true) {
+        yield index++;
+    }
+}
+var gen = gen();
+gen.next(); // return {value: 0, done: false}
+gen.next(); // return {value: 1, done: false}
+//...</code></pre>
+<p>As you can see, <code>function gen</code> has a method called <strong>next</strong>. This method returns an object with two properties: value and done. The value can be any value, and the done will be read as a boolean to distinguish whether the iterator has already to the end.</p>
+<p>A simple iterator implement:</p>
+
+<pre><code>function gen(array) {
+    var index = 0;
+    return {
+        next: function () {
+            return index &lt; array.length ?
+                {vale: array[index++], done: false} :
+                {done: true};
+        }
+    }
+}</code></pre>
+<p>You may also notice the grammer <code>function*</code>, that&#39;s called <code>generator function</code>, and you can use keyword <code>field</code> there, which works combined with <code>next()</code>. When <code>next</code> is invoked, it starts the execution of the generator. The generator runs until it encounters a <code>yield</code> expression. Then it pauses and the execution goes back to the code that called <code>next</code>.</p>
+<p>You can also pass parameters to <code>next()</code>. It behaves like this:</p>
+
+<pre><code>function* gen() {
+    var index = 0;
+    while (true) {
+        var res = yield index++;
+        console.log(res);
+    }
+}
+/**  yield and next
+ * gen() is invoked by a next.
+ * when execute gen.next(88), the generator runs until
+ * it encounter a yield and pauses, but not give the value
+ * to res. when execute gen.next(888), it goes back to the
+ * code and give the value to res, and the value is the 
+ * parameter passed to next.
+ */
+var gen = gen(); // gen() is not invoked there
+gen.next(88); // {value: 1, done: false} 
+gen.next(888); // 888</code></pre>
+<p>It is like another way to execute callback. However, we can code synchronously to express the asynchronous progress without nested function.</p>
+
+<h2 id="toc_2"><strong>for-of</strong></h2>
+<p>This expression is used to iterate over iterable objects(including Array, Map, Set, arguments object and so on). Just a generator comprehension.</p>
+
+<pre><code>for (let i of [1, 2, 3]) {
+    console.log(i * i); 
+}
+// 1, 4, 9</code></pre>
+
+<h2 id="toc_3"><em>co</em></h2>
+<p><code>co</code> is an ultimate generator made by TJ, using thunks or promises. A simple co example:</p>
+
+<pre><code>var co = require('co');
+var fs = require('fs');
+
+function read(file) {
+  return function(fn){
+    fs.readFile(file, 'utf8', fn);
+  }
+}
+
+co(function *(){
+  var a = yield read('1.txt');
+  var b = yield read('2.txt');
+  var c = yield read('3.txt');
+  console.log([a,b,c]);
+})();</code></pre>
+<p>We pass a generator <code>fn</code> to <code>co</code> and <code>co</code> return a <code>thunk</code>. A <code>thunk</code> is just like the traditional node-style callback whith a signature of: <code>(err, res)</code>.</p>
+
+<pre><code>// read thunk
+function read(path, encoding) {
+    return function (cb) {
+        fs.readFile(path, encoding, cb);
+    }
+}
+//invoke
+read('package.json', 'utf8')(function(err, str){
+    //...
+})</code></pre>
+<p>Actually, in <code>co</code>, the <code>yieldable</code> objects supports thunks, promises, generators, generator functions and array. <code>co</code> will iterate many times until the <code>fn.done</code> is <code>true</code>. A most simple <code>co</code> implement:</p>
+
+<pre><code>function co(GenFunc) {
+  return function(cb) {
+    var gen = GenFunc();
+    (function next() {
+        if (gen.next) {
+            gen.next().done ? cb &amp;&amp; cb() : next();
+        }
+    })();
+  }
+}</code></pre>
+<p><code>co</code> also support passing arguments into the generator.</p>
+
+<pre><code>var exec = require('co-exec');
+co(function *(cmd) {
+  var res = yield exec(cmd);
+  return res;
+})('pwd', done); // done is the callback function</code></pre>
+<p><code>co</code> support error handle as well. And in <a href="https://github.com/visionmedia/co">github</a>, it says:</p>
+
+<blockquote>
+<p>Co is careful to relay any errors that occur back to the generator, including those within the thunk, or from the thunk&#39;s callback.</p>
+</blockquote>
+<p>At last, I&#39;m strongly recommend that you should <strong>read co&#39;s source code</strong>, it is less than 300 lines. Have fun:D</p>
+
+<h2 id="toc_4"><em>Reference</em></h2>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/The_Iterator_protocol">MDN-The-Iterator-protocol</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of">MDN-for-of</a></li>
+<li><a href="http://domenic.me/2013/09/06/es6-iterators-generators-and-iterables/">es6-iterators-generators-and-iterables</a></li>
+<li><a href="https://github.com/visionmedia/co">co</a></li>
+</ul>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Harmony generator , for-of and co';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://facebook.com/Tinple">Facebook</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+      <p class="copyright">
+      <span class="software">
+        Powered by <a href="http://lab.lepture.com/liquidluck/">Felix Felicis</a> 3.8.1,
+      </span>
+      <span class="theme">
+        Theme <a href="https://github.com/lepture/liquidluck-theme-moment" rel="nofollow">moment</a> 2.0 by <a href="http://lepture.com">Hsiaoming Yang</a>
+      </span>
+      </p>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>
