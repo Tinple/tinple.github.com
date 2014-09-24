@@ -5,8 +5,8 @@
     <title>What&#39;s Promises? - Tinple</title>
     <script>if (top !== self) top.location = self.location;</script>
     <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="/static/yue.css?v=7f42a" />
-    <link rel="stylesheet" href="/static/pygments.css?v=c6adc" />
+    <link rel="stylesheet" href="/static/yue.css?v=36f92" />
+    <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
     <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
     
     <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
@@ -59,18 +59,18 @@
 <p>When <code>Node</code> brings us an asynchronous world, our applications begin to become non-blocking and much faster.
 However, it also makes our code complex and unpredictable.
 See this simple code:</p>
-
-<pre><code>function readJSON(filename, callback) {
-    fs.readFile(filename, 'utf8', function (err, res) {
-        if (err) return callback(err);
-        try {
-            res = JSON.parse(res);
-        } catch (e) {
-            return callback(e);
-        }
-        callback(null, res);
-    });
-}</code></pre>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">readJSON</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="nx">res</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
 <p>The code above is somewhat ugly and we actually can&#39;t make sure what arguments input to callback, and we must do try-catch for <code>JSON.parse</code> to handle the error. Luckily, a solution for asynchronous called <code>Promises</code> help us handle errors naturally and make code clean.</p>
 
 <h2 id="toc_1"><em>Promises</em></h2>
@@ -85,29 +85,29 @@ See this simple code:</p>
 
 <h3 id="toc_2"><em>Begin Promise</em></h3>
 <p>Let&#39;s begin with such codes:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">Promise</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;promise&#39;</span><span class="p">);</span>
 
-<pre><code>var fs = require('fs')
-  , Promise = require('promise');
+<span class="kd">function</span> <span class="nx">readFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="nx">enc</span><span class="p">){</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">fulfill</span><span class="p">,</span> <span class="nx">reject</span><span class="p">){</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="nx">enc</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">reject</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="k">else</span> <span class="nx">fulfill</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
 
-function readFile(filename, enc){
-  return new Promise(function (fulfill, reject){
-    fs.readFile(filename, enc, function (err, res){
-      if (err) reject(err);
-      else fulfill(res);
-    });
-  });
-}
-
-function readJSON(filename){
-  return readFile(filename, 'utf8').then(function (res){
-    console.log(JSON.parse(res));
-  }, function (err) {
-    console.log(err);
-  });
-}</code></pre>
+<span class="kd">function</span> <span class="nx">readJSON</span><span class="p">(</span><span class="nx">filename</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nx">readFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
+  <span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
 <p>As we can see, we re-write our <code>readJSON</code> function, there is no unpredictable callback and we almost use <code>Promise</code> to finish our code. In our code, we use <code>new Promise</code> to construct the promise, which requires a function called resolver, and the resolver function is passed two arguments: resolve and reject.</p>
-
-<pre><code>new Promise(function (resolve, reject) {})</code></pre>
+<div class="highlight"><pre><span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{})</span>
+</pre></div>
 
 <h3 id="toc_3"><em>resolve and reject</em></h3>
 <p>The resolve and reject should be called with a single argument, and promise will be fulfilled or rejected with that value. A special situation is when resolve is called with a promise(A) then the returned promise takes on the state of that new promise(A). </p>
@@ -117,39 +117,39 @@ synchronous methods. So what actually <code>then()</code> is?</p>
 <h3 id="toc_4"><em>Promise.prototype.then(onFulfilled, onRejected)</em></h3>
 <p>This prototype method follows the <a href="http://promises-aplus.github.io/promises-spec/">Promises/A+ spec</a>. 
 Simply to say, it appends fulfillment and rejection handlers to the promise, and returns a new promise resolving to the return value of the called handler. And it can be chained.</p>
-
-<pre><code>new Promise(function (fulfill, reject){})
-.then(onFulfilled, onRejected)
-.then(onFulfilled, onRejected)
-.then(onFulfilled, onRejected)
-// ...</code></pre>
+<div class="highlight"><pre><span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">fulfill</span><span class="p">,</span> <span class="nx">reject</span><span class="p">){})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">onFulfilled</span><span class="p">,</span> <span class="nx">onRejected</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">onFulfilled</span><span class="p">,</span> <span class="nx">onRejected</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">onFulfilled</span><span class="p">,</span> <span class="nx">onRejected</span><span class="p">)</span>
+<span class="c1">// ...</span>
+</pre></div>
 
 <h2 id="toc_5">Browser</h2>
 <p>Actually, there is not only node module <a href="https://github.com/then/promise">promise</a> support <code>Promises</code>, in some browser, like Chrome 32 and latest Firefox, have already support it. It is similar to what we write before.</p>
-
-<pre><code>if (window.Promise) {
-    var promise = new Promise(function (resolve, reject) {
-        var request = new XMLHttpRequest();
-        request.open('GET', 'http://api.icndb.com/jokes/random');
-        request.onload = function () {
-            if (request.status == 200) {
-                resolve(request.response);
-            } else {
-                reject(Error(request.statusText));
-            }
-        };
-        request.onerror = function () {
-            reject(Error('Error fetching data'));
-        };
-        request.send();
-    }).then(function (data) {
-        console.log(JSON.parse(data).value.joke);
-    }, function (err) {
-        console.log(err.message);
-    })
-} else {
-    console.log('Promise is not supported')
-}</code></pre>
+<div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">Promise</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">promise</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+        <span class="nx">request</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;http://api.icndb.com/jokes/random&#39;</span><span class="p">);</span>
+        <span class="nx">request</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">resolve</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">response</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">reject</span><span class="p">(</span><span class="nb">Error</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">statusText</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+        <span class="nx">request</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="nx">reject</span><span class="p">(</span><span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Error fetching data&#39;</span><span class="p">));</span>
+        <span class="p">};</span>
+        <span class="nx">request</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+    <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">value</span><span class="p">.</span><span class="nx">joke</span><span class="p">);</span>
+    <span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+    <span class="p">})</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Promise is not supported&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
 
 <h2 id="toc_6">More static methods</h2>
 <p>We have seen how promises help us to do with complex asynchronous code, actually, there are more advanced patterns for promise use and some of the helper methods 
@@ -178,7 +178,7 @@ may make our Promise more concise. I just refer it simply.</p>
     
 
     <div class="entry-tags">
-        <a href="/tag/promises/">Promises</a>
+        
     </div>
 
     
@@ -199,16 +199,8 @@ may make our Promise more concise. I just refer it simply.</p>
     <footer id="footer">
       <div class="end"></div>
       <nav class="elsewhere">
-        <a href="https://github.com/Tinple">Github</a><a href="https://facebook.com/Tinple">Facebook</a><a href="http://weibo.com/tinple">Weibo</a>
+        <a href="https://github.com/Tinple">Github</a><a href="https://twitter.com/htinple">Twitter</a><a href="http://weibo.com/tinple">Weibo</a>
       </nav>
-      <p class="copyright">
-      <span class="software">
-        Powered by <a href="http://lab.lepture.com/liquidluck/">Felix Felicis</a> 3.8.1,
-      </span>
-      <span class="theme">
-        Theme <a href="https://github.com/lepture/liquidluck-theme-moment" rel="nofollow">moment</a> 2.0 by <a href="http://lepture.com">Hsiaoming Yang</a>
-      </span>
-      </p>
     </footer>
     <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
     

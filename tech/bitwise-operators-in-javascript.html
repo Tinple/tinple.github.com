@@ -5,8 +5,8 @@
     <title>Bitwise Operators in javascript - Tinple</title>
     <script>if (top !== self) top.location = self.location;</script>
     <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="/static/yue.css?v=7f42a" />
-    <link rel="stylesheet" href="/static/pygments.css?v=c6adc" />
+    <link rel="stylesheet" href="/static/yue.css?v=36f92" />
+    <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
     <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
     
     <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
@@ -63,11 +63,11 @@ of 32 bits, just zeros or ones. And the maximum and minimum integers are
 2147483647 and -2147483648, which represented through a 32bit signed number.</p>
 
 <h2 id="toc_0">Signed 32-bit integers</h2>
-
-<pre><code>var maximum = 2147483647;
-maximum.toString(2); // 1111111111111111111111111111111
-var minimum = -2147483648;
-minimum.toString(2); // -10000000000000000000000000000000</code></pre>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">maximum</span> <span class="o">=</span> <span class="mi">2147483647</span><span class="p">;</span>
+<span class="nx">maximum</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// 1111111111111111111111111111111</span>
+<span class="kd">var</span> <span class="nx">minimum</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2147483648</span><span class="p">;</span>
+<span class="nx">minimum</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// -10000000000000000000000000000000</span>
+</pre></div>
 <p>Notes that the maximum and minimum above in <code>Javascript</code>. Things 
 may get strang if you exceed the scope. And if you lack the basis, go to 
 <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Signed_32-bit_integers">MDN</a> to learn more.</p>
@@ -79,56 +79,56 @@ result in constructed bitwise. </p>
 
 <h2 id="toc_2">Bitwise Operands</h2>
 <p>As we know, <code>Javascript</code> is a weak typing programming language. Actually, all values can be bitwise operand, for example, a function or a string. However, I guess, <code>javascript</code> will convert the operand to int or long at first internally according to its engine. Some values like function or string  which can not be correctly converted will be 0.</p>
-
-<pre><code>// 88.88 -&gt; 88, 88 | 0 -&gt; 88
-console.log(88.88 | 0); // 88
-// '88.88' -&gt; 88, 88 | 0 -&gt; 88
-console.log('88.88' | 0); // 88
-// 'sss' -&gt; 0, 0 | 1 -&gt; 1
-console.log('sss' | 1); // 1
-// [] -&gt; 0, 0 &amp; -1 -&gt; 0
-console.log([] &amp; -1); // 0</code></pre>
+<div class="highlight"><pre><span class="c1">// 88.88 -&gt; 88, 88 | 0 -&gt; 88</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mf">88.88</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// 88</span>
+<span class="c1">// &#39;88.88&#39; -&gt; 88, 88 | 0 -&gt; 88</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;88.88&#39;</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// 88</span>
+<span class="c1">// &#39;sss&#39; -&gt; 0, 0 | 1 -&gt; 1</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;sss&#39;</span> <span class="o">|</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 1</span>
+<span class="c1">// [] -&gt; 0, 0 &amp; -1 -&gt; 0</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([]</span> <span class="o">&amp;</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// 0</span>
+</pre></div>
 
 <h2 id="toc_3">Skills with Bitwise Operators</h2>
 <p>Your codes with nice usage of bitwise operators will be much more
 efficient. And the situation below you may meet frequently.</p>
+<div class="highlight"><pre><span class="c1">// x represents the number under the scope of maximum and minimum</span>
+<span class="c1">// x &amp; 0 will return 0</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span> <span class="o">&amp;</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// 0</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">2147483648</span> <span class="o">&amp;</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// 0</span>
+<span class="c1">// x &amp; -1 will return x</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span> <span class="o">&amp;</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// random number x</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">2147483648</span> <span class="o">&amp;</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// random number x</span>
+<span class="c1">// x | 0 will return x</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// random number x</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">2147483648</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// random number x</span>
+<span class="c1">// x | -1 will return -1</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span> <span class="o">|</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// -1</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">2147483648</span> <span class="o">|</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// -1</span>
 
-<pre><code>// x represents the number under the scope of maximum and minimum
-// x &amp; 0 will return 0
-console.log(Math.random() * 2147483647 &amp; 0); // 0
-console.log(Math.random() * -2147483648 &amp; 0); // 0
-// x &amp; -1 will return x
-console.log(Math.random() * 2147483647 &amp; -1); // random number x
-console.log(Math.random() * -2147483648 &amp; -1); // random number x
-// x | 0 will return x
-console.log(Math.random() * 2147483647 | 0); // random number x
-console.log(Math.random() * -2147483648 | 0); // random number x
-// x | -1 will return -1
-console.log(Math.random() * 2147483647 | -1); // -1
-console.log(Math.random() * -2147483648 | -1); // -1
+<span class="c1">// Even or Odd, Odd returns 1, Even returns 0</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mi">1111</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">);</span>  <span class="c1">// 1</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mi">2222</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">);</span>  <span class="c1">// 0</span>
 
-// Even or Odd, Odd returns 1, Even returns 0
-console.log(1111 &amp; 1);  // 1
-console.log(2222 &amp; 1);  // 0
+<span class="c1">// ~x will return -(x + 1)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span><span class="p">));</span> <span class="c1">// -(x + 1)</span>
 
-// ~x will return -(x + 1)
-console.log(~(Math.random() * 2147483647)); // -(x + 1)
+<span class="c1">// x ^ 0 will return x, x ^ -1 will return ~x</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span> <span class="o">^</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// random number x</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span> <span class="o">^</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// ~x</span>
 
-// x ^ 0 will return x, x ^ -1 will return ~x
-console.log(Math.random() * 2147483647 ^ 0); // random number x
-console.log(Math.random() * 2147483647 ^ -1); // ~x
+<span class="c1">// x &lt;&lt; y will return x * 2 ^ y (^ is power)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mi">8</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">);</span> <span class="c1">// 128</span>
 
-// x &lt;&lt; y will return x * 2 ^ y (^ is power)
-console.log(8 &lt;&lt; 4); // 128
-
-// replace name.indexOf(subName) === 3
-var name = 'Tinple';
-var subName = 'ple';
-if (~name.indexOf(subName)) {
-    // if true
-} else {
-    // if else
-}</code></pre>
+<span class="c1">// replace name.indexOf(subName) === 3</span>
+<span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Tinple&#39;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">subName</span> <span class="o">=</span> <span class="s1">&#39;ple&#39;</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">~</span><span class="nx">name</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">subName</span><span class="p">))</span> <span class="p">{</span>
+    <span class="c1">// if true</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// if else</span>
+<span class="p">}</span>
+</pre></div>
 
 <h2 id="toc_4">END</h2>
 <p>Using bitwise operator correctly will enhance your code performance.
@@ -146,7 +146,7 @@ And the datas in this post are tested in <a href="https://code.google.com/p/v8/"
     
 
     <div class="entry-tags">
-        <a href="/tag/javascript/">javascript</a><a href="/tag/bitwiseoperator/">bitwiseOperator</a>
+        
     </div>
 
     
@@ -167,16 +167,8 @@ And the datas in this post are tested in <a href="https://code.google.com/p/v8/"
     <footer id="footer">
       <div class="end"></div>
       <nav class="elsewhere">
-        <a href="https://github.com/Tinple">Github</a><a href="https://facebook.com/Tinple">Facebook</a><a href="http://weibo.com/tinple">Weibo</a>
+        <a href="https://github.com/Tinple">Github</a><a href="https://twitter.com/htinple">Twitter</a><a href="http://weibo.com/tinple">Weibo</a>
       </nav>
-      <p class="copyright">
-      <span class="software">
-        Powered by <a href="http://lab.lepture.com/liquidluck/">Felix Felicis</a> 3.8.1,
-      </span>
-      <span class="theme">
-        Theme <a href="https://github.com/lepture/liquidluck-theme-moment" rel="nofollow">moment</a> 2.0 by <a href="http://lepture.com">Hsiaoming Yang</a>
-      </span>
-      </p>
     </footer>
     <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
     
