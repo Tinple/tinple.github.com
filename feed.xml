@@ -3,14 +3,162 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2014-09-24T15:19:59+08:00</updated>
+    <updated>2014-09-25T12:32:56+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[Nodejs in production]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/nodejs-in-production"/>
+        <published>2014-09-24T00:00:00+08:00</published>
+        <updated>2014-09-25T12:32:56+08:00</updated>
+        <id>http://tinple.me/tech/nodejs-in-production</id>
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <p>Last two days, I deploy a <code>nodejs</code> production environment on a vps.
+The process is hard but fun. Hence, I post this essay to note.
+My project is based on <a href="http://koajs.com">koa</a>, using 
+<a href="https://www.mongodb.org/">mongodb</a> to store data.</p>
+<p>As we know, when running a node application in production, we need
+to keep stability, performance, security, and maintainability in mind.</p>
+
+<h2 id="toc_0">Begin</h2>
+<p>At begin, my initial idea is to use <code>nginx</code> to proxy <code>nodejs</code> app. And the
+<code>nginx</code> plays a <strong>Load Balancer</strong> role, improving performance and
+reliability by distributing the workload across multiple servers,
+working as a front end server. What&#39;s more, your static files 
+can also be handled much better.</p>
+
+<h2 id="toc_1">Install Node.js &amp;&amp; MongoDB</h2>
+<p>My vps is <code>CentOS</code>, the first thing we need to do is to install <code>node</code>.
+P.S. As I use <a href="http://koajs.com">koa</a>, so I install version 0.11.9.</p>
+
+<pre><code>$ wget http://nodejs.org/dist/v0.11.9/node-v0.11.9.tar.gz
+$ tar zxvf node-v0.11.9.tar.gz
+$ cd node-v0.11.9
+$ ./configure
+$ make
+$ sudo make install</code></pre>
+<p>After these things done, we can check our install.
+<code>
+$ node -v
+0.11.9
+$ npm -v
+1.3.15
+</code></p>
+<p>For <code>Mongo</code>, we can follow the official installation with <code>RedHat</code>.</p>
+
+<pre><code>$ vim /etc/yum.repos.d/mongodb.repo</code></pre>
+<p>For 64-bit system, add the following information to the repo file.</p>
+
+<pre><code>[mongodb]
+name=MongoDB Repository
+baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
+gpgcheck=0
+enabled=1</code></pre>
+<p>Now to install <code>MongdoDB</code>.</p>
+
+<pre><code>yum install mongo-10gen mongo-10gen-server</code></pre>
+<p>In our production, we need to open the mongod auth, edit <code>/etc/mongod.conf</code>
+to set <code>auth=true</code>.</p>
+<p>And at last, we can use <code>service mongod start</code> or <code>/etc/init.d/mongod start</code>
+to start mongodb.:D</p>
+
+<h2 id="toc_2">nginx.conf</h2>
+<p>For the idea above, we need to configure <code>nginx.conf</code> to proxy our app.
+As I&#39;ll explain, nginx is used for almost everything: gzip encoding,
+static file serving, HTTP caching, SSL handling, load balancing and
+spoon feeding clients. Here is my main nginx config:</p>
+
+<pre><code>http {
+    ...
+    server {
+        listen 80;
+        server_name reg.hduisa.cn;
+
+        location ~ ^/(images/|img/|javascript/|js/|css/|stylesheets/|flash/|media/|static/|robots.txt|humans.txt|favicon.ico) {
+            root /home/wwwroot/reg.hduisa.cn/public;
+            access_log off;
+            expires max;
+        }
+
+        location / {
+            proxy_pass http://localhost:3000/;
+        }
+
+        access_log /home/wwwlogs/req.hduisa.cn.log access;
+    }
+    ...
+}</code></pre>
+<p>The most important part of the section is <code>proxy_pass</code>, this tells nginx to proxy
+correctly. And for static assets, any requests for with a URI starting with images,
+img, css, js&hellip;will be matched by this location. If you want to proxy multi apps, 
+you can use <code>upstream</code>. The upstream directive specifies that these two instances 
+work in tandem as an upstream server for nginx.</p>
+
+<pre><code>http {
+    ...
+    upstream reg_hduisa_cn_upstream {
+        server http://localhost:3000;
+        server http://localhost:3001;
+        keepalive 64;
+    }
+    server {
+        ...
+        location / {
+            proxy_pass http://reg_hduisa_cn_upstream;
+        }
+        ...
+    }   
+}</code></pre>
+<p>Now we can pay attention to our app. At first, we should create a user.</p>
+
+<h2 id="toc_3">Create Web User</h2>
+<p>For the security of our server, we should not run the app with root. So I create
+a web user for my own.</p>
+
+<pre><code>$ useradd -mRu koa -p password
+$ su koa</code></pre>
+<p>And I use <code>pm2</code> to manage my app. We need install it.
+And for globally npm install, we can detect whether the <code>$NODE_PATH</code> includes 
+the location that npm installs globally or not.</p>
+
+<pre><code>$ which node
+/usr/local/bin/node
+$ which npm
+/usr/local/bin/npm
+$ echo $NODE_PATH</code></pre>
+<p>Our <code>$NODE_PATH</code> is null, so add </p>
+
+<pre><code>export NODE_PATH=/usr/local/lib/node_modules</code></pre>
+<p>to our <code>.bash_profile</code> or <code>.zshrc</code>. The path is not absolute, it depends 
+on your node directory. Now we can install pm2 globally.</p>
+
+<pre><code>$ npm install pm2 -g</code></pre>
+<p>As my koa app needs <code>--harmony</code> flag, we use pm2 to start.</p>
+
+<pre><code>$ pm2 start /home/wwwroot/reg.hduisa.cn/app.js --name reg.hduisa.cn --node-args=&quot;--harmony-generators&quot; --watch</code></pre>
+<p>OK, that&#39;s the whole thing, you can see the process by</p>
+
+<pre><code>$ pm2 list</code></pre>
+
+<h2 id="toc_4">End</h2>
+<p>This&#39;s my first deployment with nodejs on production, if you have something to correct,
+welcome to point it:D</p>
+
+<h3 id="toc_5">References:</h3>
+
+<ul>
+<li><a href="http://docs.mongodb.org/manual/tutorial/install-mongodb-on-red-hat-centos-or-fedora-linux/">install-mongodb-on-red-hat-centos</a></li>
+<li><a href="http://blog.carbonfive.com/2014/06/02/node-js-in-production/">nodejs-in-production</a></li>
+<li><a href="http://blog.argteam.com/coding/hardening-node-js-for-production-part-2-using-nginx-to-avoid-node-js-load/">nodejs-for-production-part-2</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[callbacks with for loop]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/callbacks-with-for-loop"/>
         <published>2014-08-13T00:00:00+08:00</published>
-        <updated>2014-09-24T15:15:17+08:00</updated>
+        <updated>2014-09-24T16:58:26+08:00</updated>
         <id>http://tinple.me/tech/callbacks-with-for-loop</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <p>When I play some ctf games, usually I need to blast some interface like post a certain length of string which contains numbers and letters. </p>
@@ -23,7 +171,7 @@
 <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">blast</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">blast</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">blast</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span><span class="nx">form</span><span class="o">:</span><span class="p">{</span> <span class="nx">token</span> <span class="nx">i</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">k</span> <span class="p">}},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span><span class="nx">form</span><span class="o">:</span><span class="p">{</span> <span class="nx">token</span><span class="o">:</span> <span class="nx">i</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">k</span> <span class="p">}},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
           <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">k</span><span class="p">);</span>
           <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
@@ -33,7 +181,52 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
-<p>OK, we have our magical blast payload ready. </p>
+<p>OK, we have our first magical blast payload ready. 
+Here&#39;s what you think will happen:</p>
+
+<ol>
+<li>in a for loop, post token from 000 to 999</li>
+<li>if find the respond body with keywords <strong>key</strong>, print token and body</li>
+</ol>
+<p>However, <code>Node</code> is asynchronous. The request post will return before it even starts 
+the post. It will return back to your for loop. And your for loop will move on to the
+next file. And the next one.</p>
+<p>We have to wait for the callback. When it&#39;s called, only then do post our next
+number token. In other words, we need to call another function inside our callback.
+And this function needs to start post next number token. Hence, maybe we need
+a recursive function to do this.</p>
+<p>A nice little recursive pattern we can use for this case:</p>
+
+<pre><code>var request = require('request');
+var url = 'www.example.com/hack';
+function blast(num) {
+    if (num &gt;= 000 &amp;&amp; num &lt;= 999) {
+        request.post(url, {form:{ token: num }}, function (err, res, body) {
+            if (body.indexOf('key') !== -1) {
+              console.log(i + j + k);
+              console.log(body);
+            } else {
+                blast(++num);
+            }
+        })
+    }
+}
+blast(000);</code></pre>
+<p>In short, the pattern can be this:</p>
+
+<pre><code>repeater(i) {
+    if (statement) {
+        aysnc(function () {
+            repeater(++i)
+        })
+    }
+}</code></pre>
+
+<h2 id="toc_0">Referemce</h2>
+
+<ul>
+<li><a href="http://www.richardrodger.com/2011/04/21/node-js-how-to-write-a-for-loop-with-callbacks/#.VCJ-ciuSy8Q">How to Write a For Loop With Callbacks</a></li>
+</ul>
 ]]>
         </content>
     </entry><entry>
@@ -1568,63 +1761,6 @@ determination and continually solving the problem.And what I think is that is ca
 <blockquote>
 <p>其实我和大多数人一样,有时候很想做个心理学家,只不过在阴差阳错间,在生活所迫,在性格诱使,在碎碎念间从事了另一项工作。</p>
 </blockquote>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[Tinple.me and liquidluck]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/tinple-me-and-liquidluck"/>
-        <published>2013-09-06T00:00:00+08:00</published>
-        <updated>2014-09-24T14:51:21+08:00</updated>
-        <id>http://tinple.me/tech/tinple-me-and-liquidluck</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p>These days I have been occupied with <a href="http://tinple.me">tinple.me</a> in my leisure.
-And I use liquidluck to build it.Now I want to share the process with you.</p>
-<p>Several days ago, I got the response from <a href="http://lepture.com">lepture</a> that suggested
-me to use Github Pages.Then I googled some information and started to learn git.</p>
-<p>As git is a little difficult to use adeptly, so I am still learning it and I think it is a good 
-start for me to dive myself into open source.But for liquidluck, knowing a little knowledge 
-about git is ample.</p>
-<p>First, you should build a website in liquidluck.You can follow its simple document on 
-<a href="http://liquidluck.readthedocs.org/en/latest/index.html">RTD</a>, it is just easy anyway.
-And you are also prepared git.</p>
-<p>And next you can use git to add your files into VCS(version control system).Turn to your deploy
-directory under the website and init the git.</p>
-
-<pre><code>$ cd website/deploy
-$ git init</code></pre>
-<p>Then add all your files into git and commit it.If you are not similiar with git, I strongly 
-advise you to learn the book Pro_Git on the website, chinese and english version are all available. </p>
-
-<pre><code>$ git add .
-$ git commit -m 'my blog source'</code></pre>
-<p>Now you can see your git status and use remote repository.But at before, you should create a new repo
-named [username].github.com, which calls your personal page(one patterns of github pages) and it should be
-exist only one. Blog is just a shortname, you can use others.</p>
-
-<pre><code>$ git status
-$ git remote add blog https://github.com/username/username.github.com.git
-$ git remote -v
-$ git push blog master</code></pre>
-<p>And type your username and password in github, then you may push your core to github.
-If you see some wrongs, you may <code>git pull</code> the repo first or use <code>git push -f</code>.
-Going to username.github.io , your website made in liquidluck may display.If you see 404,
-you may wait few minutes to let github resolve it and refresh the page.</p>
-<p>The main of things is done now.And if you want to buy yourself a domain, you may go to 
-<a href="http://godaddy.com/">Godaddy</a>, it is greater than any other domain service company.
-For me in China, I used alipay to pay for it.Luckily, I received email from Godaddy 10 minutes around
-after I paid(Actually someone used alipay may wait 48 hours later).And then I used DNSPod to set my
-domain.You can find some information about it on the website.Pay attention to the top domain in github
-when you set your domain resolve.</p>
-<p>And today, I followed the webhook document on liquidluck.There are some small mistakes happening
-when I added webhook.Because I used virtual machine to run the webhook, some other questions
-dizzy me.Anyway to my luck, I fixed it.You can go to <a href="http://liquidluck.readthedocs.org/en/latest/index.html">RTD</a>
-again to see something about webhook and just follow it(I am in github).</p>
-<p>Finally go to the URL you set and if you see ok, the webhook is already successful.
-And you will see deploy directory created.Everytime when you post an essay and refresh the webhook,
-the deploy has updated.And then you can <code>git push</code> to your repo.</p>
-<p>Although I tossed many times and almost got crazy, it really taught me a lot.
-Anyway, liquidluck is just so lovely and I really like it! </p>
 ]]>
         </content>
     </entry>

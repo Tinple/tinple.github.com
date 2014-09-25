@@ -1,0 +1,229 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Nodejs in production - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=36f92" />
+    <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/nodejs-in-production" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Nodejs in production</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2014-09-24T00:00:00+08:00" pubdate>
+            <a href="/2014/">2014-09-24</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <p>Last two days, I deploy a <code>nodejs</code> production environment on a vps.
+The process is hard but fun. Hence, I post this essay to note.
+My project is based on <a href="http://koajs.com">koa</a>, using 
+<a href="https://www.mongodb.org/">mongodb</a> to store data.</p>
+<p>As we know, when running a node application in production, we need
+to keep stability, performance, security, and maintainability in mind.</p>
+
+<h2 id="toc_0">Begin</h2>
+<p>At begin, my initial idea is to use <code>nginx</code> to proxy <code>nodejs</code> app. And the
+<code>nginx</code> plays a <strong>Load Balancer</strong> role, improving performance and
+reliability by distributing the workload across multiple servers,
+working as a front end server. What&#39;s more, your static files 
+can also be handled much better.</p>
+
+<h2 id="toc_1">Install Node.js &amp;&amp; MongoDB</h2>
+<p>My vps is <code>CentOS</code>, the first thing we need to do is to install <code>node</code>.
+P.S. As I use <a href="http://koajs.com">koa</a>, so I install version 0.11.9.</p>
+
+<pre><code>$ wget http://nodejs.org/dist/v0.11.9/node-v0.11.9.tar.gz
+$ tar zxvf node-v0.11.9.tar.gz
+$ cd node-v0.11.9
+$ ./configure
+$ make
+$ sudo make install</code></pre>
+<p>After these things done, we can check our install.
+<code>
+$ node -v
+0.11.9
+$ npm -v
+1.3.15
+</code></p>
+<p>For <code>Mongo</code>, we can follow the official installation with <code>RedHat</code>.</p>
+
+<pre><code>$ vim /etc/yum.repos.d/mongodb.repo</code></pre>
+<p>For 64-bit system, add the following information to the repo file.</p>
+
+<pre><code>[mongodb]
+name=MongoDB Repository
+baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
+gpgcheck=0
+enabled=1</code></pre>
+<p>Now to install <code>MongdoDB</code>.</p>
+
+<pre><code>yum install mongo-10gen mongo-10gen-server</code></pre>
+<p>In our production, we need to open the mongod auth, edit <code>/etc/mongod.conf</code>
+to set <code>auth=true</code>.</p>
+<p>And at last, we can use <code>service mongod start</code> or <code>/etc/init.d/mongod start</code>
+to start mongodb.:D</p>
+
+<h2 id="toc_2">nginx.conf</h2>
+<p>For the idea above, we need to configure <code>nginx.conf</code> to proxy our app.
+As I&#39;ll explain, nginx is used for almost everything: gzip encoding,
+static file serving, HTTP caching, SSL handling, load balancing and
+spoon feeding clients. Here is my main nginx config:</p>
+
+<pre><code>http {
+    ...
+    server {
+        listen 80;
+        server_name reg.hduisa.cn;
+
+        location ~ ^/(images/|img/|javascript/|js/|css/|stylesheets/|flash/|media/|static/|robots.txt|humans.txt|favicon.ico) {
+            root /home/wwwroot/reg.hduisa.cn/public;
+            access_log off;
+            expires max;
+        }
+
+        location / {
+            proxy_pass http://localhost:3000/;
+        }
+
+        access_log /home/wwwlogs/req.hduisa.cn.log access;
+    }
+    ...
+}</code></pre>
+<p>The most important part of the section is <code>proxy_pass</code>, this tells nginx to proxy
+correctly. And for static assets, any requests for with a URI starting with images,
+img, css, js&hellip;will be matched by this location. If you want to proxy multi apps, 
+you can use <code>upstream</code>. The upstream directive specifies that these two instances 
+work in tandem as an upstream server for nginx.</p>
+
+<pre><code>http {
+    ...
+    upstream reg_hduisa_cn_upstream {
+        server http://localhost:3000;
+        server http://localhost:3001;
+        keepalive 64;
+    }
+    server {
+        ...
+        location / {
+            proxy_pass http://reg_hduisa_cn_upstream;
+        }
+        ...
+    }   
+}</code></pre>
+<p>Now we can pay attention to our app. At first, we should create a user.</p>
+
+<h2 id="toc_3">Create Web User</h2>
+<p>For the security of our server, we should not run the app with root. So I create
+a web user for my own.</p>
+
+<pre><code>$ useradd -mRu koa -p password
+$ su koa</code></pre>
+<p>And I use <code>pm2</code> to manage my app. We need install it.
+And for globally npm install, we can detect whether the <code>$NODE_PATH</code> includes 
+the location that npm installs globally or not.</p>
+
+<pre><code>$ which node
+/usr/local/bin/node
+$ which npm
+/usr/local/bin/npm
+$ echo $NODE_PATH</code></pre>
+<p>Our <code>$NODE_PATH</code> is null, so add </p>
+
+<pre><code>export NODE_PATH=/usr/local/lib/node_modules</code></pre>
+<p>to our <code>.bash_profile</code> or <code>.zshrc</code>. The path is not absolute, it depends 
+on your node directory. Now we can install pm2 globally.</p>
+
+<pre><code>$ npm install pm2 -g</code></pre>
+<p>As my koa app needs <code>--harmony</code> flag, we use pm2 to start.</p>
+
+<pre><code>$ pm2 start /home/wwwroot/reg.hduisa.cn/app.js --name reg.hduisa.cn --node-args=&quot;--harmony-generators&quot; --watch</code></pre>
+<p>OK, that&#39;s the whole thing, you can see the process by</p>
+
+<pre><code>$ pm2 list</code></pre>
+
+<h2 id="toc_4">End</h2>
+<p>This&#39;s my first deployment with nodejs on production, if you have something to correct,
+welcome to point it:D</p>
+
+<h3 id="toc_5">References:</h3>
+
+<ul>
+<li><a href="http://docs.mongodb.org/manual/tutorial/install-mongodb-on-red-hat-centos-or-fedora-linux/">install-mongodb-on-red-hat-centos</a></li>
+<li><a href="http://blog.carbonfive.com/2014/06/02/node-js-in-production/">nodejs-in-production</a></li>
+<li><a href="http://blog.argteam.com/coding/hardening-node-js-for-production-part-2-using-nginx-to-avoid-node-js-load/">nodejs-for-production-part-2</a></li>
+</ul>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Nodejs in production';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://twitter.com/htinple">Twitter</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>

