@@ -70,8 +70,10 @@ working as a front end server. What&#39;s more, your static files
 can also be handled much better.</p>
 
 <h2 id="toc_1">Install Node.js &amp;&amp; MongoDB</h2>
-<p>My vps is <code>CentOS</code>, the first thing we need to do is to install <code>node</code>.
-P.S. As I use <a href="http://koajs.com">koa</a>, so I install version 0.11.9.</p>
+
+<h3 id="toc_2">Node.js</h3>
+<p>My vps is <code>CentOS</code>, the first thing we need to do is to install <code>node</code>.</p>
+<p>P.S. As I use <a href="http://koajs.com">koa</a>, so I install version 0.11.9.</p>
 
 <pre><code>$ wget http://nodejs.org/dist/v0.11.9/node-v0.11.9.tar.gz
 $ tar zxvf node-v0.11.9.tar.gz
@@ -79,13 +81,14 @@ $ cd node-v0.11.9
 $ ./configure
 $ make
 $ sudo make install</code></pre>
-<p>After these things done, we can check our install.
-<code>
-$ node -v
+<p>After these things done, we can check our install.</p>
+
+<pre><code>$ node -v
 0.11.9
 $ npm -v
-1.3.15
-</code></p>
+1.3.15</code></pre>
+
+<h3 id="toc_3">MongoDB</h3>
 <p>For <code>Mongo</code>, we can follow the official installation with <code>RedHat</code>.</p>
 
 <pre><code>$ vim /etc/yum.repos.d/mongodb.repo</code></pre>
@@ -99,13 +102,13 @@ enabled=1</code></pre>
 <p>Now to install <code>MongdoDB</code>.</p>
 
 <pre><code>yum install mongo-10gen mongo-10gen-server</code></pre>
-<p>In our production, we need to open the mongod auth, edit <code>/etc/mongod.conf</code>
+<p>In my production, we need to open the mongod auth, edit <code>/etc/mongod.conf</code>
 to set <code>auth=true</code>.</p>
 <p>And at last, we can use <code>service mongod start</code> or <code>/etc/init.d/mongod start</code>
 to start mongodb.:D</p>
 
-<h2 id="toc_2">nginx.conf</h2>
-<p>For the idea above, we need to configure <code>nginx.conf</code> to proxy our app.
+<h2 id="toc_4">nginx.conf</h2>
+<p>As the idea above, we need to configure <code>nginx.conf</code> to proxy our app.
 As I&#39;ll explain, nginx is used for almost everything: gzip encoding,
 static file serving, HTTP caching, SSL handling, load balancing and
 spoon feeding clients. Here is my main nginx config:</p>
@@ -123,7 +126,7 @@ spoon feeding clients. Here is my main nginx config:</p>
         }
 
         location / {
-            proxy_pass http://localhost:3000/;
+            proxy_pass 127.0.0.1:3000/;
         }
 
         access_log /home/wwwlogs/req.hduisa.cn.log access;
@@ -134,13 +137,13 @@ spoon feeding clients. Here is my main nginx config:</p>
 correctly. And for static assets, any requests for with a URI starting with images,
 img, css, js&hellip;will be matched by this location. If you want to proxy multi apps, 
 you can use <code>upstream</code>. The upstream directive specifies that these two instances 
-work in tandem as an upstream server for nginx.</p>
+work in tandem as an upstream server for nginx(not only two).</p>
 
 <pre><code>http {
     ...
     upstream reg_hduisa_cn_upstream {
-        server http://localhost:3000;
-        server http://localhost:3001;
+        server 127.0.0.1:3000;
+        server 127.0.0.1:3001;
         keepalive 64;
     }
     server {
@@ -153,7 +156,7 @@ work in tandem as an upstream server for nginx.</p>
 }</code></pre>
 <p>Now we can pay attention to our app. At first, we should create a user.</p>
 
-<h2 id="toc_3">Create Web User</h2>
+<h2 id="toc_5">Create Web User</h2>
 <p>For the security of our server, we should not run the app with root. So I create
 a web user for my own.</p>
 
@@ -168,10 +171,10 @@ the location that npm installs globally or not.</p>
 $ which npm
 /usr/local/bin/npm
 $ echo $NODE_PATH</code></pre>
-<p>Our <code>$NODE_PATH</code> is null, so add </p>
+<p>My <code>$NODE_PATH</code> is null, so add </p>
 
 <pre><code>export NODE_PATH=/usr/local/lib/node_modules</code></pre>
-<p>to our <code>.bash_profile</code> or <code>.zshrc</code>. The path is not absolute, it depends 
+<p>to my <code>.bash_profile</code> or <code>.zshrc</code>. The path is not absolute, it depends 
 on your node directory. Now we can install pm2 globally.</p>
 
 <pre><code>$ npm install pm2 -g</code></pre>
@@ -182,11 +185,11 @@ on your node directory. Now we can install pm2 globally.</p>
 
 <pre><code>$ pm2 list</code></pre>
 
-<h2 id="toc_4">End</h2>
+<h2 id="toc_6">End</h2>
 <p>This&#39;s my first deployment with nodejs on production, if you have something to correct,
 welcome to point it:D</p>
 
-<h3 id="toc_5">References:</h3>
+<h3 id="toc_7">References:</h3>
 
 <ul>
 <li><a href="http://docs.mongodb.org/manual/tutorial/install-mongodb-on-red-hat-centos-or-fedora-linux/">install-mongodb-on-red-hat-centos</a></li>
