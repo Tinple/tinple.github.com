@@ -3,14 +3,157 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2014-09-25T14:06:44+08:00</updated>
+    <updated>2014-09-26T12:57:25+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[Work with IPTables]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/work-with-iptables"/>
+        <published>2014-09-25T00:00:00+08:00</published>
+        <updated>2014-09-26T12:57:25+08:00</updated>
+        <id>http://tinple.me/tech/work-with-iptables</id>
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <p>Nowadays I happened to <code>IPTables</code> again. To be honest, I&#39;m not familiar with it.
+This post is just my note about working with <code>IPTables</code> these days.</p>
+
+<h2 id="toc_0">What&#39;s iptables?</h2>
+<p><code>CentOS</code> has a powerful firewall, that&#39;s called <code>iptables</code>, aka <code>iptables/netfilter</code>.
+It&#39;s the userscope module, and <code>netfilter</code> is a kernel module, built into the kernel,
+that actually does the filtering.</p>
+<p><code>IPTables</code> places rules into predefined chains(INPUT, OUTPUT and FORWORD) that are 
+checked against any traffic(IP packets) relevant to those chains. And a decision is
+made about what to do with each packet based upon the outcome of those rules, for 
+example, accepting or dropping.</p>
+
+<h2 id="toc_1">Chains</h2>
+<p>There are 3 predefined chains in the filter table to which we can add rules for 
+processing IP packets passing through those chains.</p>
+
+<ul>
+<li>INPUT - All packets destined for the host computer.</li>
+<li>OUTPUT - All packets originating from the host computer.</li>
+<li>FORWARD - All packets neither destined for nor originating the host, but passing 
+through the host computer.</li>
+</ul>
+<p>A packet is checked against each rule in turn, starting at the top, and if it 
+matches the rule, then an action is taken such as accepting(ACCEPT) or dropping
+(DROP) the packet. Once a rule has been matched and an action taken, then the 
+packet is processed according to the outcome of that rule and isn&#39;t processed by
+further rules in the chain.</p>
+
+<h2 id="toc_2">Begin Start</h2>
+<p>We can use <code>iptables -L</code> to inspect the currently loaded rules.
+This is <a href="http://www.aliyun.com">aliyun</a> server, we can see the default set
+of rules. The default set seems that the firewall is the same as closed.</p>
+
+<pre><code>Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination</code></pre>
+<p>P.S. If <code>iptables</code> is not running, you can enable it by running:</p>
+
+<pre><code># system-config-securitylevel</code></pre>
+
+<h2 id="toc_3">Server Setups</h2>
+<p>At first, I&#39;ll explain our server setups. We have 5 servers totally.
+And we use <a href="https://www.digitalocean.com/community/tutorials/5-common-server-setups-for-your-web-application">Load Balancer</a> policy to setup our servers:</p>
+
+<ol>
+<li>One Load Balancer Server(Reverse Proxy)</li>
+<li>Three app-backend Servers</li>
+<li>One Database Server</li>
+</ol>
+<p>OK, it&#39;s time to go start. At first, we decide the following basic <code>iptables</code> policies.
+For Reverse Proxy server, we only open port 22 and 80, allowing tcp packets that
+have specific bits(flags) set, to match a rule. For three app-backend servers, we
+just open port 22 and 80. For database server, we open the port 22 and database port.</p>
+
+<h2 id="toc_4">Set IPTables Rule (Load Balancer Server)</h2>
+<p>At first, we may add a rule allowing SSH connections over tcp port 22. This is to 
+prevent accidental lockouts when working on remote systems over an SSH connection.</p>
+
+<pre><code># iptables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT</code></pre>
+<p>And the same as HTTP connections over tcp port 80.</p>
+
+<pre><code># iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT</code></pre>
+<p>Then we may allow all incoming packets destined for the localhost interface to be
+accepted. This is generally required as many software applications expect to be
+able to communicate with the localhost adaptor.</p>
+
+<pre><code># iptables -A INPUT -i lo -j ACCEPT</code></pre>
+<p>After these basic setting rules, we add three tcp packets that have specific bits
+(flags) rules.</p>
+
+<pre><code># -A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG FIN,SYN,RST,PSH,ACK,URG -j DROP 
+# -A INPUT -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j DROP
+# -A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP</code></pre>
+<p>Then we add the last rule to the INPUT chain. <code>ESTABLISHED</code> and <code>RELATED</code> refers to
+incoming packets that are part of an already established connection or related to
+and already established connection.</p>
+
+<pre><code># iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></pre>
+<p>At last, we set the default policy on the INPUT chain and FORWARD chain.</p>
+
+<pre><code># iptables -P INPUT DROP
+# iptables -P FORWARD DROP</code></pre>
+<p>Now we can see our <code>iptables</code> setting.</p>
+
+<pre><code># iptables -S
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG FIN,SYN,RST,PSH,ACK,URG -j DROP
+-A INPUT -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j DROP
+-A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></pre>
+<p>It seems fine, and our iptables on <code>Reverse Proxy Server</code> needs to be saved.</p>
+
+<pre><code># /sbin/service iptables save</code></pre>
+<p>For other three app-backend servers:</p>
+
+<pre><code># iptables -S
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></pre>
+<p>And the database server:</p>
+
+<pre><code># iptables -S
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport [Your_database_port] -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></pre>
+
+<h2 id="toc_5">End</h2>
+<p>If you have something to correct, welcome to point it out:D</p>
+
+<h3 id="toc_6">References:</h3>
+
+<ul>
+<li><a href="http://wiki.centos.org/HowTos/Network/IPTables">wiki-centos-iptables</a></li>
+<li><a href="http://www.centos.org/docs/5/html/Deployment_Guide-en-US/ch-iptables.html">ch-iptables</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[Nodejs in production]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/nodejs-in-production"/>
         <published>2014-09-24T00:00:00+08:00</published>
-        <updated>2014-09-25T14:06:44+08:00</updated>
+        <updated>2014-09-25T15:02:21+08:00</updated>
         <id>http://tinple.me/tech/nodejs-in-production</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <p>Last two days, I deploy a <code>nodejs</code> production environment on a vps.
@@ -653,7 +796,7 @@ And the datas in this post are tested in <a href="https://code.google.com/p/v8/"
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/using-jade-template-engine"/>
         <published>2014-01-22T00:00:00+08:00</published>
-        <updated>2014-09-24T15:17:16+08:00</updated>
+        <updated>2014-09-25T18:24:58+08:00</updated>
         <id>http://tinple.me/tech/using-jade-template-engine</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <p>These days I touched a node template engine <code>jade</code>. I loved it at once because its <code>zencoding</code> grammar really attracts me.</p>
@@ -1700,70 +1843,6 @@ determination and continually solving the problem.And what I think is that is ca
 <p>说了这么多贬低的话，其实没必要去相信，我自己也不相信自己说的。正所谓术业有专攻， 一旦你喜爱自己所在的领域，去专心学习其实是件很享受的事。其实大二有很多课我非常感兴趣， 很多时候我觉得学习的确是件美好的事，尤其是学习那些勾着自己心的东西，那种充实的感觉，很温暖。</p>
 <p>最后说说感情。算了不说了。</p>
 <p>懒懒散散说了那么多无关痛痒的事，也只是对大二定了个基调。不过谁知道呢，也许将来有一天回过头来将这一切全盘否定。姑且就这么进行下去吧。<strong>也祝明天安协迎新宣讲顺利:D</strong></p>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[内向者优势]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/life/the-introvert-advantage-1"/>
-        <published>2013-09-08T00:00:00+08:00</published>
-        <updated>2014-09-24T14:49:07+08:00</updated>
-        <id>http://tinple.me/life/the-introvert-advantage-1</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p>该从哪说起呢?其实这本书也只是在暑假抽空读的,而一读完我就想急切地说点什么,关乎自己,关乎周遭,
-也关乎一些自己一直以来对不同性格的人的一些想法。</p>
-<p>其实这么久以来,在我脑海里常常涌现的一个错觉就是:</p>
-
-<blockquote>
-<p>我是一个神秘的人,沉默寡言、深沉、不喜欢抛头露面。</p>
-</blockquote>
-<p>这是一个很赞的想法,至少在我看来是的。往往一些曾经不如意又不喜说话的人是善于心理安慰的,尤其是对自己,他们会很好地保护自己不受伤害。他们也往往很喜欢被认可,却又会因为各方的关注而感压力太大。
-更多的时候,他们喜欢自己独处,或者只是想安静地待一会儿。这样很安全。</p>
-<p>我是一个性格内向的人,从小就是。</p>
-<p>而就是因为内向,我从小就被父母数落我的性格,他们甚至周围的其他的人都一致地认为内向是很不好的,
-这的确在当时我是切身体会到的。从小跟周围的小伙伴们一起参加外界的活动时我就会感到压力很大,
-就像一条离水之鱼,其实到现在也是这样的,只不过能稍微适应些。所以我常常觉得自己是生活在一种对反思和独处持否定态度的文化中,而外向就被人们理所当然地认为是健康发展的自然结果。</p>
-<p>一直以来,我没少被多少人说过他们感觉我常常闷闷不乐。</p>
-<p>何为乐?其实以前我觉得只要他们不排斥内向个性的人我就很开心了。曾经看到过这样一句话:</p>
-
-<blockquote>
-<p>快乐需要拥有三种特质:自尊, 乐观和外向。</p>
-</blockquote>
-<p>显然,这种说法简直是把性格内向的人掐死在胡同里。我只是觉得不同的人有不同的方式描述他们的快乐,
-父母经常就因为我常嘟着嘴、常常不说话闷在心里就觉得我心情很不好,然后就拿琐事来纷扰我所做的事。
-可是这样往往适得其反。我想大部分这种错误的想法都是站在不属于性格内向人的角度去考虑一个性格内向的人。而的确是有这样一句显着描述两种性格的话:</p>
-
-<blockquote>
-<p>内向和外向处于能量连续体的相反的两端。我们落入那连续体的什么位置就决定了我们获得自己生活精力的方式。处于连续体的偏内向那一端的人倾向于向内以获得精力。而处于连续体的偏外向那一端的人倾向于向外获得精力。</p>
-</blockquote>
-<p>其实我的理解是把一些情绪包括快乐也置于精力中。至少我觉得我是需要独处来慢慢获得精力的。不过这样导致的不同的生活状态会比较大程度的左右到性格内向的人。也是因为这到现在我甚至其实还有点不满自己内向的性格,因为我总是拿自己跟一些外向的人比,很多时候我觉得自己这样是在犯一个很大的错。而这本书
-,很多时候话语间能让或许是你认为的羞耻消散。</p>
-
-<blockquote>
-<p>安静的人们常常具有深刻的洞察力,
-浅浅的溪流或河水奔流迅速,
-较深的水域似乎比较平静。</p>
-</blockquote>
-<p>到现在以来我接触过许多性格内向的人,对一个问题就像书中所说的一样,一定要知根知底才肯罢休
-。这是确实存在的,就在我认为,如果不是彻底地去弄清楚,我就会觉得很心烦,脾气躁乱,我会觉得大脑有一部分是空白的,这种体验让人觉得很没安全感。</p>
-<p>其实大多时候像我这样性格内向的人比较拘谨,欣赏一种较简单的生活方式,有亲密的依恋,以新的方式来计划和思考如何去做一件事,倾向于鼓励别人谨慎小心,自我反思,并且在行动前认真思考。相反,正如书中所比喻的一样,外向的人就像有着高新奇的探求者,喜爱奇特而动人的旅行以及任何新鲜的事物,他们容易冲动
-,易敏感波动情绪,非常健谈并擅长说服别人,他们倾向于丰富多彩并想将极限推到新的高度。</p>
-
-<blockquote>
-<blockquote>
-<p>在追求感觉良好这一点上,两者没有什么不同,每个人都喜欢感觉良好,但是他们在是什么让他们感觉良好上大为不同。</p>
-</blockquote>
-</blockquote>
-<p>那会不会在随着时间推移中<strong>改变</strong>一个人的性格呢?</p>
-<p>我想多多少少在表面上是会改变的。一个人或多或少会受外界的影响,孟母尚有三迁,但若说完全涉及本性,
-可能改变不大。影响的因素很多。许多内向的人会逐渐变得外向,可能是朋友的干涉或者生活的改变,但就我而言,有时候我还是一个内向的人,我隐隐觉得这种改变只是因为生活中出现了某种奇妙的变故,我会觉得自己正在享受另一种风格的生活,别人觉得我是一个外向开朗的人。但是我发现自己还是一如既往的,需要一个人安静地获得精力,还是迫于大型的活动,还是喜欢过着慢节奏的生活。</p>
-<p>这本书大部分是作者在阐述她自己的故事,还有许多期间她所研究过的从病理和实际上共同去考虑的分析,
-还涉及到婚姻关系、为人父母包括养育性格内向的孩子、社交活动和工作。</p>
-<p>懒懒散散写了这么多,其实自己也不知道写了些什么,也就这么边读边写下来了。</p>
-
-<blockquote>
-<p>其实我和大多数人一样,有时候很想做个心理学家,只不过在阴差阳错间,在生活所迫,在性格诱使,在碎碎念间从事了另一项工作。</p>
-</blockquote>
 ]]>
         </content>
     </entry>

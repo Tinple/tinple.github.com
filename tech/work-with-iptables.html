@@ -1,0 +1,224 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Work with IPTables - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=36f92" />
+    <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/work-with-iptables" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Work with IPTables</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2014-09-25T00:00:00+08:00" pubdate>
+            <a href="/2014/">2014-09-25</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <p>Nowadays I happened to <code>IPTables</code> again. To be honest, I&#39;m not familiar with it.
+This post is just my note about working with <code>IPTables</code> these days.</p>
+
+<h2 id="toc_0">What&#39;s iptables?</h2>
+<p><code>CentOS</code> has a powerful firewall, that&#39;s called <code>iptables</code>, aka <code>iptables/netfilter</code>.
+It&#39;s the userscope module, and <code>netfilter</code> is a kernel module, built into the kernel,
+that actually does the filtering.</p>
+<p><code>IPTables</code> places rules into predefined chains(INPUT, OUTPUT and FORWORD) that are 
+checked against any traffic(IP packets) relevant to those chains. And a decision is
+made about what to do with each packet based upon the outcome of those rules, for 
+example, accepting or dropping.</p>
+
+<h2 id="toc_1">Chains</h2>
+<p>There are 3 predefined chains in the filter table to which we can add rules for 
+processing IP packets passing through those chains.</p>
+
+<ul>
+<li>INPUT - All packets destined for the host computer.</li>
+<li>OUTPUT - All packets originating from the host computer.</li>
+<li>FORWARD - All packets neither destined for nor originating the host, but passing 
+through the host computer.</li>
+</ul>
+<p>A packet is checked against each rule in turn, starting at the top, and if it 
+matches the rule, then an action is taken such as accepting(ACCEPT) or dropping
+(DROP) the packet. Once a rule has been matched and an action taken, then the 
+packet is processed according to the outcome of that rule and isn&#39;t processed by
+further rules in the chain.</p>
+
+<h2 id="toc_2">Begin Start</h2>
+<p>We can use <code>iptables -L</code> to inspect the currently loaded rules.
+This is <a href="http://www.aliyun.com">aliyun</a> server, we can see the default set
+of rules. The default set seems that the firewall is the same as closed.</p>
+
+<pre><code>Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination</code></pre>
+<p>P.S. If <code>iptables</code> is not running, you can enable it by running:</p>
+
+<pre><code># system-config-securitylevel</code></pre>
+
+<h2 id="toc_3">Server Setups</h2>
+<p>At first, I&#39;ll explain our server setups. We have 5 servers totally.
+And we use <a href="https://www.digitalocean.com/community/tutorials/5-common-server-setups-for-your-web-application">Load Balancer</a> policy to setup our servers:</p>
+
+<ol>
+<li>One Load Balancer Server(Reverse Proxy)</li>
+<li>Three app-backend Servers</li>
+<li>One Database Server</li>
+</ol>
+<p>OK, it&#39;s time to go start. At first, we decide the following basic <code>iptables</code> policies.
+For Reverse Proxy server, we only open port 22 and 80, allowing tcp packets that
+have specific bits(flags) set, to match a rule. For three app-backend servers, we
+just open port 22 and 80. For database server, we open the port 22 and database port.</p>
+
+<h2 id="toc_4">Set IPTables Rule (Load Balancer Server)</h2>
+<p>At first, we may add a rule allowing SSH connections over tcp port 22. This is to 
+prevent accidental lockouts when working on remote systems over an SSH connection.</p>
+
+<pre><code># iptables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT</code></pre>
+<p>And the same as HTTP connections over tcp port 80.</p>
+
+<pre><code># iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT</code></pre>
+<p>Then we may allow all incoming packets destined for the localhost interface to be
+accepted. This is generally required as many software applications expect to be
+able to communicate with the localhost adaptor.</p>
+
+<pre><code># iptables -A INPUT -i lo -j ACCEPT</code></pre>
+<p>After these basic setting rules, we add three tcp packets that have specific bits
+(flags) rules.</p>
+
+<pre><code># -A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG FIN,SYN,RST,PSH,ACK,URG -j DROP 
+# -A INPUT -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j DROP
+# -A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP</code></pre>
+<p>Then we add the last rule to the INPUT chain. <code>ESTABLISHED</code> and <code>RELATED</code> refers to
+incoming packets that are part of an already established connection or related to
+and already established connection.</p>
+
+<pre><code># iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></pre>
+<p>At last, we set the default policy on the INPUT chain and FORWARD chain.</p>
+
+<pre><code># iptables -P INPUT DROP
+# iptables -P FORWARD DROP</code></pre>
+<p>Now we can see our <code>iptables</code> setting.</p>
+
+<pre><code># iptables -S
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG FIN,SYN,RST,PSH,ACK,URG -j DROP
+-A INPUT -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j DROP
+-A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></pre>
+<p>It seems fine, and our iptables on <code>Reverse Proxy Server</code> needs to be saved.</p>
+
+<pre><code># /sbin/service iptables save</code></pre>
+<p>For other three app-backend servers:</p>
+
+<pre><code># iptables -S
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></pre>
+<p>And the database server:</p>
+
+<pre><code># iptables -S
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport [Your_database_port] -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></pre>
+
+<h2 id="toc_5">End</h2>
+<p>If you have something to correct, welcome to point it out:D</p>
+
+<h3 id="toc_6">References:</h3>
+
+<ul>
+<li><a href="http://wiki.centos.org/HowTos/Network/IPTables">wiki-centos-iptables</a></li>
+<li><a href="http://www.centos.org/docs/5/html/Deployment_Guide-en-US/ch-iptables.html">ch-iptables</a></li>
+</ul>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Work with IPTables';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://twitter.com/htinple">Twitter</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>
