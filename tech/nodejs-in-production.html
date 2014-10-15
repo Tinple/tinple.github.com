@@ -160,7 +160,7 @@ work in tandem as an upstream server for nginx(not only two).</p>
 <p>For the security of our server, we should not run the app with root. So I create
 a web user for my own.</p>
 
-<pre><code>$ useradd -mRu koa -p password
+<pre><code>$ useradd -mrU koa -p password
 $ su koa</code></pre>
 <p>And I use <code>pm2</code> to manage my app. We need install it.
 And for globally npm install, we can detect whether the <code>$NODE_PATH</code> includes 

@@ -3,7 +3,7 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2014-09-28T10:54:14+08:00</updated>
+    <updated>2014-10-15T10:25:19+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
         <title type="html"><![CDATA[Work with IPTables]]></title>
@@ -153,7 +153,7 @@ and already established connection.</p>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/nodejs-in-production"/>
         <published>2014-09-24T00:00:00+08:00</published>
-        <updated>2014-09-28T10:54:12+08:00</updated>
+        <updated>2014-10-15T10:25:19+08:00</updated>
         <id>http://tinple.me/tech/nodejs-in-production</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <p>Last two days, I deploy a <code>nodejs</code> production environment on a vps.
@@ -261,7 +261,7 @@ work in tandem as an upstream server for nginx(not only two).</p>
 <p>For the security of our server, we should not run the app with root. So I create
 a web user for my own.</p>
 
-<pre><code>$ useradd -mRu koa -p password
+<pre><code>$ useradd -mrU koa -p password
 $ su koa</code></pre>
 <p>And I use <code>pm2</code> to manage my app. We need install it.
 And for globally npm install, we can detect whether the <code>$NODE_PATH</code> includes 
