@@ -3,9 +3,133 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2014-10-15T10:25:19+08:00</updated>
+    <updated>2014-10-18T15:08:12+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[Computer Network and Communication]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/computer-network-and-communication-1"/>
+        <published>2014-10-18T00:00:00+08:00</published>
+        <updated>2014-10-18T15:08:12+08:00</updated>
+        <id>http://tinple.me/tech/computer-network-and-communication-1</id>
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <h1 id="toc_0">Computer Networks</h1>
+
+<h2 id="toc_1">Chapter 1 problems:</h2>
+
+<h3 id="toc_2">Question 1:</h3>
+<p>Imagine that you have trained your St. Bernard, Bernie, to carry a box of three 8mm tapes instead of a flask of brandy. (When your disk fills up, you consider that an emergency.) These tapes each contain 7 gigabytes. The dog can travel to your side, wherever you may be, at 18 km/hour. For what range of distances does Bernie have a higher data rate than a transmission line whose data rate (excluding overhead) is 150 Mbps?</p>
+
+<h3 id="toc_3">Answer:</h3>
+
+<pre><code>The dog can carry 3 * 7 = 21 gigabytes (168 gigabits)
+Speed = 18 km/hour = 0.005 km/sec
+Distance: x km
+Time: x / 0.005 = 200x sec
+Hence, 168 / 200x Gbps or 840 / x Mbps.
+For x &lt; 5.6 km, the dog has higher rate than the communication line.</code></pre>
+
+<h3 id="toc_4">Question 6:</h3>
+<p>A client-server system uses a satellite network, with the satellite at a height of 40,000 km. What is the best-case delay in response to a request?</p>
+
+<h3 id="toc_5">Answer:</h3>
+
+<pre><code>Request distance: 40000 * 2 = 80000 km
+Response distance: 40000 * 2 = 80000 km
+Total distance: 80000 + 80000 = 160000 km
+The speed of light: 300000 km/sec
+Delay: 160000 / 300000 = 533 msec</code></pre>
+
+<h3 id="toc_6">Question 10:</h3>
+<p>A disadvantage of a broadcast subnet is the capacity wasted when multiple hosts attempt to access the channel at the same time. As a simplistic example, suppose that time is divided into discrete slots, with each of the n hosts attempting to use the channel with probability p during each slot. What fraction of the slots are wasted due to collisions?</p>
+
+<h3 id="toc_7">Answer:</h3>
+
+<pre><code>There are two situations without collisions.
+1. Successful transmission. n * p * (1 - p) ^ (n - 1)
+2. All stations are idle. (1 - p) ^ n
+Hence, the fraction that are wasted is
+1 - n * p * (1 - p) ^ (n - 1) - (1 - p) ^ n</code></pre>
+
+<h3 id="toc_8">Question 20:</h3>
+<p>A system has an n-layer protocol hierarchy. Applications generate messages of length M bytes. At each of the layers, an h-byte header is added. What fraction of the network bandwidth is filled with headers?</p>
+
+<h3 id="toc_9">Answer:</h3>
+
+<pre><code>The total number of header bytes: n * h
+The total packet size: n * h + M
+Hence, the fraction of each packet used by protocol header is 
+[n * h / (M + n * h)]</code></pre>
+
+<h3 id="toc_10">Question 27:</h3>
+<p>How long was a bit on the original 802.3 standard in meters? Use a transmission speed of 10 Mbps and assume the propagation speed in coax is 2/3 the speed of light in vacuum.</p>
+
+<h3 id="toc_11">Answer:</h3>
+
+<pre><code>The speed of light in coax: 200000 km/sec (200 meter/μsec).
+At 10Mbps, it takes 0.1μsec to transmit a bit.
+0.1 * 200 = 20 meters.
+Hence, a bit is 20 meters long here.</code></pre>
+
+<h3 id="toc_12">Question 28:</h3>
+<p>An image is 1024 x 768 pixels with 3 bytes/pixel. Assume the image is uncompressed. How long does it take to transmit it over a 56-kbps modem channel? Over a 1-Mbps cable modem? Over a 10-Mbps Ethernet? Over 100-Mbps Ethernet?</p>
+
+<h3 id="toc_13">Answer:</h3>
+
+<pre><code>The image is 1024 * 768 * 3 = 2359296 bytes = 18874368 bits
+a. 56-kbps: 337.042 sec
+b. 1-Mbps: 18.874 sec
+c. 10-Mbps: 1.887 sec
+d. 100-Mbps: 0.189 sec</code></pre>
+
+<h1 id="toc_14">Data and computer communication</h1>
+
+<h2 id="toc_15">Chapter 2 problems:</h2>
+
+<h3 id="toc_16">Question 2:</h3>
+<p>a.The French and Chinese prime ministers need to come to an agreement by telephone, but neither speaks the other’s language. Further, neither has on hand a translator that can translate to the language of the other. However, both prime ministers have English translators on their staffs. Draw a diagram similar to Figure 2.12 to depict the situation, and describe the interaction and each level.</p>
+<p>b. Now suppose that the Chinese prime minister’s translator can translate only into Japanese and that the French prime minister has a German translator available. A translator between German and Japanese is available in Germany. Draw a new diagram that reflects this arrangement and describe the hypothetical phone conversation.</p>
+
+<h3 id="toc_17">Answer:</h3>
+<p>  a. Picture</p>
+
+<pre><code>----------------------           ----------------------
+|Chinese prime ministers|        |French prime ministers|
+-----------------------          ----------------------
+|  Chinese Translator   |        |   French Translator  |
+-----------------------          ----------------------
+|        Telephone      |        |     Telephone        |
+---------------------------------------------------------
+              Telephone Line
+---------------------------------------------------------</code></pre>
+<p>b. Picture</p>
+
+<pre><code>----------------                           -----------------
+|China  ministers|                         |French ministers |
+ -----------------   -------------------    -----------------
+|China Translator|  |Germany Translator |  |French Translator|
+ -----------------   -------------------    -----------------
+|   Telephone    |  |Telephone|Telephone|  |     Telephone   |
+ ------------------------------------------------------------
+  Chinese and German                        French and German
+    Telephone Line                            Telephone Line
+  ------------------                        -----------------</code></pre>
+
+<h3 id="toc_18">Question 3:</h3>
+<p>List the major disadvantages with the layered approach to protocols.</p>
+
+<h3 id="toc_19">Answer:</h3>
+<p>The layered protocols may cause the processing and data overhead. And with so many layers,
+it takes a long time to develop and promulgate the standards.</p>
+
+<h3 id="toc_20">Question 4:</h3>
+<p>Two blue armies are each poised on opposite hills preparing to attack a single red army in the valley. The red army can defeat either of the blue armies separately but will fail to defeat both blue armies if they attack simultaneously. The blue armies communicate via an unreliable communications system (a foot soldier). The commander with one of the blue armies would like to attack at noon. His problem is this: If he sends a message to the other blue army, ordering the attack, he cannot be sure it will get through. He could ask for acknowledgment, but that might not get through. Is there a protocol that the two blue armies can use to avoid defeat? </p>
+
+<h3 id="toc_21">Answer:</h3>
+<p>No. There is no way to be assured that the last message gets through, except by acknowledging it. </p>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[Work with IPTables]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/work-with-iptables"/>
@@ -1805,44 +1929,6 @@ determination and continually solving the problem.And what I think is that is ca
 <p>It belongs to what you think…</p>
 
 <h2 id="toc_7">And the future…</h2>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[写在开学前]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/life/write-before-start"/>
-        <published>2013-09-14T00:00:00+08:00</published>
-        <updated>2014-09-24T14:49:31+08:00</updated>
-        <id>http://tinple.me/life/write-before-start</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p>转眼马上就要开学了，心中那份未知的悸动也悄悄滋生，总感觉将要到来的一些事自己没太多底，也不知道该如何才能让自己信心满满。很久以前就有人告诫我尽力做好每一件别人信任你托付你的事和你自己想去做的事。现在想来，真正做好一件事远非自己在做之前估摸着只要硬着头皮去做就能一切迎刃而解。</p>
-
-<blockquote>
-<blockquote>
-<p>你有没有想过，有时候花太多的精力在你愿意为之倾付的事，但这件事情最后能带给你的领会并不多。</p>
-</blockquote>
-</blockquote>
-<p>很多时候我想，那么多你期待去做的事，的确存在如上述所言，做完后并没有一种释然，更多的时候带来的是一种懊悔去做这件事这样的想法。</p>
-<p>但也许我可以这样理解这两者之间既矛盾又让人举棋不定的微妙关系：担当。这一点于内向者 ，因他人的信任而去做他人托付的事很多时候心理压力甚于自己渴望做的事。而一旦有了基于这样的想法后，许多时候所做的事也不再是基于自己相关的利益的出发，更多时候是去承担， 即便这事于你毫无利益甚至有所不利。</p>
-<p>然后再谈谈大二，之前在<a href="http://tinple.me/life/pick-up-writing">重拾writing</a>里随性列了一条条新学期所想做的事，现在看来倒也是完成了其中的几条，也是略感欣慰。但仔细看一看， 不免也有点担忧。自己所列的基本上是基于自己的，无关乎外界，无关乎家庭，也无关乎现在身边的人。请容忍一个内向的人很多时候考虑的时候基于保护自己。意识到这点以后，接下来心中也有了一定的底。</p>
-
-<blockquote>
-<blockquote>
-<p>许多时候你所一如既往固执般坚持着的，往往在末者看来是错的。</p>
-</blockquote>
-</blockquote>
-<p>或许你自己也不知道哪一天回头看看现在所做的一些事，是多么的低俗、毫无价值。说的过了。</p>
-<p>接着谈谈学习。大一一年的课自己上的有多水自己心里也最清楚，要么自学，要么期末勐补， 说白了就是上课没听过课。为什么我会有这样的想法？跟大多数人一样，觉得大学上课没必要像以前那样，每节课都要去学好，觉得大学没有条条框框限制着了，就要装出一副洒脱的样子享受大学无拘无束的日子。又或者更多的时候可以解释为大学让人没有安全感，许多人怀疑上过的课能给自己将来带来多少可能性，毕竟上的是一样的课，不是说你努力学的好就能比别人多份希望， 就如考证一样，往往对结果毫无影响。</p>
-
-<blockquote>
-<blockquote>
-<p>闻道有先后，术业有专攻。</p>
-</blockquote>
-</blockquote>
-<p>一来是大学的课程，二来便是专业的问题。大部分人不知道自己所在的专业将来能干嘛，基本上对大学所定位的专业毫无感觉，更多的时候是直接去询问长一辈的人，甚至连自己的想法都没夹杂一丝。在这样的情况下，再是跟紧大学的相关&quot;量身定制&quot;基本上就是三个和尚没水喝的喜闻乐见的剧情了。</p>
-<p>说了这么多贬低的话，其实没必要去相信，我自己也不相信自己说的。正所谓术业有专攻， 一旦你喜爱自己所在的领域，去专心学习其实是件很享受的事。其实大二有很多课我非常感兴趣， 很多时候我觉得学习的确是件美好的事，尤其是学习那些勾着自己心的东西，那种充实的感觉，很温暖。</p>
-<p>最后说说感情。算了不说了。</p>
-<p>懒懒散散说了那么多无关痛痒的事，也只是对大二定了个基调。不过谁知道呢，也许将来有一天回过头来将这一切全盘否定。姑且就这么进行下去吧。<strong>也祝明天安协迎新宣讲顺利:D</strong></p>
 ]]>
         </content>
     </entry>
