@@ -3,14 +3,217 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2014-10-18T15:08:12+08:00</updated>
+    <updated>2014-10-23T21:00:49+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[Testing with mocha and casperjs]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/testing-with-mocha-and-casperjs"/>
+        <published>2014-10-22T00:00:00+08:00</published>
+        <updated>2014-10-23T21:00:49+08:00</updated>
+        <id>http://tinple.me/tech/testing-with-mocha-and-casperjs</id>
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <p>When talking about <code>Unit Test</code> in <code>node</code>, <code>mocha</code> flashes first in my brain.</p>
+
+<h2 id="toc_0">mocha &amp;&amp; should.js</h2>
+
+<blockquote>
+<p>Mocha is a feature-rich JavaScript test framework running on node.js and the browser.</p>
+</blockquote>
+<p>I used to use <code>mocha</code> for the elegant way it does async along with familiar BDD style syntax.
+And I worked <code>mocha</code> with <code>should.js</code>, which is a human assertion library.</p>
+
+<h3 id="toc_1">Install</h3>
+
+<pre><code>$ npm install mocha -g 
+$ npm install shou --save-dev</code></pre>
+
+<h3 id="toc_2">First Step</h3>
+<p>Let&#39;s say we have two api to test, and the api script is saved as <code>api.js</code>.</p>
+
+<pre><code>var Add_sync = exports.Add_sync = function () {};
+var Add_async = exports.Add_async = function () {};
+Add_sync.prototype.add = function (a, b) { return a + b; };
+Add_async.prototype.add = function (a, b, cb) {
+    setTimeout(function () {
+        cb(a + b);
+    }, 100);
+}</code></pre>
+<p>Now we can check these two api&#39;s behavior right or not, save it as <code>test/test.js</code>.</p>
+
+<pre><code>var should = require('should');
+var add_sync = require('../api.js').Add_sync;
+var add_async = require('../api.js').Add_async;
+describe('test api', function () {
+    describe('sync add api', function () {
+        it('should return 3', function () {
+            var adder = new add_sync();
+            adder.add(1, 2).should.equal(3);
+        });
+    });
+
+    describe('async add api', function () {
+        it('should callback with 3', function (done) {
+            var adder = new add_async();
+            adder.add(1, 2, function (res) {
+                res.should.equal(3);
+                done();
+            });
+        });
+    });
+});</code></pre>
+<p>Pay attention to testing asynchronous code that you should add a callback(usually named done)
+to it(). <code>Mocha</code> will know that it should wait for completion.</p>
+<p>Besides, <code>Mocha</code> supports all hooks that is <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, <code>afterEach()</code>.
+We use within <code>describe()</code> at any nesting level, and use outside <code>describe()</code> for global scope.</p>
+
+<h3 id="toc_3">Running the tests</h3>
+
+<blockquote>
+<p>By default mocha(1) will use the pattern ./test/*.js, so it&#39;s usually a good place to put your tests.</p>
+</blockquote>
+<p>However, I prefer to set up a <code>Makefile</code> in the root of the project.</p>
+
+<pre><code>test:
+    @./node_modules/.bin/mocha \
+        --require should \
+        --reporter dot \
+        --bail \
+
+.PHONY: test</code></pre>
+<p>Then we can just run our tests with <code>$ make test</code>. There are tons of options, visit
+<a href="http://mochajs.github.io/mocha/">mocha</a> for more information.</p>
+<p>Well, when refering to frontend tests, we focus more on <code>Functional Tests</code>. Sometimes we 
+may just <code>refresh-click-click-click</code> and the testing is done. But how to do with some 
+hudge <code>javascript</code> code on user interface or hundreds of refreshes and clicks? Hence, 
+we still need something to automate test.</p>
+
+<h2 id="toc_4">casper.js &amp;&amp; phantomjs</h2>
+<p>Even though <code>mocha</code> also support browser, <a href="http://casperjs.org/">CasperJS</a> is my favorite.</p>
+
+<blockquote>
+<p>CasperJS, a toolkit on top of PhantomJS.</p>
+</blockquote>
+<p>So let&#39;s begin with <a href="http://phantomjs.org/">PhantomJS</a>.</p>
+
+<blockquote>
+<p>PhantomJS is a headless WebKit with Javascript API.</p>
+</blockquote>
+<p>So what&#39;s headless? You most likely know what a browser is, now take away the GUI, that&#39;s
+called a headless browser. You can think of it as a programmable browser for the terminal.
+It&#39;s really cool!</p>
+<p>And <code>PhantomJS</code> has fast and native support for various web standards like DOM handling,
+CSS selectors, JSON, Canvas and SVG. For me, I code with <code>PhantomJS</code> just like code with <code>node</code>!</p>
+<p>However, <code>PhantomJS</code> itself is not a test framework, it is only used to launch the tests
+via a suitable test runner. Hence, <code>CasperJS</code> comes.</p>
+<p><code>CasperJS</code> is an open source navigation scripting and testing utility based on <code>PhantomJS</code>,
+also support <code>SlimerJS(Gecko)</code>. So <code>PhantomJS</code> provides the headless browser capability,
+and <code>CasperJS</code> fills in the rest: it runs on top of Phantom with built in testing functionality
+allows for navigation scripting. Let&#39;s begin our frontend test!</p>
+
+<h3 id="toc_5">Install on OSX</h3>
+
+<pre><code>$ brew install phantomjs
+$ brew install casperjs --devel</code></pre>
+<p>As <code>CasperJS</code> 1.1 branch is now pretty stable and supports testing utility, I choose this
+version to start.</p>
+
+<h3 id="toc_6">Casper Test API</h3>
+<p>Now let&#39;s open up the <code>/go/programmer</code> subnode on <a href="http://www.v2ex.com/">v2ex</a>, click the
+first topic link and confirm that we do the right operation. </p>
+
+<pre><code>casper.options.viewportSize = {width: 1024, height: 768};
+var testCount = 2;
+casper.test.begin(&quot;Testing V2EX&quot;, testCount, function suite (test) {
+    casper.start(&quot;http://www.v2ex.com/go/programmer&quot;, function() {
+        test.assertTitleMatch(/程序员/, &quot;Title is what we'd expect&quot;);
+        casper.click(&quot;a[href*='/t/']&quot;);
+        casper.waitForUrl(/\/t\/*/, function() {
+            test.assertExists(&quot;.topic_content&quot;, &quot;Find the content&quot;);
+            casper.capture(&quot;v2ex.png&quot;);  
+        });
+    }).run(function() {
+        test.done();
+    });
+});</code></pre>
+<p>Here, after we click the first topic link, we wait for the url to change and the content
+of the first topic page to load. And capture the whole page and saved as <code>v2ex.png</code>.
+Actually, you can also wrap your follow-up codes in a <code>then()</code> callback in order to see 
+the changes from your click event.</p>
+
+<pre><code>casper.then(function() {
+    test.assertExists(&quot;.topic_content&quot;, &quot;Find the content&quot;);
+    casper.capture(&quot;v2ex2.png&quot;);
+});</code></pre>
+<p>The <code>then()</code> callback staff is an implementation of the Promise Pattern. Hence, after
+calling other casper api like <code>fill()</code> and <code>sendKeys()</code>, you should wrap your next interaction
+in <code>casper.then()</code>. </p>
+<p>The <code>fill()</code> api is a convenient way to fill out and submit the form on web page.</p>
+
+<pre><code>casper.options.viewportSize = {width: 1024, height: 768};
+var testCount = 3;
+casper.test.begin(&quot;Searching V2EX&quot;, testCount, function suite(test) {
+    casper.start(&quot;http://www.v2ex.com/&quot;, function() {
+        casper.fill(&quot;form&quot;, {
+            &quot;q&quot;: &quot;casper&quot;
+        }, false);
+        casper.then(function () {
+            this.evaluate(function () {
+                dispatch(); // manually submit the form
+            });
+            casper.waitForPopup(/google\.com/, function () {
+                this.test.assertEquals(this.popups.length, 1);
+            })
+            casper.withPopup(/google\.com/, function() {
+                this.capture(&quot;search.png&quot;);
+                test.assertTitleMatch(/Google/, &quot;Title is right!&quot;);
+                var value = this.evaluate(function () {
+                    // we are in DOM!
+                    return document.querySelector('input[name=&quot;q&quot;]').value;
+                });
+                test.assertEquals(value, 'site:v2ex.com/t casper');
+            });
+        });
+    }).run(function() {
+        test.done();
+    });
+});</code></pre>
+<p>Here, as <code>CasperJS</code> can&#39;t submit the search form on <code>v2ex</code>, we should manually submit
+the form by call <code>dispatch()</code> function after fill the search input. We use <code>evaluate()</code>
+to run code in the current page DOM context(we are in DOM!). Then <code>v2ex</code> will popup a 
+google hacking result for your search keywords, like <code>site:v2ex.com/t casper</code> here. 
+So there we need <code>waitForPopup</code> and <code>withPopup</code>.</p>
+<p>Actually, <code>CasperJS</code> has a fucking awesome <a href="http://docs.casperjs.org/en/latest/">doc</a>
+that I strongly recommend you to read about it. You may need it when you stuck.</p>
+
+<h2 id="toc_7">Summary</h2>
+<p><code>Unit tests</code> are written from the developer’s perspective, and typically target a method 
+or a class. While <code>Functional tests</code> are written from the user’s perspective, and usually 
+test the interaction between multiple building blocks of the application. Your application
+would be better with both a comprehensive suite of <code>Unit tests</code> as well as a bunch of 
+<code>Functional tests</code>. </p>
+
+<blockquote>
+<p>Unit testing makes sure you are using quality ingredients. Functional testing makes sure your application doesn&#39;t taste like crap. </p>
+</blockquote>
+
+<h2 id="toc_8">End</h2>
+<p>If you have something to correct, welcome to point it out:D</p>
+
+<h3 id="toc_9">References:</h3>
+
+<ul>
+<li><a href="https://brianstoner.com/blog/testing-in-nodejs-with-mocha/">testing-in-nodejs-with-mocha</a></li>
+<li><a href="http://www.helpscout.net/blog/functional-testing-casperjs/">functional-testing-casperjs</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[Computer Network and Communication]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/computer-network-and-communication-1"/>
         <published>2014-10-18T00:00:00+08:00</published>
-        <updated>2014-10-18T15:08:12+08:00</updated>
+        <updated>2014-10-18T15:22:37+08:00</updated>
         <id>http://tinple.me/tech/computer-network-and-communication-1</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <h1 id="toc_0">Computer Networks</h1>
@@ -100,7 +303,7 @@ d. 100-Mbps: 0.189 sec</code></pre>
 -----------------------          ----------------------
 |        Telephone      |        |     Telephone        |
 ---------------------------------------------------------
-              Telephone Line
+                       Telephone Line
 ---------------------------------------------------------</code></pre>
 <p>b. Picture</p>
 
@@ -1874,61 +2077,6 @@ application, and just try to make preventions to protect it!</p>
 
 <h2 id="toc_3">End:</h2>
 <p>总的来说这个9月过得很充实，忙得开心，心里也觉得踏实，各方面都还行。展望10月的到来:D</p>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[ISA Training Part One]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/isa-training-1"/>
-        <published>2013-09-27T00:00:00+08:00</published>
-        <updated>2014-09-24T15:19:59+08:00</updated>
-        <id>http://tinple.me/tech/isa-training-1</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <h2 id="toc_0">Our surroundings</h2>
-<p>We are born in an <strong>absurd</strong> surroundings, anyway, it is really hard to release yourself 
-in the prior education years.And I do not know how the bases of us hate <strong>the Oriented education.</strong>
-When we come to university, Someone may complain about the differences of the foundation
-between us.</p>
-
-<blockquote>
-<p>He seems to know a lot about the things, but I almost have no idea! What a fuck!</p>
-</blockquote>
-<p>When the <strong>psychological gap</strong> exists, you may find the world unfair. And Someone may decide
-to change it.</p>
-
-<h2 id="toc_1">Interesting</h2>
-
-<blockquote>
-<p>As for interesting concept, everyone is cup of tea.</p>
-</blockquote>
-
-<h2 id="toc_2">So what to do</h2>
-<p>It is really hard to say what we really want to do now when we come to university, because the
-life is full of excitement in the early time and we are almost busy with class lessons.</p>
-<p>Howerver, it is fun.The most important things is what we think and decide to do, may be 
-just one thing to relax ourselves, or to change the world. It almost <strong>depends on</strong> ourselves.</p>
-
-<h2 id="toc_3">why not we begin to start it</h2>
-<p>Once we had determined, why not we begin to start it?
-Everything is difficult when we start it.Almost like a series of mountains.But if you
-get it in the first time, you will feel delighted and may have braves to try any other
-things.
-It is the first step that costs troublesome.</p>
-
-<h2 id="toc_4">Get trouble &amp;&amp; Solution</h2>
-<p>We must meet trouble when we stick to everything, it is normal.
-Hence, we must find the way to solve it, and it shadows our ability.
-Everyone may try to exercise it and it is really essential.</p>
-
-<h2 id="toc_5">Persisting</h2>
-<p>I can not imagine how the one to be if he persist the processing, begining to start one
-determination and continually solving the problem.And what I think is that is called 
-<strong>development</strong>.</p>
-
-<h2 id="toc_6">What is for</h2>
-<p>It belongs to what you think…</p>
-
-<h2 id="toc_7">And the future…</h2>
 ]]>
         </content>
     </entry>
