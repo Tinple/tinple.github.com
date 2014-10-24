@@ -3,14 +3,14 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2014-10-23T21:00:49+08:00</updated>
+    <updated>2014-10-24T10:37:51+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
         <title type="html"><![CDATA[Testing with mocha and casperjs]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/testing-with-mocha-and-casperjs"/>
         <published>2014-10-22T00:00:00+08:00</published>
-        <updated>2014-10-23T21:00:49+08:00</updated>
+        <updated>2014-10-24T10:37:51+08:00</updated>
         <id>http://tinple.me/tech/testing-with-mocha-and-casperjs</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <p>When talking about <code>Unit Test</code> in <code>node</code>, <code>mocha</code> flashes first in my brain.</p>
@@ -30,38 +30,38 @@ $ npm install shou --save-dev</code></pre>
 
 <h3 id="toc_2">First Step</h3>
 <p>Let&#39;s say we have two api to test, and the api script is saved as <code>api.js</code>.</p>
-
-<pre><code>var Add_sync = exports.Add_sync = function () {};
-var Add_async = exports.Add_async = function () {};
-Add_sync.prototype.add = function (a, b) { return a + b; };
-Add_async.prototype.add = function (a, b, cb) {
-    setTimeout(function () {
-        cb(a + b);
-    }, 100);
-}</code></pre>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Add_sync</span> <span class="o">=</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">Add_sync</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{};</span>
+<span class="kd">var</span> <span class="nx">Add_async</span> <span class="o">=</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">Add_async</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{};</span>
+<span class="nx">Add_sync</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span> <span class="p">};</span>
+<span class="nx">Add_async</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <p>Now we can check these two api&#39;s behavior right or not, save it as <code>test/test.js</code>.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">should</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;should&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">add_sync</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../api.js&#39;</span><span class="p">).</span><span class="nx">Add_sync</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">add_async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../api.js&#39;</span><span class="p">).</span><span class="nx">Add_async</span><span class="p">;</span>
+<span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;test api&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;sync add api&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return 3&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">adder</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">add_sync</span><span class="p">();</span>
+            <span class="nx">adder</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">).</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
 
-<pre><code>var should = require('should');
-var add_sync = require('../api.js').Add_sync;
-var add_async = require('../api.js').Add_async;
-describe('test api', function () {
-    describe('sync add api', function () {
-        it('should return 3', function () {
-            var adder = new add_sync();
-            adder.add(1, 2).should.equal(3);
-        });
-    });
-
-    describe('async add api', function () {
-        it('should callback with 3', function (done) {
-            var adder = new add_async();
-            adder.add(1, 2, function (res) {
-                res.should.equal(3);
-                done();
-            });
-        });
-    });
-});</code></pre>
+    <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;async add api&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should callback with 3&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">adder</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">add_async</span><span class="p">();</span>
+            <span class="nx">adder</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+                <span class="nx">done</span><span class="p">();</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
 <p>Pay attention to testing asynchronous code that you should add a callback(usually named done)
 to it(). <code>Mocha</code> will know that it should wait for completion.</p>
 <p>Besides, <code>Mocha</code> supports all hooks that is <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, <code>afterEach()</code>.
@@ -121,63 +121,63 @@ version to start.</p>
 <h3 id="toc_6">Casper Test API</h3>
 <p>Now let&#39;s open up the <code>/go/programmer</code> subnode on <a href="http://www.v2ex.com/">v2ex</a>, click the
 first topic link and confirm that we do the right operation. </p>
-
-<pre><code>casper.options.viewportSize = {width: 1024, height: 768};
-var testCount = 2;
-casper.test.begin(&quot;Testing V2EX&quot;, testCount, function suite (test) {
-    casper.start(&quot;http://www.v2ex.com/go/programmer&quot;, function() {
-        test.assertTitleMatch(/程序员/, &quot;Title is what we'd expect&quot;);
-        casper.click(&quot;a[href*='/t/']&quot;);
-        casper.waitForUrl(/\/t\/*/, function() {
-            test.assertExists(&quot;.topic_content&quot;, &quot;Find the content&quot;);
-            casper.capture(&quot;v2ex.png&quot;);  
-        });
-    }).run(function() {
-        test.done();
-    });
-});</code></pre>
+<div class="highlight"><pre><span class="nx">casper</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">viewportSize</span> <span class="o">=</span> <span class="p">{</span><span class="nx">width</span><span class="o">:</span> <span class="mi">1024</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">768</span><span class="p">};</span>
+<span class="kd">var</span> <span class="nx">testCount</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="nx">casper</span><span class="p">.</span><span class="nx">test</span><span class="p">.</span><span class="nx">begin</span><span class="p">(</span><span class="s2">&quot;Testing V2EX&quot;</span><span class="p">,</span> <span class="nx">testCount</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">suite</span> <span class="p">(</span><span class="nx">test</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">casper</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="s2">&quot;http://www.v2ex.com/go/programmer&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">test</span><span class="p">.</span><span class="nx">assertTitleMatch</span><span class="p">(</span><span class="sr">/程序员/</span><span class="p">,</span> <span class="s2">&quot;Title is what we&#39;d expect&quot;</span><span class="p">);</span>
+        <span class="nx">casper</span><span class="p">.</span><span class="nx">click</span><span class="p">(</span><span class="s2">&quot;a[href*=&#39;/t/&#39;]&quot;</span><span class="p">);</span>
+        <span class="nx">casper</span><span class="p">.</span><span class="nx">waitForUrl</span><span class="p">(</span><span class="sr">/\/t\/*/</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">test</span><span class="p">.</span><span class="nx">assertExists</span><span class="p">(</span><span class="s2">&quot;.topic_content&quot;</span><span class="p">,</span> <span class="s2">&quot;Find the content&quot;</span><span class="p">);</span>
+            <span class="nx">casper</span><span class="p">.</span><span class="nx">capture</span><span class="p">(</span><span class="s2">&quot;v2ex.png&quot;</span><span class="p">);</span>  
+        <span class="p">});</span>
+    <span class="p">}).</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">test</span><span class="p">.</span><span class="nx">done</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
 <p>Here, after we click the first topic link, we wait for the url to change and the content
 of the first topic page to load. And capture the whole page and saved as <code>v2ex.png</code>.
 Actually, you can also wrap your follow-up codes in a <code>then()</code> callback in order to see 
 the changes from your click event.</p>
-
-<pre><code>casper.then(function() {
-    test.assertExists(&quot;.topic_content&quot;, &quot;Find the content&quot;);
-    casper.capture(&quot;v2ex2.png&quot;);
-});</code></pre>
+<div class="highlight"><pre><span class="nx">casper</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">test</span><span class="p">.</span><span class="nx">assertExists</span><span class="p">(</span><span class="s2">&quot;.topic_content&quot;</span><span class="p">,</span> <span class="s2">&quot;Find the content&quot;</span><span class="p">);</span>
+    <span class="nx">casper</span><span class="p">.</span><span class="nx">capture</span><span class="p">(</span><span class="s2">&quot;v2ex2.png&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
 <p>The <code>then()</code> callback staff is an implementation of the Promise Pattern. Hence, after
 calling other casper api like <code>fill()</code> and <code>sendKeys()</code>, you should wrap your next interaction
 in <code>casper.then()</code>. </p>
 <p>The <code>fill()</code> api is a convenient way to fill out and submit the form on web page.</p>
-
-<pre><code>casper.options.viewportSize = {width: 1024, height: 768};
-var testCount = 3;
-casper.test.begin(&quot;Searching V2EX&quot;, testCount, function suite(test) {
-    casper.start(&quot;http://www.v2ex.com/&quot;, function() {
-        casper.fill(&quot;form&quot;, {
-            &quot;q&quot;: &quot;casper&quot;
-        }, false);
-        casper.then(function () {
-            this.evaluate(function () {
-                dispatch(); // manually submit the form
-            });
-            casper.waitForPopup(/google\.com/, function () {
-                this.test.assertEquals(this.popups.length, 1);
-            })
-            casper.withPopup(/google\.com/, function() {
-                this.capture(&quot;search.png&quot;);
-                test.assertTitleMatch(/Google/, &quot;Title is right!&quot;);
-                var value = this.evaluate(function () {
-                    // we are in DOM!
-                    return document.querySelector('input[name=&quot;q&quot;]').value;
-                });
-                test.assertEquals(value, 'site:v2ex.com/t casper');
-            });
-        });
-    }).run(function() {
-        test.done();
-    });
-});</code></pre>
+<div class="highlight"><pre><span class="nx">casper</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">viewportSize</span> <span class="o">=</span> <span class="p">{</span><span class="nx">width</span><span class="o">:</span> <span class="mi">1024</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">768</span><span class="p">};</span>
+<span class="kd">var</span> <span class="nx">testCount</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="nx">casper</span><span class="p">.</span><span class="nx">test</span><span class="p">.</span><span class="nx">begin</span><span class="p">(</span><span class="s2">&quot;Searching V2EX&quot;</span><span class="p">,</span> <span class="nx">testCount</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">suite</span><span class="p">(</span><span class="nx">test</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">casper</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="s2">&quot;http://www.v2ex.com/&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">casper</span><span class="p">.</span><span class="nx">fill</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s2">&quot;q&quot;</span><span class="o">:</span> <span class="s2">&quot;casper&quot;</span>
+        <span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
+        <span class="nx">casper</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">evaluate</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="nx">dispatch</span><span class="p">();</span> <span class="c1">// manually submit the form</span>
+            <span class="p">});</span>
+            <span class="nx">casper</span><span class="p">.</span><span class="nx">waitForPopup</span><span class="p">(</span><span class="sr">/google\.com/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">test</span><span class="p">.</span><span class="nx">assertEquals</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">popups</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">})</span>
+            <span class="nx">casper</span><span class="p">.</span><span class="nx">withPopup</span><span class="p">(</span><span class="sr">/google\.com/</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">capture</span><span class="p">(</span><span class="s2">&quot;search.png&quot;</span><span class="p">);</span>
+                <span class="nx">test</span><span class="p">.</span><span class="nx">assertTitleMatch</span><span class="p">(</span><span class="sr">/Google/</span><span class="p">,</span> <span class="s2">&quot;Title is right!&quot;</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">evaluate</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="c1">// we are in DOM!</span>
+                    <span class="k">return</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;input[name=&quot;q&quot;]&#39;</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
+                <span class="p">});</span>
+                <span class="nx">test</span><span class="p">.</span><span class="nx">assertEquals</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="s1">&#39;site:v2ex.com/t casper&#39;</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">}).</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">test</span><span class="p">.</span><span class="nx">done</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
 <p>Here, as <code>CasperJS</code> can&#39;t submit the search form on <code>v2ex</code>, we should manually submit
 the form by call <code>dispatch()</code> function after fill the search input. We use <code>evaluate()</code>
 to run code in the current page DOM context(we are in DOM!). Then <code>v2ex</code> will popup a 
