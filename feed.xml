@@ -3,7 +3,7 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2014-10-24T10:37:51+08:00</updated>
+    <updated>2014-10-26T17:29:41+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
         <title type="html"><![CDATA[Testing with mocha and casperjs]]></title>
@@ -480,7 +480,7 @@ and already established connection.</p>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/nodejs-in-production"/>
         <published>2014-09-24T00:00:00+08:00</published>
-        <updated>2014-10-15T10:25:19+08:00</updated>
+        <updated>2014-10-26T17:29:41+08:00</updated>
         <id>http://tinple.me/tech/nodejs-in-production</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <p>Last two days, I deploy a <code>nodejs</code> production environment on a vps.
@@ -554,7 +554,7 @@ spoon feeding clients. Here is my main nginx config:</p>
         }
 
         location / {
-            proxy_pass 127.0.0.1:3000/;
+            proxy_pass http://127.0.0.1:3000/;
         }
 
         access_log /home/wwwlogs/req.hduisa.cn.log access;
@@ -631,19 +631,19 @@ welcome to point it:D</p>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/callbacks-with-for-loop"/>
         <published>2014-08-13T00:00:00+08:00</published>
-        <updated>2014-09-24T16:58:26+08:00</updated>
+        <updated>2014-10-24T12:35:29+08:00</updated>
         <id>http://tinple.me/tech/callbacks-with-for-loop</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p>When I play some ctf games, usually I need to blast some interface like post a certain length of string which contains numbers and letters. </p>
+            <![CDATA[ <p>When I play some ctf games, usually I need to bruteforcing some interface like post a certain length of string which contains numbers and letters. </p>
 <p>Let&#39;s say we have a url <code>www.example.com/hack</code>, we need to get the information after post correct token. We already know the token&#39;s length is three, containing numbers.</p>
 <p>Now we may write payload like this.</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">blast</span> <span class="o">=</span> <span class="s1">&#39;0123456789&#39;</span><span class="p">;</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">bruteforcing</span> <span class="o">=</span> <span class="s1">&#39;0123456789&#39;</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;www.example.com/hack&#39;</span><span class="p">;</span>
 
-<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">blast</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">blast</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">blast</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">bruteforcing</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">bruteforcing</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">bruteforcing</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span><span class="nx">form</span><span class="o">:</span><span class="p">{</span> <span class="nx">token</span><span class="o">:</span> <span class="nx">i</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">k</span> <span class="p">}},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
           <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">k</span><span class="p">);</span>
@@ -654,7 +654,7 @@ welcome to point it:D</p>
   <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
-<p>OK, we have our first magical blast payload ready. 
+<p>OK, we have our first magical bruteforcing payload ready. 
 Here&#39;s what you think will happen:</p>
 
 <ol>
@@ -672,19 +672,19 @@ a recursive function to do this.</p>
 
 <pre><code>var request = require('request');
 var url = 'www.example.com/hack';
-function blast(num) {
+function bruteforcing(num) {
     if (num &gt;= 000 &amp;&amp; num &lt;= 999) {
         request.post(url, {form:{ token: num }}, function (err, res, body) {
             if (body.indexOf('key') !== -1) {
               console.log(i + j + k);
               console.log(body);
             } else {
-                blast(++num);
+                bruteforcing(++num);
             }
         })
     }
 }
-blast(000);</code></pre>
+bruteforcing(000);</code></pre>
 <p>In short, the pattern can be this:</p>
 
 <pre><code>repeater(i) {

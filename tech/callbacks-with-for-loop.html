@@ -55,16 +55,16 @@
         </span>
     </div>
     <div class="entry-content">
-        <p>When I play some ctf games, usually I need to blast some interface like post a certain length of string which contains numbers and letters. </p>
+        <p>When I play some ctf games, usually I need to bruteforcing some interface like post a certain length of string which contains numbers and letters. </p>
 <p>Let&#39;s say we have a url <code>www.example.com/hack</code>, we need to get the information after post correct token. We already know the token&#39;s length is three, containing numbers.</p>
 <p>Now we may write payload like this.</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">blast</span> <span class="o">=</span> <span class="s1">&#39;0123456789&#39;</span><span class="p">;</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">bruteforcing</span> <span class="o">=</span> <span class="s1">&#39;0123456789&#39;</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;www.example.com/hack&#39;</span><span class="p">;</span>
 
-<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">blast</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">blast</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">blast</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">bruteforcing</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">bruteforcing</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">bruteforcing</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span><span class="nx">form</span><span class="o">:</span><span class="p">{</span> <span class="nx">token</span><span class="o">:</span> <span class="nx">i</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">k</span> <span class="p">}},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
           <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">k</span><span class="p">);</span>
@@ -75,7 +75,7 @@
   <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
-<p>OK, we have our first magical blast payload ready. 
+<p>OK, we have our first magical bruteforcing payload ready. 
 Here&#39;s what you think will happen:</p>
 
 <ol>
@@ -93,19 +93,19 @@ a recursive function to do this.</p>
 
 <pre><code>var request = require('request');
 var url = 'www.example.com/hack';
-function blast(num) {
+function bruteforcing(num) {
     if (num &gt;= 000 &amp;&amp; num &lt;= 999) {
         request.post(url, {form:{ token: num }}, function (err, res, body) {
             if (body.indexOf('key') !== -1) {
               console.log(i + j + k);
               console.log(body);
             } else {
-                blast(++num);
+                bruteforcing(++num);
             }
         })
     }
 }
-blast(000);</code></pre>
+bruteforcing(000);</code></pre>
 <p>In short, the pattern can be this:</p>
 
 <pre><code>repeater(i) {

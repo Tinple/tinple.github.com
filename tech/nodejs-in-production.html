@@ -126,7 +126,7 @@ spoon feeding clients. Here is my main nginx config:</p>
         }
 
         location / {
-            proxy_pass 127.0.0.1:3000/;
+            proxy_pass http://127.0.0.1:3000/;
         }
 
         access_log /home/wwwlogs/req.hduisa.cn.log access;
