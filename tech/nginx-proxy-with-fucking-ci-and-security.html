@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Nginx with fucking CI and security - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=4bfa1" />
+    <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/nginx-proxy-with-fucking-ci-and-security" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Nginx with fucking CI and security</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2014-10-28T00:00:00+08:00" pubdate>
+            <a href="/2014/">2014-10-28</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <h2 id="toc_0">CI and Nginx</h2>
+<p>Oh, it&#39;s time to note the fucking <code>Codeigniter</code> rewrite with <code>Nginx</code>, which will cause a <code>404</code>
+status to make you (╯°□°）╯︵ ┻━┻.</p>
+<p>If you use <code>Codeigniter</code>, aka <code>CI</code>, you may know its fucking url rewrite with <code>index.php</code>.
+And the rewrite rules are for <code>apache</code> and not <code>nginx</code>. Hence, we should use <code>nginx rewrite rules</code> 
+to get our site up and running.</p>
+<p>Below is a section of my <code>nginx.conf</code>.</p>
+
+<pre><code>server {
+    listen 80 default;
+    server_name www.example.com example.com;
+
+    root  /home/wwwroot/ci/;
+    index index.php;
+
+    location / {
+        if ($request_filename !~ (index.php)) {  
+            rewrite ^/(.*)$ /index.php?$1 last;  
+        }  
+    }
+
+    location ~ .*.(php|php5)?$ {
+        try_files $uri =404;
+        fastcgi_pass  unix:/tmp/php-cgi.sock;
+        fastcgi_index index.php;
+        include fcgi.conf;
+    }
+
+    location ~ .*.(gif|jpg|jpeg|png|bmp|swf|ttf|svg|woff|eot)$ {
+        expires      30d;
+    }
+
+    location ~ .*.(js|css)?$ {
+        expires      12h;
+    }
+
+    access_log  /home/logs/ci_access.log  access;
+    error_log /home/logs/ci_error.log;
+}</code></pre>
+
+<h2 id="toc_1">End</h2>
+<p>If you have something to correct, welcome to point it out:D</p>
+
+<h3 id="toc_2">References:</h3>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Nginx with fucking CI and security';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://twitter.com/htinple">Twitter</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>

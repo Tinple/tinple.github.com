@@ -3,9 +3,249 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2014-10-26T17:29:41+08:00</updated>
+    <updated>2014-12-17T21:58:22+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[MongoDB Security Part One]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/mongo-security"/>
+        <published>2014-12-15T00:00:00+08:00</published>
+        <updated>2014-12-17T21:58:22+08:00</updated>
+        <id>http://tinple.me/tech/mongo-security</id>
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <p><a href="https://time.xctf.org.cn/ctfs/1/">hctf</a> is over a month away. In the online game, I prepared two <code>MongoDB</code>
+vulnerable applications for players to capture the flag. Actually, <code>NoSQL</code> develops fast these years, and 
+unlike traditional SQL databases, NoSQL databases require fewer relational constraints and consistency checks.
+However, they are still potentially vulnerable to injection attacks, even if they aren&#39;t using the traditional
+sql syntax. I think it&#39;s time for us to focus on NoSQL security, and this is also my initial purpose.</p>
+
+<blockquote>
+<p>NoSQL injection attacks may execute in different areas of an application than traditional SQL injection. Where SQL injection would execute within the database engine, NoSQL variants may execute during within the application layer or the database layer, depending on the NoSQL API used and data model. Typically NoSQL injection attacks will execute where the attack string is parsed, evaluated, or concatenated into a NoSQL API call.</p>
+</blockquote>
+<p>There are now over 150 <a href="http://nosql-database.org/">NoSQL databases</a> available, and <code>MongoDB</code> is the most widely
+used NoSQL database. In a series of MongoDB Security articles, I will show different vulnerable applications,
+the code and payload is available in <a href="https://github.com/Tinple/mongo-attack-example">github</a>.</p>
+<p>For the first part, I would like to show the MongoDB unauthorized access vulnerability, which causes MongoDB
+information leakage because the MongoDB runned without the option <code>--auth</code>.  And the information leakage may
+cause a series of other security problem. </p>
+<p>As the payload may attackable, I only scan my servers for the example. And I write my payload as follow:</p>
+
+<pre><code>var file = &quot;data&quot;,
+    lineReader = require(&quot;line-reader&quot;),
+    mongoose = require('mongoose');
+
+function conn (host, cb){
+    var url = 'mongodb://' + host,
+        options = { server: { socketOptions: { connectTimeoutMS: 4000 }}},
+        connection = mongoose.createConnection(url, options);
+        Admin = mongoose.mongo.Admin;
+    connection.on('error', function(err) {
+        if (err) throw new Error(err);
+    });
+    connection.on('open',function(){
+        new Admin(connection.db).listDatabases(function (err, res) {
+            if (err) throw new Error(err);
+            res.databases.map(function (db) {
+                console.log('[*] Database %s %s', db.name, db.sizeOnDisk);
+                var db = mongoose.createConnection(url + '/' + db.name, options);
+                db.on('open', function () {
+                    db.db.collectionNames(function (err, res) {
+                        if (err) throw new Error(err);
+                        res.map(function (collection) {
+                            console.log('[+] Collection %s', collection.name);
+                        });
+                        console.log();
+                        db.close();
+                        connection.close();
+                    })
+                })
+            })
+        })
+        cb(host);
+    });
+}
+lineReader.eachLine(file, function(line) {
+    if (String(line)) {
+        conn(line, function(host){
+            console.log(&quot;Detected: &quot; + host);
+        });
+    }
+}).then(function () {
+    console.log('[*] Read Done');
+});</code></pre>
+<p>The payload scans a list of ip, and gets the unauthorized mongo server, what&#39;s more, for every unauthorized
+mongo server, I get their <code>Databases</code> and <code>Collections</code> to stress the importance of information leakage. The
+results for my server as follow:</p>
+
+<pre><code>[*] Read Done
+Detected: xx.xx.xx.xx
+[*] Database erciyuan 218103808
+[*] Database shop 218103808
+[*] Database admin 83886080
+[*] Database test 1
+
+[+] Collection admin.system.version
+[+] Collection admin.system.indexes
+[+] Collection admin.system.users
+
+[+] Collection erciyuan.system.indexes
+[+] Collection erciyuan.system.users
+[+] Collection erciyuan.renwu
+[+] Collection erciyuan.log
+
+[+] Collection shop.system.indexes
+[+] Collection shop.system.users
+[+] Collection shop.users
+[+] Collection shop.feedbacks
+[+] Collection shop.baskets
+[+] Collection shop.products
+
+Detected: xx.xx.xx.xx
+[*] Database vnwa 218103808
+[*] Database admin 83886080
+[*] Database test 1
+
+[+] Collection admin.system.version
+[+] Collection admin.system.indexes
+[+] Collection admin.system.users
+
+[+] Collection vnwa.system.indexes
+[+] Collection vnwa.users
+[+] Collection vnwa.messages</code></pre>
+<p>Besides, the <a href="http://www.hackersoul.com/post/mongodb_unauthorized_access_vulnerability_global_probing_report.html">HackerSoul</a> scan almost 40000 IP list using 
+MongoDB, and give us a report about this vulnerability.</p>
+
+<pre><code>[*] Start-date: 20141202-23:20
+[*] End-date: 20141202-23:28
+[*] Info
+  [+] Target: 39818
+  [+] Success: 7071
+[*] Done</code></pre>
+<p>The results is crazy, hence, be sure to run your mongo with <code>auth</code> flag, or, change the mongo port(
+default is 27017) and start the firewall only allow the white-list ip to connect(something like 
+<a href="http://tinple.io/tech/work-with-iptables">iptables</a>.</p>
+
+<pre><code>## End
+
+If you have something to correct, welcome to point it out:D
+
+###References:
+* [Attacking NodeJS and MongoDB](http://blog.websecurify.com/2014/08/attacks-nodejs-and-mongodb-part-to.html)
+* [Hacking NodeJS and MongoDB](http://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html)
+* [nosql injection](https://community.rapid7.com/community/metasploit/blog/2014/06/12/you-have-no-sql-inj--sorry-nosql-injections-in-your-application)
+* [Server-Side JavaScript Injection](https://media.blackhat.com/bh-us-11/Sullivan/BH_US_11_Sullivan_Server_Side_WP.pdf)
+* [mongodb_unauthorized_access](http://www.hackersoul.com/post/mongodb_unauthorized_access_vulnerability_global_probing_report.html)</code></pre>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Use Make with javascript]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/use-make-with-javascript"/>
+        <published>2014-12-11T00:00:00+08:00</published>
+        <updated>2014-12-12T21:37:12+08:00</updated>
+        <id>http://tinple.me/tech/use-make-with-javascript</id>
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">Javascript build tools</h2>
+<p>During my frontend time, I have seen some of tools to build frontend projects. <a href="gruntjs.com">Grunt</a>,
+<a href="gulpjs.com">Gulp</a> and so on. However, these tools often make me get in the way for its verbose
+configuration and long dependent plugins.</p>
+
+<h2 id="toc_1">Why make</h2>
+<p>Actually, most of the tasks we need to build can be run using existing executables in the shell.
+Sass, Uglify, Unit test and so on have awesome executables already, what we need is just an easy way
+to run our commands to build projects without extra tooling and plugins. And <a href="https://www.gnu.org/software/make">Make</a> comes to rescue.</p>
+
+<h2 id="toc_2">What and how</h2>
+
+<blockquote>
+<p>GUN Make is a tool which controls the generation of executables and other non-sources files of a program from the program&#39;s source files.</p>
+</blockquote>
+<p>Though <code>make</code> is perceived as being only for C projects, it is a general-purpose build tool that can be used 
+on any kinds of projects. And in the case of a frontend build, <code>make</code> can help us construct dependency graph 
+and execute some commands directly.</p>
+<p>At begin, we need a file called <code>Makefile</code>. A Makefile consists of rules that has ite own specific purpose.
+Each of these rules has:</p>
+
+<ul>
+<li>a target, it can be a file or just a name</li>
+<li>prerequisites, an optional set of files the target depends on</li>
+<li>commands</li>
+</ul>
+<p>And the syntax for a target is:</p>
+
+<pre><code>target: prerequisites
+    commands</code></pre>
+
+<h2 id="toc_3">A Web project Makefile</h2>
+<p>Next, we will build a simple web project that uses <code>Sass</code>, <code>jade</code>, and we test it using <code>CasperJS</code>.
+The contents of our source files are not important, what we concern is what we need to do with the 
+files to make them ready to run.</p>
+
+<h2 id="toc_4">Reference</h2>
+
+<ul>
+<li><a href="https://www.gnu.org/software/make/manual/make.html">GNU Make Doc</a></li>
+<li><a href="https://blog.jcoglan.com/2014/02/05/building-javascript-projects-with-make/">building-javascript-projects-with-make</a></li>
+<li><a href="http://oxy.fi/2013/02/03/how-to-use-makefiles-in-your-web-projects/">how-to-use-makefiles-in-your-web-projects</a></li>
+<li><a href="https://algorithms.rdio.com/post/make/">make</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Nginx with fucking CI and security]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/nginx-proxy-with-fucking-ci-and-security"/>
+        <published>2014-10-28T00:00:00+08:00</published>
+        <updated>2014-10-28T20:26:28+08:00</updated>
+        <id>http://tinple.me/tech/nginx-proxy-with-fucking-ci-and-security</id>
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">CI and Nginx</h2>
+<p>Oh, it&#39;s time to note the fucking <code>Codeigniter</code> rewrite with <code>Nginx</code>, which will cause a <code>404</code>
+status to make you (╯°□°）╯︵ ┻━┻.</p>
+<p>If you use <code>Codeigniter</code>, aka <code>CI</code>, you may know its fucking url rewrite with <code>index.php</code>.
+And the rewrite rules are for <code>apache</code> and not <code>nginx</code>. Hence, we should use <code>nginx rewrite rules</code> 
+to get our site up and running.</p>
+<p>Below is a section of my <code>nginx.conf</code>.</p>
+
+<pre><code>server {
+    listen 80 default;
+    server_name www.example.com example.com;
+
+    root  /home/wwwroot/ci/;
+    index index.php;
+
+    location / {
+        if ($request_filename !~ (index.php)) {  
+            rewrite ^/(.*)$ /index.php?$1 last;  
+        }  
+    }
+
+    location ~ .*.(php|php5)?$ {
+        try_files $uri =404;
+        fastcgi_pass  unix:/tmp/php-cgi.sock;
+        fastcgi_index index.php;
+        include fcgi.conf;
+    }
+
+    location ~ .*.(gif|jpg|jpeg|png|bmp|swf|ttf|svg|woff|eot)$ {
+        expires      30d;
+    }
+
+    location ~ .*.(js|css)?$ {
+        expires      12h;
+    }
+
+    access_log  /home/logs/ci_access.log  access;
+    error_log /home/logs/ci_error.log;
+}</code></pre>
+
+<h2 id="toc_1">End</h2>
+<p>If you have something to correct, welcome to point it out:D</p>
+
+<h3 id="toc_2">References:</h3>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[Testing with mocha and casperjs]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/testing-with-mocha-and-casperjs"/>
@@ -1800,283 +2040,6 @@ but not IE8)</strong></li>
 <span class="p">}</span>
 </pre></div>
 <p><strong>Maintainable Javascript Part Two over</strong>.</p>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[Maintainable Javascript Part One]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/maintainable-javascript-1"/>
-        <published>2013-10-28T00:00:00+08:00</published>
-        <updated>2014-09-24T14:51:02+08:00</updated>
-        <id>http://tinple.me/tech/maintainable-javascript-1</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p>Last two days I just have finished the book 《Maintainable Javascript》.</p>
-
-<blockquote>
-<p>When you come to work, you&#39;re not writing code for you, you&#39;re
-writing code for those who come after you.</p>
-</blockquote>
-<p>I really like the words above the author Nicholas C. Zakas said, and this book really
-improves someone who may not work in professional team like me, or someone who wants to organize a team.The
-following is just my note that I regard it useful, but it may not really meets you.</p>
-
-<h2 id="toc_0">Part one ：Style Guidelines</h2>
-
-<blockquote>
-<p>Programs are meant to be read by humans and only incidentally for computers to execute.</p>
-</blockquote>
-
-<h4 id="toc_1">null</h4>
-<p><strong><code>null</code></strong> should be used in just a few cases:</p>
-
-<ol>
-<li>To initialize a variable that may later be assigned an object value</li>
-<li>To compare against an initialized variable that may or may not have an object value.</li>
-<li>To pass into a function where an object is expected</li>
-<li>To return from a function where an object is expected</li>
-</ol>
-<p>And the best way to think about null is as a placeholder for an object. </p>
-
-<h4 id="toc_2">for-in loop</h4>
-<p>As <code>for-in</code> loop returns not only instance properties of an object but also all
-properties it inherits through the prototype.Hence, it is best to filter the <code>for-in</code> loop to only instance properties by using <code>hasOwnProperty()</code>.</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">prop</span><span class="p">;</span>
-<span class="k">for</span> <span class="p">(</span><span class="nx">prop</span> <span class="k">in</span> <span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">object</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Property name is&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">);</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Property value is&quot;</span> <span class="o">+</span> <span class="nx">object</span><span class="p">[</span><span class="nx">prop</span><span class="p">]);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-<p>And remember do not use <code>for-in</code> to iterate over members of an array.</p>
-
-<h4 id="toc_3">Equality</h4>
-<p>One of the main areas in which <strong>type coercion</strong> occurs is with the use of equality operators, <code>==</code> and <code>!=</code>. </p>
-<p>And <strong>other points</strong> in this part I just easily skip.</p>
-
-<h2 id="toc_4">Part two ：Programming Practices</h2>
-
-<h3 id="toc_5">Loose Coupling of UI Layers</h3>
-<p>Loose coupling is achieved when you are able to make changes to a single component without making changes to other components. And it is achieved by limiting each component&#39;s knowledge of the larger system.</p>
-
-<ul>
-<li>Keep JavaScript Out of CSS (css expression denied)</li>
-<li>Keep CSS Out of JavaScript</li>
-<li><strong>Keep JavaScript Out of HTML</strong></li>
-</ul>
-<div class="highlight"><pre>// ugly code
-<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;doSomething()&quot;</span> <span class="na">id=</span><span class="s">&quot;action-btn&quot;</span><span class="nt">&gt;</span>Click Me<span class="nt">&lt;/button&gt;</span>
-</pre></div>
-<div class="highlight"><pre><span class="c1">// use JavaScript methods for adding event handlers</span>
-<span class="kd">function</span> <span class="nx">addListener</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">target</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">target</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">(</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">target</span><span class="p">[</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="nx">handler</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="kd">var</span> <span class="nx">btn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;action-btn&quot;</span><span class="p">);</span>
-<span class="nx">addListener</span><span class="p">(</span><span class="nx">btn</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">doSomething</span><span class="p">);</span>
-</pre></div>
-
-<ul>
-<li><strong>Keep HTML Out of JavaScript</strong></li>
-</ul>
-<div class="highlight"><pre><span class="c1">// Bad </span>
-<span class="kd">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;my-div&quot;</span><span class="p">);</span>
-<span class="nx">div</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&lt;h3&gt;Error&lt;/h3&gt;&lt;p&gt;Invalid e-mail address.&lt;/p&gt;&quot;</span><span class="p">;</span>
-</pre></div>
-<p>Embedding HTML strings inside your JavaScript is a bad practice for a number of
-reasons.And there are several ways to accomplish this in a loosely coupled manner.</p>
-
-<h4 id="toc_6">1.Load from the Server</h4>
-<p>keep the templates remote and use an XMLHttpRequest object to retrieve
-additional markup, it is much more convenient for single-page applications than 
-multiple-page applications. But when using this method, you should pay attention 
-to <code>XSS</code> attack, and it requires lots of transcode and decode strategy between client and server to defense.</p>
-<div class="highlight"><pre><span class="kd">function</span> <span class="nx">loadDialog</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">oncomplete</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
-    <span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;/js/dialog/&quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-
-    <span class="nx">xhr</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
-
-            <span class="kd">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;dlg-holder&quot;</span><span class="p">);</span>
-            <span class="nx">div</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
-            <span class="nx">oncomplete</span><span class="p">();</span>
-
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="c1">// wrong handler</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-
-<h4 id="toc_7">2.Simple Client-Side Templates</h4>
-<p>Client-side Templates are markup pieces with slots that must be filled by JavaScript in order to be complete.For example:</p>
-<div class="highlight"><pre><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;%s&quot;</span><span class="nt">&gt;</span>%s<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
-</pre></div>
-<p>And you can make templates accessible to Javascript by embedding them directly
-in the HTML page.Maybe a function will make it.</p>
-<div class="highlight"><pre><span class="kd">function</span> <span class="nx">sprintf</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">;</span>
-    <span class="k">return</span> <span class="nx">text</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/%s/g</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="o">?</span> <span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-    <span class="p">});</span>
-<span class="p">}</span>
-
-<span class="c1">// usage</span>
-<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">sprintf</span><span class="p">(</span><span class="nx">templateText</span><span class="p">,</span> <span class="s2">&quot;/item/4&quot;</span><span class="p">,</span> <span class="s2">&quot;Fourth item&quot;</span><span class="p">);</span>
-</pre></div>
-<p>It is ok to include the templates as an comment or embed templates into an HTML
-page by using a <code>&lt;script&gt;</code> element with a custom <code>type</code> property.</p>
-<div class="highlight"><pre>// comment
-<span class="nt">&lt;ul</span> <span class="na">id=</span><span class="s">&quot;mylist&quot;</span><span class="nt">&gt;</span><span class="c">&lt;!--&lt;li id=&quot;item%s&quot;&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;--&gt;</span>
-<span class="nt">&lt;/ul&gt;</span>
-</pre></div>
-
-<pre><code>/* script element, remember to strip any leading white space 
-that may be in the template, because template text is  
-on the line after the opening script tag */
-&lt;script type=&quot;text/x-my-template&quot; id=&quot;list-item&quot;&gt;
-    &lt;li&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;
-&lt;/script&gt;</code></pre>
-
-<h4 id="toc_8">3.Complex Client-Side Templates</h4>
-<p>Complex Client-Side Templates may do some escaping, well, you can use some robust templates like <a href="http://handlebarsjs.com/">Handlebars</a>, which is a complete client-side templating system designed to work with JavaScript in the browser.</p>
-<p><strong>Maintainable Javascript Part One over</strong>.</p>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[Securing web application Part One]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/securing-web-application-1"/>
-        <published>2013-10-10T00:00:00+08:00</published>
-        <updated>2014-09-24T15:17:24+08:00</updated>
-        <id>http://tinple.me/tech/securing-web-application-1</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p>It would be a hard decision for me to write down this essay.But I still want to
-express some security opinion and give the solution for some attack that I used to do.</p>
-
-<h2 id="toc_0">SQL Injection</h2>
-<p>When I learned <code>PHP</code> last term, I just only finished a simple web application and ensured the ability it should have.But it is really dangerous leaving web application without any other defences.You see, something with SQL could be attacked by some sneaky tricks.</p>
-<p>Considering a situation that I make a platform for users to join a competition, 
-and at first they should apply but the <strong>privilege field</strong> in database that for 
-users logining in platform is 0(same as false), I may change it to
-1 few days later.</p>
-<p>And if I design my table structure like this(I use mysql):</p>
-<div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">EXAMPLE</span> <span class="p">(</span>
-    <span class="n">ID</span>   <span class="nb">INTEGER</span> <span class="n">UNSIGNED</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
-    <span class="n">USERNAME</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-    <span class="n">PASSWORD</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-    <span class="n">PRIVILEGE</span> <span class="n">TINYINT</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="mi">0</span><span class="p">,</span>
-
-    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">ID</span><span class="p">)</span>
-<span class="p">);</span>
-</pre></div>
-<p>And my form page receives datas which are posted and immediately inserted into database without any filter: </p>
-<div class="highlight"><pre><span class="x">$username = $_POST[&#39;username&#39;];</span>
-<span class="x">$pwd = $_POST[&#39;password&#39;];</span>
-
-<span class="x">//..some database connection codes</span>
-<span class="x">$query = &quot;INSERT INTO EXAMPLE VALUES(&#39;$username&#39;, &#39;$pwd&#39;, 0)&quot;;</span>
-<span class="x">//$dbc is a mysql connection return</span>
-<span class="x">mysqli_query($dbc, $query);</span>
-
-<span class="x">//any other codes</span>
-</pre></div>
-<p>If someone put <code>passwor&#39;, 1) --</code> into password field, the sql query will be 
-<code>INSERT INTO EXAMPLE VALUES(&#39;someone&#39;, &#39;password&#39;, 1) -- &#39;, 0)</code>, and the double-hyphen comment causes the rest of the line of SQL code to be ignored!Hence,
-his privilege will be 1.And this attack is known as an <strong>SQL Injection</strong>.</p>
-<p>And something we could do to defense it is filter any datas that user can write into
-database, an example defence:</p>
-<div class="highlight"><pre><span class="x">$username = mysqli_real_escape($dbc, trim($_POST[&#39;username&#39;]));</span>
-<span class="x">$pwd = mysqli_real_escape($dbc, trim($_POST[&#39;password&#39;]));</span>
-</pre></div>
-<p>Sure, you can alse use <strong>regular expression</strong> to filter it.Besides, the privilege field could be designed to <code>DEFAULT 0</code> so that it would not be inserted any more, or just revoke the <code>INSERT privilege(field)</code> privilege in mysql for users, like we will talk below. </p>
-
-<h2 id="toc_1">Mysql privileges</h2>
-<p>Like some other man, I used <code>Mysql</code> as my database to store datas in my all project.
-But I am not professional, just use it to combine with <code>PHP</code>.
-I didn&#39;t care the mysql privileges when I executed a sql statement, just let it runned as I expected.</p>
-<p>And now I realized the <strong>big potential</strong> problem that I have made. I didn&#39;t set privileges accurately for mysql users.</p>
-<p>Above example again.This time we create another mysql user named user_example at begin.And we could set this mysql user only few privileges when users apply:</p>
-<div class="highlight"><pre><span class="o">//</span><span class="p">[...]</span> <span class="n">should</span> <span class="n">be</span> <span class="n">replaced</span> <span class="n">depends</span> <span class="k">on</span> <span class="n">you</span>
-<span class="k">GRANT</span> <span class="k">INSERT</span><span class="p">(</span><span class="o">`</span><span class="n">USERNAME</span><span class="o">`</span><span class="p">,</span> <span class="o">`</span><span class="n">PASSWORD</span><span class="o">`</span><span class="p">)</span> <span class="k">ON</span> <span class="o">`</span><span class="p">[</span><span class="k">database</span><span class="p">]</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">EXAMPLE</span><span class="o">`</span> 
-<span class="k">TO</span> <span class="o">`</span><span class="n">user_example</span><span class="o">`@</span><span class="p">[</span><span class="n">ip_address</span><span class="p">];</span>
-</pre></div>
-<p>Like this, users will not be able to do something like INSERT privilege field into database.And if you have a backstage to manage platform, you may also set the second mysql user privilege accurately, just use two mysql users and <strong>ensure their respective privilege</strong> in your web application, accurating privileges to your every table field.And it means a lot about security to your web application.</p>
-
-<h2 id="toc_2">CSRF &amp;&amp; Token defense</h2>
-<p><strong>Cross-site request forgery</strong>, which exploits the trust that a site has in user\&#39;s
-browser.</p>
-
-<blockquote>
-<p>The attack works by including a link or script in a page that accesses a site to which the user is known (or is supposed) to have been authenticated.</p>
-</blockquote>
-<p>I am sorry that I know little about it.But you could learn it more on <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">wiki</a>.Have fun!</p>
-
-<h2 id="toc_3">End</h2>
-<p>Nothing is ever truly 100% secure, so we are always talking about degrees of security.The above three points may let you realize the security about your web
-application, and just try to make preventions to protect it!</p>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[Monthly review for Sep.2013]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/life/monthly-review-for-sep-2013"/>
-        <published>2013-10-01T00:00:00+08:00</published>
-        <updated>2014-09-24T14:49:19+08:00</updated>
-        <id>http://tinple.me/life/monthly-review-for-sep-2013</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p>序:前段时间跟人聊起各自童年的一些故事，那个老伙计滔滔不绝说得很开心，可我却抓破脑皮也只能闪过一些片段。我才发现自己的记忆是那么短暂而又不可或缺。因此我想从现在这个拼搏的年纪开始，每月进行一次总结，权当青春。</p>
-
-<h2 id="toc_0">Tech:</h2>
-<p>1.月初在writing上写了第一篇博客，也暗自下决心坚持写下去，哪怕都是些乱七八糟的东西，然后自己搭了个liquidluck，风格甚是喜欢，干干净净。</p>
-<p>2.也是月初在Github上托管了自己的静态博客，然后在godaddy上花了8刀买了个性.me域名，从此爱上markdown的写作风格。</p>
-<p>3.初步学习了git，感受到版本控制管理机制的强大，以后会常跟它打交道。</p>
-<p>4.碎片般优化了攻防大赛平台，何少后续讲的许多相关安全性质的东西都深受启发。</p>
-<p>5.把windows格了，装了个应急用的ubuntu，试用了几天感觉不错，只是到现在也还没能解决桌面环境崩溃假死的情况，自带桌面和awesome都崩过:(</p>
-<p>5.用了几天Ubuntu，熟练了许多linux下的命令，感觉再过一年差不多应该入门了。</p>
-<p>6.功防平台用的是nginx，然后部署的时候服务器方面吃了许多nginx的知识，初步对nginx配置文件有了较大的了解，以后要补服务端的知识。</p>
-<p>7.在node下成功实现手机远程控制自己写的幻灯片，考虑接触nodejs。</p>
-
-<h2 id="toc_1">Work:</h2>
-<p>1.跟协会的小伙伴们一起准备开学季的工作，从学院爆炸般的宣讲会到接近300人的面试，再到第一次新生培训，面对每年都能把1#128挤爆的新生们，自己也是第一次站在前面以学长的身份向新生们传输思想。</p>
-<p>2.也是那天的新生培训，听到杰哥的讲话，深受感触，只能隐约记起其中两点。</p>
-
-<blockquote>
-<p>大一是决定大学四年最重要的一年。</p>
-<p>付出总是会有回报的。</p>
-</blockquote>
-<p>3.第一次听华哥讲开源，也是第一次对开源有了更进一步的认识。</p>
-
-<blockquote>
-<p>做开源的大多是以前从开源中受益，然后决定自己也开源让别人受益。</p>
-<p>开源也是一种发展，通过开源代码能不断改进不断进步。</p>
-<p>开源只有学生和大公司能做，因为没有经费压力。</p>
-</blockquote>
-<p>4.现在做研发大多都是独自一人去做，还没接触过多人协作。但是一旦多人协作起来，自己担心的最大的问题就是在开发投入前，没有人把需求明确，没人对需求进行版本分离，没有合理的分工，结果到最后都是边做边想边挠头，一头乱。</p>
-<p>5.虽然没有在一个技术之外的社团呆过，曾经也是一面就被院党建怒刷。但是说起一些组织上的事，看着各个社团在开学初忙里忙外，自己也有几点看法。</p>
-
-<blockquote>
-<p>一份工作所需要的资源与工作本身并没有太大的关系，一件事情被膨胀出来的重要性和复杂性，与完成这件事情花的时间成正比。</p>
-<p><a href="http://wiki.mbalib.com/wiki/%E5%BD%BC%E5%BE%97%E5%8E%9F%E7%90%86">彼得原理</a></p>
-</blockquote>
-
-<h2 id="toc_2">Life:</h2>
-<p>1.有得必有失。自己清楚自己得到了什么学会了什么，也清楚自己正在逐步疏远什么，失去什么，诸事为难只求兼顾，愿能理解原谅。</p>
-<p>2.升大二后生活不再像刚入学般具有挑战性，很难再有去年跟An air们一起全身投入各种活动，不可否认大一跟An air们在一起是最欢乐的时光。</p>
-<p>3.越是陷入技术越深，越是对生活中的一些细节警觉，昔日的故友，好友的关切，父母的慰问，很是怕因为固执己见失去更重要的东西，也尝试去处理好。</p>
-<p>4.开学后生活的节奏感已被定型，大部分时间是呆在协会，有课上课，不喜欢的翘，然后组团吃饭，完后继续协会，最后10点半回寝。虽说枯燥平澹，但也的确忙的有来有回，乐于其中，或许这个10月要改变什么。</p>
-
-<h2 id="toc_3">End:</h2>
-<p>总的来说这个9月过得很充实，忙得开心，心里也觉得踏实，各方面都还行。展望10月的到来:D</p>
 ]]>
         </content>
     </entry>

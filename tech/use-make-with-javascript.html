@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Use Make with javascript - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=4bfa1" />
+    <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/use-make-with-javascript" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Use Make with javascript</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2014-12-11T00:00:00+08:00" pubdate>
+            <a href="/2014/">2014-12-11</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <h2 id="toc_0">Javascript build tools</h2>
+<p>During my frontend time, I have seen some of tools to build frontend projects. <a href="gruntjs.com">Grunt</a>,
+<a href="gulpjs.com">Gulp</a> and so on. However, these tools often make me get in the way for its verbose
+configuration and long dependent plugins.</p>
+
+<h2 id="toc_1">Why make</h2>
+<p>Actually, most of the tasks we need to build can be run using existing executables in the shell.
+Sass, Uglify, Unit test and so on have awesome executables already, what we need is just an easy way
+to run our commands to build projects without extra tooling and plugins. And <a href="https://www.gnu.org/software/make">Make</a> comes to rescue.</p>
+
+<h2 id="toc_2">What and how</h2>
+
+<blockquote>
+<p>GUN Make is a tool which controls the generation of executables and other non-sources files of a program from the program&#39;s source files.</p>
+</blockquote>
+<p>Though <code>make</code> is perceived as being only for C projects, it is a general-purpose build tool that can be used 
+on any kinds of projects. And in the case of a frontend build, <code>make</code> can help us construct dependency graph 
+and execute some commands directly.</p>
+<p>At begin, we need a file called <code>Makefile</code>. A Makefile consists of rules that has ite own specific purpose.
+Each of these rules has:</p>
+
+<ul>
+<li>a target, it can be a file or just a name</li>
+<li>prerequisites, an optional set of files the target depends on</li>
+<li>commands</li>
+</ul>
+<p>And the syntax for a target is:</p>
+
+<pre><code>target: prerequisites
+    commands</code></pre>
+
+<h2 id="toc_3">A Web project Makefile</h2>
+<p>Next, we will build a simple web project that uses <code>Sass</code>, <code>jade</code>, and we test it using <code>CasperJS</code>.
+The contents of our source files are not important, what we concern is what we need to do with the 
+files to make them ready to run.</p>
+
+<h2 id="toc_4">Reference</h2>
+
+<ul>
+<li><a href="https://www.gnu.org/software/make/manual/make.html">GNU Make Doc</a></li>
+<li><a href="https://blog.jcoglan.com/2014/02/05/building-javascript-projects-with-make/">building-javascript-projects-with-make</a></li>
+<li><a href="http://oxy.fi/2013/02/03/how-to-use-makefiles-in-your-web-projects/">how-to-use-makefiles-in-your-web-projects</a></li>
+<li><a href="https://algorithms.rdio.com/post/make/">make</a></li>
+</ul>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Use Make with javascript';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://twitter.com/htinple">Twitter</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>
