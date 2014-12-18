@@ -25,7 +25,7 @@
       })();
     </script>
     
-<link rel="canonical" href="/tech/mongo-security" />
+<link rel="canonical" href="/tech/mongo-security-part-one" />
 
 
   </head>
@@ -69,7 +69,7 @@ used NoSQL database. In a series of MongoDB Security articles, I will show diffe
 the code and payload is available in <a href="https://github.com/Tinple/mongo-attack-example">github</a>.</p>
 <p>For the first part, I would like to show the MongoDB unauthorized access vulnerability, which causes MongoDB
 information leakage because the MongoDB runned without the option <code>--auth</code>.  And the information leakage may
-cause a series of other security problem further. </p>
+cause a series of other security problem. </p>
 <p>As the payload may attackable, I only scan my servers for the example. And I write my payload as follow:</p>
 
 <pre><code>var file = &quot;data&quot;,
