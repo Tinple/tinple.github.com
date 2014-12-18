@@ -17,7 +17,6 @@
 }
 
 .yue ::-moz-selection {
-<<<<<<< HEAD
   background-color: rgba(0,0,0,1);
   color: #fff;
 }
@@ -25,13 +24,6 @@
 .yue ::selection {
   background-color: rgba(0,0,0,1);
   color: #fff;
-=======
-  background-color: rgba(0,0,0,0.2);
-}
-
-.yue ::selection {
-  background-color: rgba(0,0,0,0.2);
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
 }
 
 .yue h1,
@@ -159,11 +151,7 @@
 
 .yue blockquote {
   margin: 0 0 1.64em 0;
-<<<<<<< HEAD
   border-left: 3px solid #14c023;
-=======
-  border-left: 3px solid #dadada;
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
   padding-left: 12px;
   color: #666664;
 }
@@ -217,21 +205,12 @@
 
 .yue code,
 .yue tt {
-<<<<<<< HEAD
   font-size: 0.96em;
   background-color: rgba(0,0,0,0.05);
   padding: 1px 2px;
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
   word-wrap: break-word;
   border-radius: 3px;
-=======
-  color: #808080;
-  font-size: 0.96em;
-  background-color: #f9f9f7;
-  padding: 1px 2px;
-  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-  word-wrap: break-word;
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
 }
 
 .yue pre {
