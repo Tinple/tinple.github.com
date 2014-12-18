@@ -5,11 +5,7 @@
     <title>MongoDB Security Part One - Tinple</title>
     <script>if (top !== self) top.location = self.location;</script>
     <meta name="viewport" content="width=device-width" />
-<<<<<<< HEAD
     <link rel="stylesheet" href="/static/yue.css?v=f93f9" />
-=======
-    <link rel="stylesheet" href="/static/yue.css?v=4bfa1" />
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
     <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
     <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
     
@@ -75,7 +71,6 @@ the code and payload is available in <a href="https://github.com/Tinple/mongo-at
 information leakage because the MongoDB runned without the option <code>--auth</code>.  And the information leakage may
 cause a series of other security problem. </p>
 <p>As the payload may attackable, I only scan my servers for the example. And I write my payload as follow:</p>
-<<<<<<< HEAD
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
     <span class="nx">lineReader</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;line-reader&quot;</span><span class="p">),</span>
     <span class="nx">mongoose</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">);</span>
@@ -120,52 +115,6 @@ cause a series of other security problem. </p>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;[*] Read Done&#39;</span><span class="p">);</span>
 <span class="p">});</span>
 </pre></div>
-=======
-
-<pre><code>var file = &quot;data&quot;,
-    lineReader = require(&quot;line-reader&quot;),
-    mongoose = require('mongoose');
-
-function conn (host, cb){
-    var url = 'mongodb://' + host,
-        options = { server: { socketOptions: { connectTimeoutMS: 4000 }}},
-        connection = mongoose.createConnection(url, options);
-        Admin = mongoose.mongo.Admin;
-    connection.on('error', function(err) {
-        if (err) throw new Error(err);
-    });
-    connection.on('open',function(){
-        new Admin(connection.db).listDatabases(function (err, res) {
-            if (err) throw new Error(err);
-            res.databases.map(function (db) {
-                console.log('[*] Database %s %s', db.name, db.sizeOnDisk);
-                var db = mongoose.createConnection(url + '/' + db.name, options);
-                db.on('open', function () {
-                    db.db.collectionNames(function (err, res) {
-                        if (err) throw new Error(err);
-                        res.map(function (collection) {
-                            console.log('[+] Collection %s', collection.name);
-                        });
-                        console.log();
-                        db.close();
-                        connection.close();
-                    })
-                })
-            })
-        })
-        cb(host);
-    });
-}
-lineReader.eachLine(file, function(line) {
-    if (String(line)) {
-        conn(line, function(host){
-            console.log(&quot;Detected: &quot; + host);
-        });
-    }
-}).then(function () {
-    console.log('[*] Read Done');
-});</code></pre>
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
 <p>The payload scans a list of ip, and gets the unauthorized mongo server, what&#39;s more, for every unauthorized
 mongo server, I get their <code>Databases</code> and <code>Collections</code> to stress the importance of information leakage. The
 results for my server as follow:</p>
@@ -218,7 +167,6 @@ MongoDB, and give us a report about this vulnerability.</p>
 default is 27017) and start the firewall only allow the white-list ip to connect(something like 
 <a href="http://tinple.io/tech/work-with-iptables">iptables</a>.</p>
 
-<<<<<<< HEAD
 <h2 id="toc_0">End</h2>
 <p>If you have something to correct, welcome to point it out:D</p>
 
@@ -228,15 +176,6 @@ default is 27017) and start the firewall only allow the white-list ip to connect
 <li><a href="http://www.hackersoul.com/post/mongodb_unauthorized_access_vulnerability_global_probing_report.html">mongodb_unauthorized_access</a></li>
 <li><a href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">Testing for NoSQL injection</a></li>
 </ul>
-=======
-<pre><code>## End
-
-If you have something to correct, welcome to point it out:D
-
-###References:
-* [mongodb_unauthorized_access](http://www.hackersoul.com/post/mongodb_unauthorized_access_vulnerability_global_probing_report.html)
-* [Testing for NoSQL injection](https://www.owasp.org/index.php/Testing_for_NoSQL_injection)</code></pre>
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
 
     </div>
 

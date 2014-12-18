@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Tinple</title>
-<<<<<<< HEAD
     <link href="http://tinple.io/feed" rel="self" />
     <link href="http://tinple.io/" />
     <updated>2014-12-18T15:53:47+08:00</updated>
@@ -24,35 +23,11 @@
 <li><a href="https://media.blackhat.com/bh-us-11/Sullivan/BH_US_11_Sullivan_Server_Side_WP.pdf">Server-Side JavaScript Injection</a></li>
 <li><a href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">Testing for NoSQL injection</a></li>
 </ul>
-=======
-    <link href="http://tinple.me/feed" rel="self" />
-    <link href="http://tinple.me/" />
-    <updated>2014-12-18T14:51:57+08:00</updated>
-    <id>http://tinple.me/</id>
-    <entry>
-        <title type="html"><![CDATA[MongoDB Security Part Three]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/mongo-security-part-three"/>
-        <published>2014-12-18T00:00:00+08:00</published>
-        <updated>2014-12-18T14:51:57+08:00</updated>
-        <id>http://tinple.me/tech/mongo-security-part-three</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ 
-<pre><code>## End
-
-If you have something to correct, welcome to point it out:D
-
-###References:
-* [nosql injection](https://community.rapid7.com/community/metasploit/blog/2014/06/12/you-have-no-sql-inj--sorry-nosql-injections-in-your-application)
-* [Server-Side JavaScript Injection](https://media.blackhat.com/bh-us-11/Sullivan/BH_US_11_Sullivan_Server_Side_WP.pdf)
-* [Testing for NoSQL injection](https://www.owasp.org/index.php/Testing_for_NoSQL_injection)</code></pre>
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
 ]]>
         </content>
     </entry><entry>
         <title type="html"><![CDATA[MongoDB Security Part Two]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/mongo-security-part-two"/>
         <published>2014-12-17T00:00:00+08:00</published>
         <updated>2014-12-18T15:17:12+08:00</updated>
@@ -68,40 +43,16 @@ If you have something to correct, welcome to point it out:D
 <li><a href="http://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html">Hacking NodeJS and MongoDB</a></li>
 <li><a href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">Testing for NoSQL injection</a></li>
 </ul>
-=======
-        <link href="http://tinple.me/tech/mongo-security-part-two"/>
-        <published>2014-12-17T00:00:00+08:00</published>
-        <updated>2014-12-18T14:51:55+08:00</updated>
-        <id>http://tinple.me/tech/mongo-security-part-two</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ 
-<pre><code>## End
-
-If you have something to correct, welcome to point it out:D
-
-###References:
-* [Attacking NodeJS and MongoDB](http://blog.websecurify.com/2014/08/attacks-nodejs-and-mongodb-part-to.html)
-* [Hacking NodeJS and MongoDB](http://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html)
-* [Testing for NoSQL injection](https://www.owasp.org/index.php/Testing_for_NoSQL_injection)</code></pre>
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
 ]]>
         </content>
     </entry><entry>
         <title type="html"><![CDATA[MongoDB Security Part One]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/mongo-security-part-one"/>
         <published>2014-12-15T00:00:00+08:00</published>
         <updated>2014-12-18T15:53:47+08:00</updated>
         <id>http://tinple.io/tech/mongo-security-part-one</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/mongo-security-part-one"/>
-        <published>2014-12-15T00:00:00+08:00</published>
-        <updated>2014-12-18T14:51:52+08:00</updated>
-        <id>http://tinple.me/tech/mongo-security-part-one</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <p><a href="https://time.xctf.org.cn/ctfs/1/">hctf</a> is over a month away. In the online game, I prepared two <code>MongoDB</code>
 vulnerable applications for players to capture the flag. Actually, <code>NoSQL</code> develops fast these years, and 
 unlike traditional SQL databases, NoSQL databases require fewer relational constraints and consistency checks.
@@ -118,7 +69,6 @@ the code and payload is available in <a href="https://github.com/Tinple/mongo-at
 information leakage because the MongoDB runned without the option <code>--auth</code>.  And the information leakage may
 cause a series of other security problem. </p>
 <p>As the payload may attackable, I only scan my servers for the example. And I write my payload as follow:</p>
-<<<<<<< HEAD
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
     <span class="nx">lineReader</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;line-reader&quot;</span><span class="p">),</span>
     <span class="nx">mongoose</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">);</span>
@@ -163,52 +113,6 @@ cause a series of other security problem. </p>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;[*] Read Done&#39;</span><span class="p">);</span>
 <span class="p">});</span>
 </pre></div>
-=======
-
-<pre><code>var file = &quot;data&quot;,
-    lineReader = require(&quot;line-reader&quot;),
-    mongoose = require('mongoose');
-
-function conn (host, cb){
-    var url = 'mongodb://' + host,
-        options = { server: { socketOptions: { connectTimeoutMS: 4000 }}},
-        connection = mongoose.createConnection(url, options);
-        Admin = mongoose.mongo.Admin;
-    connection.on('error', function(err) {
-        if (err) throw new Error(err);
-    });
-    connection.on('open',function(){
-        new Admin(connection.db).listDatabases(function (err, res) {
-            if (err) throw new Error(err);
-            res.databases.map(function (db) {
-                console.log('[*] Database %s %s', db.name, db.sizeOnDisk);
-                var db = mongoose.createConnection(url + '/' + db.name, options);
-                db.on('open', function () {
-                    db.db.collectionNames(function (err, res) {
-                        if (err) throw new Error(err);
-                        res.map(function (collection) {
-                            console.log('[+] Collection %s', collection.name);
-                        });
-                        console.log();
-                        db.close();
-                        connection.close();
-                    })
-                })
-            })
-        })
-        cb(host);
-    });
-}
-lineReader.eachLine(file, function(line) {
-    if (String(line)) {
-        conn(line, function(host){
-            console.log(&quot;Detected: &quot; + host);
-        });
-    }
-}).then(function () {
-    console.log('[*] Read Done');
-});</code></pre>
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
 <p>The payload scans a list of ip, and gets the unauthorized mongo server, what&#39;s more, for every unauthorized
 mongo server, I get their <code>Databases</code> and <code>Collections</code> to stress the importance of information leakage. The
 results for my server as follow:</p>
@@ -261,7 +165,6 @@ MongoDB, and give us a report about this vulnerability.</p>
 default is 27017) and start the firewall only allow the white-list ip to connect(something like 
 <a href="http://tinple.io/tech/work-with-iptables">iptables</a>.</p>
 
-<<<<<<< HEAD
 <h2 id="toc_0">End</h2>
 <p>If you have something to correct, welcome to point it out:D</p>
 
@@ -271,33 +174,16 @@ default is 27017) and start the firewall only allow the white-list ip to connect
 <li><a href="http://www.hackersoul.com/post/mongodb_unauthorized_access_vulnerability_global_probing_report.html">mongodb_unauthorized_access</a></li>
 <li><a href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">Testing for NoSQL injection</a></li>
 </ul>
-=======
-<pre><code>## End
-
-If you have something to correct, welcome to point it out:D
-
-###References:
-* [mongodb_unauthorized_access](http://www.hackersoul.com/post/mongodb_unauthorized_access_vulnerability_global_probing_report.html)
-* [Testing for NoSQL injection](https://www.owasp.org/index.php/Testing_for_NoSQL_injection)</code></pre>
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
 ]]>
         </content>
     </entry><entry>
         <title type="html"><![CDATA[Use Make with javascript]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/use-make-with-javascript"/>
         <published>2014-12-11T00:00:00+08:00</published>
         <updated>2014-12-12T21:37:12+08:00</updated>
         <id>http://tinple.io/tech/use-make-with-javascript</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/use-make-with-javascript"/>
-        <published>2014-12-11T00:00:00+08:00</published>
-        <updated>2014-12-12T21:37:12+08:00</updated>
-        <id>http://tinple.me/tech/use-make-with-javascript</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <h2 id="toc_0">Javascript build tools</h2>
 <p>During my frontend time, I have seen some of tools to build frontend projects. <a href="gruntjs.com">Grunt</a>,
 <a href="gulpjs.com">Gulp</a> and so on. However, these tools often make me get in the way for its verbose
@@ -347,19 +233,11 @@ files to make them ready to run.</p>
     </entry><entry>
         <title type="html"><![CDATA[Nginx with fucking CI and security]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/nginx-proxy-with-fucking-ci-and-security"/>
         <published>2014-10-28T00:00:00+08:00</published>
         <updated>2014-10-28T20:26:28+08:00</updated>
         <id>http://tinple.io/tech/nginx-proxy-with-fucking-ci-and-security</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/nginx-proxy-with-fucking-ci-and-security"/>
-        <published>2014-10-28T00:00:00+08:00</published>
-        <updated>2014-10-28T20:26:28+08:00</updated>
-        <id>http://tinple.me/tech/nginx-proxy-with-fucking-ci-and-security</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <h2 id="toc_0">CI and Nginx</h2>
 <p>Oh, it&#39;s time to note the fucking <code>Codeigniter</code> rewrite with <code>Nginx</code>, which will cause a <code>404</code>
 status to make you (╯°□°）╯︵ ┻━┻.</p>
@@ -409,19 +287,11 @@ to get our site up and running.</p>
     </entry><entry>
         <title type="html"><![CDATA[Testing with mocha and casperjs]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/testing-with-mocha-and-casperjs"/>
         <published>2014-10-22T00:00:00+08:00</published>
         <updated>2014-10-24T10:37:51+08:00</updated>
         <id>http://tinple.io/tech/testing-with-mocha-and-casperjs</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/testing-with-mocha-and-casperjs"/>
-        <published>2014-10-22T00:00:00+08:00</published>
-        <updated>2014-10-24T10:37:51+08:00</updated>
-        <id>http://tinple.me/tech/testing-with-mocha-and-casperjs</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <p>When talking about <code>Unit Test</code> in <code>node</code>, <code>mocha</code> flashes first in my brain.</p>
 
 <h2 id="toc_0">mocha &amp;&amp; should.js</h2>
@@ -620,19 +490,11 @@ would be better with both a comprehensive suite of <code>Unit tests</code> as we
     </entry><entry>
         <title type="html"><![CDATA[Computer Network and Communication]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/computer-network-and-communication-1"/>
         <published>2014-10-18T00:00:00+08:00</published>
         <updated>2014-10-18T15:22:37+08:00</updated>
         <id>http://tinple.io/tech/computer-network-and-communication-1</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/computer-network-and-communication-1"/>
-        <published>2014-10-18T00:00:00+08:00</published>
-        <updated>2014-10-18T15:22:37+08:00</updated>
-        <id>http://tinple.me/tech/computer-network-and-communication-1</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <h1 id="toc_0">Computer Networks</h1>
 
 <h2 id="toc_1">Chapter 1 problems:</h2>
@@ -752,19 +614,11 @@ it takes a long time to develop and promulgate the standards.</p>
     </entry><entry>
         <title type="html"><![CDATA[Work with IPTables]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/work-with-iptables"/>
         <published>2014-09-25T00:00:00+08:00</published>
         <updated>2014-09-28T10:54:14+08:00</updated>
         <id>http://tinple.io/tech/work-with-iptables</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/work-with-iptables"/>
-        <published>2014-09-25T00:00:00+08:00</published>
-        <updated>2014-09-28T10:54:14+08:00</updated>
-        <id>http://tinple.me/tech/work-with-iptables</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <p>Nowadays I happened to <code>IPTables</code> again. To be honest, I&#39;m not familiar with it.
 This post is just my note about working with <code>IPTables</code> these days.</p>
 
@@ -903,19 +757,11 @@ and already established connection.</p>
     </entry><entry>
         <title type="html"><![CDATA[Nodejs in production]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/nodejs-in-production"/>
         <published>2014-09-24T00:00:00+08:00</published>
         <updated>2014-10-26T17:29:41+08:00</updated>
         <id>http://tinple.io/tech/nodejs-in-production</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/nodejs-in-production"/>
-        <published>2014-09-24T00:00:00+08:00</published>
-        <updated>2014-10-26T17:29:41+08:00</updated>
-        <id>http://tinple.me/tech/nodejs-in-production</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <p>Last two days, I deploy a <code>nodejs</code> production environment on a vps.
 The process is hard but fun. Hence, I post this essay to note.
 My project is based on <a href="http://koajs.com">koa</a>, using 
@@ -1062,19 +908,11 @@ welcome to point it:D</p>
     </entry><entry>
         <title type="html"><![CDATA[callbacks with for loop]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/callbacks-with-for-loop"/>
         <published>2014-08-13T00:00:00+08:00</published>
         <updated>2014-10-24T12:35:29+08:00</updated>
         <id>http://tinple.io/tech/callbacks-with-for-loop</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/callbacks-with-for-loop"/>
-        <published>2014-08-13T00:00:00+08:00</published>
-        <updated>2014-10-24T12:35:29+08:00</updated>
-        <id>http://tinple.me/tech/callbacks-with-for-loop</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <p>When I play some ctf games, usually I need to bruteforcing some interface like post a certain length of string which contains numbers and letters. </p>
 <p>Let&#39;s say we have a url <code>www.example.com/hack</code>, we need to get the information after post correct token. We already know the token&#39;s length is three, containing numbers.</p>
 <p>Now we may write payload like this.</p>
@@ -1146,19 +984,11 @@ bruteforcing(000);</code></pre>
     </entry><entry>
         <title type="html"><![CDATA[Harmony generator , for-of and co]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/harmony-generator-and-co"/>
         <published>2014-05-15T00:00:00+08:00</published>
         <updated>2014-09-24T15:15:12+08:00</updated>
         <id>http://tinple.io/tech/harmony-generator-and-co</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/harmony-generator-and-co"/>
-        <published>2014-05-15T00:00:00+08:00</published>
-        <updated>2014-09-24T15:15:12+08:00</updated>
-        <id>http://tinple.me/tech/harmony-generator-and-co</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <h2 id="toc_0"><em>Begin</em></h2>
 <p>We talk about the new stuff with <code>harmony</code>, so make sure your <code>harmony mode</code> is enabled. With Chrome, go <code>chrome://flags/</code>, search <code>harmony</code> and enable it. With node, you need <code>0.11.*</code> version, and execute <code>node --harmony</code>. For me, I use <a href="https://github.com/visionmedia/n">n</a> to manage my node version, which is powered by TJ.</p>
 
@@ -1288,19 +1118,11 @@ bruteforcing(000);</code></pre>
     </entry><entry>
         <title type="html"><![CDATA[What&#39;s Promises?]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/what-is-promises"/>
         <published>2014-04-18T00:00:00+08:00</published>
         <updated>2014-09-24T15:16:38+08:00</updated>
         <id>http://tinple.io/tech/what-is-promises</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/what-is-promises"/>
-        <published>2014-04-18T00:00:00+08:00</published>
-        <updated>2014-09-24T15:16:38+08:00</updated>
-        <id>http://tinple.me/tech/what-is-promises</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <h2 id="toc_0"><em>Asynchronous &amp;&amp; Callback</em></h2>
 <p>When <code>Node</code> brings us an asynchronous world, our applications begin to become non-blocking and much faster.
 However, it also makes our code complex and unpredictable.
@@ -1423,19 +1245,11 @@ may make our Promise more concise. I just refer it simply.</p>
     </entry><entry>
         <title type="html"><![CDATA[Learn about unicode]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/learn-about-unicode"/>
         <published>2014-03-18T00:00:00+08:00</published>
         <updated>2014-09-24T14:50:58+08:00</updated>
         <id>http://tinple.io/tech/learn-about-unicode</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/learn-about-unicode"/>
-        <published>2014-03-18T00:00:00+08:00</published>
-        <updated>2014-09-24T14:50:58+08:00</updated>
-        <id>http://tinple.me/tech/learn-about-unicode</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <p>Actually, I have been confused about <code>character encoding</code> for a long time, and really can not figure out the relation with <code>Unicode</code> and <code>UTF-8</code>. And after my whole afternoon effort, googling many information and reading lots of posts, finally I get a preliminary understanding about it. I will try my best to explain it distinctly.</p>
 
 <h2 id="toc_0">Before Unicode</h2>
@@ -1491,19 +1305,11 @@ hexadecimal         | binary
     </entry><entry>
         <title type="html"><![CDATA[Bitwise Operators in javascript]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/bitwise-operators-in-javascript"/>
         <published>2014-02-25T00:00:00+08:00</published>
         <updated>2014-09-24T15:15:32+08:00</updated>
         <id>http://tinple.io/tech/bitwise-operators-in-javascript</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/bitwise-operators-in-javascript"/>
-        <published>2014-02-25T00:00:00+08:00</published>
-        <updated>2014-09-24T15:15:32+08:00</updated>
-        <id>http://tinple.me/tech/bitwise-operators-in-javascript</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <p>Last two days, I touched frequently with <strong>Bitwise Operators</strong> in <code>Javascript</code>, but I did not figure out what the exactly it is and got 
 confused. Hence, after google many related resources, this post here to
 try to introduce the Bitwise Operators and some efficient skills using in codes. </p>
@@ -1594,19 +1400,11 @@ And the datas in this post are tested in <a href="https://code.google.com/p/v8/"
     </entry><entry>
         <title type="html"><![CDATA[Using jade template engine]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/using-jade-template-engine"/>
         <published>2014-01-22T00:00:00+08:00</published>
         <updated>2014-09-25T18:24:58+08:00</updated>
         <id>http://tinple.io/tech/using-jade-template-engine</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/using-jade-template-engine"/>
-        <published>2014-01-22T00:00:00+08:00</published>
-        <updated>2014-09-25T18:24:58+08:00</updated>
-        <id>http://tinple.me/tech/using-jade-template-engine</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <p>These days I touched a node template engine <code>jade</code>. I loved it at once because its <code>zencoding</code> grammar really attracts me.</p>
 <p>Unlike other template engine such as <code>EJS</code> and <code>handlebars</code>, <code>jade</code> has its own elegancy and lots of features. Firstly, you can install it via npm: <code>npm install jade -g</code> or <code>npm install jade</code>. And if you install it globally, try to detect whether the <code>$NODE_PATH</code> includes the location that npm installs globally or not.</p>
 
@@ -1756,19 +1554,11 @@ html(lang=&quot;en&quot;)
     </entry><entry>
         <title type="html"><![CDATA[Monthly review for Nov.2013]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/life/monthly-review-for-nov-2013"/>
         <published>2013-11-30T00:00:00+08:00</published>
         <updated>2014-09-24T14:46:00+08:00</updated>
         <id>http://tinple.io/life/monthly-review-for-nov-2013</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/life/monthly-review-for-nov-2013"/>
-        <published>2013-11-30T00:00:00+08:00</published>
-        <updated>2014-09-24T14:46:00+08:00</updated>
-        <id>http://tinple.me/life/monthly-review-for-nov-2013</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <h2 id="toc_0">Tech:</h2>
 
 <ol>
@@ -1800,19 +1590,11 @@ html(lang=&quot;en&quot;)
     </entry><entry>
         <title type="html"><![CDATA[Salt Cryptography]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/salt"/>
         <published>2013-11-14T00:00:00+08:00</published>
         <updated>2014-09-24T14:51:10+08:00</updated>
         <id>http://tinple.io/tech/salt</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/salt"/>
-        <published>2013-11-14T00:00:00+08:00</published>
-        <updated>2014-09-24T14:51:10+08:00</updated>
-        <id>http://tinple.me/tech/salt</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <p>Last three months ago, I made a single page web application to let users register their own team. As the password usually users fill in will make some inconvenience in our
 cyber ​​security competition, I took a service to send a email which including an automatic generation password. And what I do is adding salt in password to confirm the security.</p>
 <p>So what&#39;s called salt?</p>
@@ -1872,19 +1654,11 @@ echo 'Outping:' . md5(sha1($pass.$salt));</code></pre>
     </entry><entry>
         <title type="html"><![CDATA[HangZhou Marathon]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/life/memory-marathon"/>
         <published>2013-11-03T00:00:00+08:00</published>
         <updated>2014-09-24T14:44:17+08:00</updated>
         <id>http://tinple.io/life/memory-marathon</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/life/memory-marathon"/>
-        <published>2013-11-03T00:00:00+08:00</published>
-        <updated>2014-09-24T14:44:17+08:00</updated>
-        <id>http://tinple.me/life/memory-marathon</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <p>第一次参加马拉松，12.8公里，在杭州。</p>
 <p>你一直在跑，但总是有人在你前面，有人在你后面。只不过当你停下来的时候，你前面的人就多了，哪怕你只是放缓脚步。马拉松如此，很多时候，生活也是如此。</p>
 <p>谨以此纪念，明年再来。</p>
@@ -1893,19 +1667,11 @@ echo 'Outping:' . md5(sha1($pass.$salt));</code></pre>
     </entry><entry>
         <title type="html"><![CDATA[ISA Training Part Two]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/tech/isa-training-2"/>
         <published>2013-11-02T00:00:00+08:00</published>
         <updated>2014-09-24T14:50:47+08:00</updated>
         <id>http://tinple.io/tech/isa-training-2</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/tech/isa-training-2"/>
-        <published>2013-11-02T00:00:00+08:00</published>
-        <updated>2014-09-24T14:50:47+08:00</updated>
-        <id>http://tinple.me/tech/isa-training-2</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <p>Everytime when you open your own browser, you just step into a part of <strong>Web</strong> field.And just have a glance of those web pages on the browser.</p>
 
 <ul>
@@ -1947,19 +1713,11 @@ tell you more after.Do not be shy!</p>
     </entry><entry>
         <title type="html"><![CDATA[Monthly review for Oct.2013]]></title>
         <author><name>Tinple</name></author>
-<<<<<<< HEAD
         <link href="http://tinple.io/life/monthly-review-for-oct-2013"/>
         <published>2013-11-01T00:00:00+08:00</published>
         <updated>2014-09-24T14:49:21+08:00</updated>
         <id>http://tinple.io/life/monthly-review-for-oct-2013</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-=======
-        <link href="http://tinple.me/life/monthly-review-for-oct-2013"/>
-        <published>2013-11-01T00:00:00+08:00</published>
-        <updated>2014-09-24T14:49:21+08:00</updated>
-        <id>http://tinple.me/life/monthly-review-for-oct-2013</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
->>>>>>> eb511ed2a02d2b64d5daace778d4e5854329cbca
             <![CDATA[ <h2 id="toc_0">Tech</h2>
 <p>1.国庆回来后月初忙着报名平台的上线，忙乱中各种页面UI优化，功能测试，注入测试，最后还是赶在10号上线了。</p>
 <p>2.也是管中窥豹了一番web安全，学习了数据库权限(Privilege)的精确设置，数据的各种过滤，服务端文件的权限设置。</p>
