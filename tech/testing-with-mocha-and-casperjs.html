@@ -1,0 +1,284 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Testing with mocha and casperjs - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=f93f9" />
+    <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/testing-with-mocha-and-casperjs" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Testing with mocha and casperjs</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2014-10-22T00:00:00+08:00" pubdate>
+            <a href="/2014/">2014-10-22</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <p>When talking about <code>Unit Test</code> in <code>node</code>, <code>mocha</code> flashes first in my brain.</p>
+
+<h2 id="toc_0">mocha &amp;&amp; should.js</h2>
+
+<blockquote>
+<p>Mocha is a feature-rich JavaScript test framework running on node.js and the browser.</p>
+</blockquote>
+<p>I used to use <code>mocha</code> for the elegant way it does async along with familiar BDD style syntax.
+And I worked <code>mocha</code> with <code>should.js</code>, which is a human assertion library.</p>
+
+<h3 id="toc_1">Install</h3>
+
+<pre><code>$ npm install mocha -g 
+$ npm install shou --save-dev</code></pre>
+
+<h3 id="toc_2">First Step</h3>
+<p>Let&#39;s say we have two api to test, and the api script is saved as <code>api.js</code>.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Add_sync</span> <span class="o">=</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">Add_sync</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{};</span>
+<span class="kd">var</span> <span class="nx">Add_async</span> <span class="o">=</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">Add_async</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{};</span>
+<span class="nx">Add_sync</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span> <span class="p">};</span>
+<span class="nx">Add_async</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>Now we can check these two api&#39;s behavior right or not, save it as <code>test/test.js</code>.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">should</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;should&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">add_sync</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../api.js&#39;</span><span class="p">).</span><span class="nx">Add_sync</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">add_async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../api.js&#39;</span><span class="p">).</span><span class="nx">Add_async</span><span class="p">;</span>
+<span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;test api&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;sync add api&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return 3&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">adder</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">add_sync</span><span class="p">();</span>
+            <span class="nx">adder</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">).</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+
+    <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;async add api&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should callback with 3&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">adder</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">add_async</span><span class="p">();</span>
+            <span class="nx">adder</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+                <span class="nx">done</span><span class="p">();</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<p>Pay attention to testing asynchronous code that you should add a callback(usually named done)
+to it(). <code>Mocha</code> will know that it should wait for completion.</p>
+<p>Besides, <code>Mocha</code> supports all hooks that is <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, <code>afterEach()</code>.
+We use within <code>describe()</code> at any nesting level, and use outside <code>describe()</code> for global scope.</p>
+
+<h3 id="toc_3">Running the tests</h3>
+
+<blockquote>
+<p>By default mocha(1) will use the pattern ./test/*.js, so it&#39;s usually a good place to put your tests.</p>
+</blockquote>
+<p>However, I prefer to set up a <code>Makefile</code> in the root of the project.</p>
+
+<pre><code>test:
+    @./node_modules/.bin/mocha \
+        --require should \
+        --reporter dot \
+        --bail \
+
+.PHONY: test</code></pre>
+<p>Then we can just run our tests with <code>$ make test</code>. There are tons of options, visit
+<a href="http://mochajs.github.io/mocha/">mocha</a> for more information.</p>
+<p>Well, when refering to frontend tests, we focus more on <code>Functional Tests</code>. Sometimes we 
+may just <code>refresh-click-click-click</code> and the testing is done. But how to do with some 
+hudge <code>javascript</code> code on user interface or hundreds of refreshes and clicks? Hence, 
+we still need something to automate test.</p>
+
+<h2 id="toc_4">casper.js &amp;&amp; phantomjs</h2>
+<p>Even though <code>mocha</code> also support browser, <a href="http://casperjs.org/">CasperJS</a> is my favorite.</p>
+
+<blockquote>
+<p>CasperJS, a toolkit on top of PhantomJS.</p>
+</blockquote>
+<p>So let&#39;s begin with <a href="http://phantomjs.org/">PhantomJS</a>.</p>
+
+<blockquote>
+<p>PhantomJS is a headless WebKit with Javascript API.</p>
+</blockquote>
+<p>So what&#39;s headless? You most likely know what a browser is, now take away the GUI, that&#39;s
+called a headless browser. You can think of it as a programmable browser for the terminal.
+It&#39;s really cool!</p>
+<p>And <code>PhantomJS</code> has fast and native support for various web standards like DOM handling,
+CSS selectors, JSON, Canvas and SVG. For me, I code with <code>PhantomJS</code> just like code with <code>node</code>!</p>
+<p>However, <code>PhantomJS</code> itself is not a test framework, it is only used to launch the tests
+via a suitable test runner. Hence, <code>CasperJS</code> comes.</p>
+<p><code>CasperJS</code> is an open source navigation scripting and testing utility based on <code>PhantomJS</code>,
+also support <code>SlimerJS(Gecko)</code>. So <code>PhantomJS</code> provides the headless browser capability,
+and <code>CasperJS</code> fills in the rest: it runs on top of Phantom with built in testing functionality
+allows for navigation scripting. Let&#39;s begin our frontend test!</p>
+
+<h3 id="toc_5">Install on OSX</h3>
+
+<pre><code>$ brew install phantomjs
+$ brew install casperjs --devel</code></pre>
+<p>As <code>CasperJS</code> 1.1 branch is now pretty stable and supports testing utility, I choose this
+version to start.</p>
+
+<h3 id="toc_6">Casper Test API</h3>
+<p>Now let&#39;s open up the <code>/go/programmer</code> subnode on <a href="http://www.v2ex.com/">v2ex</a>, click the
+first topic link and confirm that we do the right operation. </p>
+<div class="highlight"><pre><span class="nx">casper</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">viewportSize</span> <span class="o">=</span> <span class="p">{</span><span class="nx">width</span><span class="o">:</span> <span class="mi">1024</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">768</span><span class="p">};</span>
+<span class="kd">var</span> <span class="nx">testCount</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="nx">casper</span><span class="p">.</span><span class="nx">test</span><span class="p">.</span><span class="nx">begin</span><span class="p">(</span><span class="s2">&quot;Testing V2EX&quot;</span><span class="p">,</span> <span class="nx">testCount</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">suite</span> <span class="p">(</span><span class="nx">test</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">casper</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="s2">&quot;http://www.v2ex.com/go/programmer&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">test</span><span class="p">.</span><span class="nx">assertTitleMatch</span><span class="p">(</span><span class="sr">/程序员/</span><span class="p">,</span> <span class="s2">&quot;Title is what we&#39;d expect&quot;</span><span class="p">);</span>
+        <span class="nx">casper</span><span class="p">.</span><span class="nx">click</span><span class="p">(</span><span class="s2">&quot;a[href*=&#39;/t/&#39;]&quot;</span><span class="p">);</span>
+        <span class="nx">casper</span><span class="p">.</span><span class="nx">waitForUrl</span><span class="p">(</span><span class="sr">/\/t\/*/</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">test</span><span class="p">.</span><span class="nx">assertExists</span><span class="p">(</span><span class="s2">&quot;.topic_content&quot;</span><span class="p">,</span> <span class="s2">&quot;Find the content&quot;</span><span class="p">);</span>
+            <span class="nx">casper</span><span class="p">.</span><span class="nx">capture</span><span class="p">(</span><span class="s2">&quot;v2ex.png&quot;</span><span class="p">);</span>  
+        <span class="p">});</span>
+    <span class="p">}).</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">test</span><span class="p">.</span><span class="nx">done</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<p>Here, after we click the first topic link, we wait for the url to change and the content
+of the first topic page to load. And capture the whole page and saved as <code>v2ex.png</code>.
+Actually, you can also wrap your follow-up codes in a <code>then()</code> callback in order to see 
+the changes from your click event.</p>
+<div class="highlight"><pre><span class="nx">casper</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">test</span><span class="p">.</span><span class="nx">assertExists</span><span class="p">(</span><span class="s2">&quot;.topic_content&quot;</span><span class="p">,</span> <span class="s2">&quot;Find the content&quot;</span><span class="p">);</span>
+    <span class="nx">casper</span><span class="p">.</span><span class="nx">capture</span><span class="p">(</span><span class="s2">&quot;v2ex2.png&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<p>The <code>then()</code> callback staff is an implementation of the Promise Pattern. Hence, after
+calling other casper api like <code>fill()</code> and <code>sendKeys()</code>, you should wrap your next interaction
+in <code>casper.then()</code>. </p>
+<p>The <code>fill()</code> api is a convenient way to fill out and submit the form on web page.</p>
+<div class="highlight"><pre><span class="nx">casper</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">viewportSize</span> <span class="o">=</span> <span class="p">{</span><span class="nx">width</span><span class="o">:</span> <span class="mi">1024</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">768</span><span class="p">};</span>
+<span class="kd">var</span> <span class="nx">testCount</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="nx">casper</span><span class="p">.</span><span class="nx">test</span><span class="p">.</span><span class="nx">begin</span><span class="p">(</span><span class="s2">&quot;Searching V2EX&quot;</span><span class="p">,</span> <span class="nx">testCount</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">suite</span><span class="p">(</span><span class="nx">test</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">casper</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="s2">&quot;http://www.v2ex.com/&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">casper</span><span class="p">.</span><span class="nx">fill</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s2">&quot;q&quot;</span><span class="o">:</span> <span class="s2">&quot;casper&quot;</span>
+        <span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
+        <span class="nx">casper</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">evaluate</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="nx">dispatch</span><span class="p">();</span> <span class="c1">// manually submit the form</span>
+            <span class="p">});</span>
+            <span class="nx">casper</span><span class="p">.</span><span class="nx">waitForPopup</span><span class="p">(</span><span class="sr">/google\.com/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">test</span><span class="p">.</span><span class="nx">assertEquals</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">popups</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">})</span>
+            <span class="nx">casper</span><span class="p">.</span><span class="nx">withPopup</span><span class="p">(</span><span class="sr">/google\.com/</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">capture</span><span class="p">(</span><span class="s2">&quot;search.png&quot;</span><span class="p">);</span>
+                <span class="nx">test</span><span class="p">.</span><span class="nx">assertTitleMatch</span><span class="p">(</span><span class="sr">/Google/</span><span class="p">,</span> <span class="s2">&quot;Title is right!&quot;</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">evaluate</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="c1">// we are in DOM!</span>
+                    <span class="k">return</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;input[name=&quot;q&quot;]&#39;</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
+                <span class="p">});</span>
+                <span class="nx">test</span><span class="p">.</span><span class="nx">assertEquals</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="s1">&#39;site:v2ex.com/t casper&#39;</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">}).</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">test</span><span class="p">.</span><span class="nx">done</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<p>Here, as <code>CasperJS</code> can&#39;t submit the search form on <code>v2ex</code>, we should manually submit
+the form by call <code>dispatch()</code> function after fill the search input. We use <code>evaluate()</code>
+to run code in the current page DOM context(we are in DOM!). Then <code>v2ex</code> will popup a 
+google hacking result for your search keywords, like <code>site:v2ex.com/t casper</code> here. 
+So there we need <code>waitForPopup</code> and <code>withPopup</code>.</p>
+<p>Actually, <code>CasperJS</code> has a fucking awesome <a href="http://docs.casperjs.org/en/latest/">doc</a>
+that I strongly recommend you to read about it. You may need it when you stuck.</p>
+
+<h2 id="toc_7">Summary</h2>
+<p><code>Unit tests</code> are written from the developer’s perspective, and typically target a method 
+or a class. While <code>Functional tests</code> are written from the user’s perspective, and usually 
+test the interaction between multiple building blocks of the application. Your application
+would be better with both a comprehensive suite of <code>Unit tests</code> as well as a bunch of 
+<code>Functional tests</code>. </p>
+
+<blockquote>
+<p>Unit testing makes sure you are using quality ingredients. Functional testing makes sure your application doesn&#39;t taste like crap. </p>
+</blockquote>
+
+<h2 id="toc_8">End</h2>
+<p>If you have something to correct, welcome to point it out:D</p>
+
+<h3 id="toc_9">References:</h3>
+
+<ul>
+<li><a href="https://brianstoner.com/blog/testing-in-nodejs-with-mocha/">testing-in-nodejs-with-mocha</a></li>
+<li><a href="http://www.helpscout.net/blog/functional-testing-casperjs/">functional-testing-casperjs</a></li>
+</ul>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Testing with mocha and casperjs';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://twitter.com/htinple">Twitter</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Maintainable Javascript Part One - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=f93f9" />
+    <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/maintainable-javascript-1" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Maintainable Javascript Part One</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2013-10-28T00:00:00+08:00" pubdate>
+            <a href="/2013/">2013-10-28</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <p>Last two days I just have finished the book 《Maintainable Javascript》.</p>
+
+<blockquote>
+<p>When you come to work, you&#39;re not writing code for you, you&#39;re
+writing code for those who come after you.</p>
+</blockquote>
+<p>I really like the words above the author Nicholas C. Zakas said, and this book really
+improves someone who may not work in professional team like me, or someone who wants to organize a team.The
+following is just my note that I regard it useful, but it may not really meets you.</p>
+
+<h2 id="toc_0">Part one ：Style Guidelines</h2>
+
+<blockquote>
+<p>Programs are meant to be read by humans and only incidentally for computers to execute.</p>
+</blockquote>
+
+<h4 id="toc_1">null</h4>
+<p><strong><code>null</code></strong> should be used in just a few cases:</p>
+
+<ol>
+<li>To initialize a variable that may later be assigned an object value</li>
+<li>To compare against an initialized variable that may or may not have an object value.</li>
+<li>To pass into a function where an object is expected</li>
+<li>To return from a function where an object is expected</li>
+</ol>
+<p>And the best way to think about null is as a placeholder for an object. </p>
+
+<h4 id="toc_2">for-in loop</h4>
+<p>As <code>for-in</code> loop returns not only instance properties of an object but also all
+properties it inherits through the prototype.Hence, it is best to filter the <code>for-in</code> loop to only instance properties by using <code>hasOwnProperty()</code>.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">prop</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="nx">prop</span> <span class="k">in</span> <span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">object</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Property name is&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Property value is&quot;</span> <span class="o">+</span> <span class="nx">object</span><span class="p">[</span><span class="nx">prop</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>And remember do not use <code>for-in</code> to iterate over members of an array.</p>
+
+<h4 id="toc_3">Equality</h4>
+<p>One of the main areas in which <strong>type coercion</strong> occurs is with the use of equality operators, <code>==</code> and <code>!=</code>. </p>
+<p>And <strong>other points</strong> in this part I just easily skip.</p>
+
+<h2 id="toc_4">Part two ：Programming Practices</h2>
+
+<h3 id="toc_5">Loose Coupling of UI Layers</h3>
+<p>Loose coupling is achieved when you are able to make changes to a single component without making changes to other components. And it is achieved by limiting each component&#39;s knowledge of the larger system.</p>
+
+<ul>
+<li>Keep JavaScript Out of CSS (css expression denied)</li>
+<li>Keep CSS Out of JavaScript</li>
+<li><strong>Keep JavaScript Out of HTML</strong></li>
+</ul>
+<div class="highlight"><pre>// ugly code
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;doSomething()&quot;</span> <span class="na">id=</span><span class="s">&quot;action-btn&quot;</span><span class="nt">&gt;</span>Click Me<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="highlight"><pre><span class="c1">// use JavaScript methods for adding event handlers</span>
+<span class="kd">function</span> <span class="nx">addListener</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">target</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">target</span><span class="p">.</span><span class="nx">attachEvent</span><span class="p">(</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">handler</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">target</span><span class="p">[</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="nx">handler</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">btn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;action-btn&quot;</span><span class="p">);</span>
+<span class="nx">addListener</span><span class="p">(</span><span class="nx">btn</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">doSomething</span><span class="p">);</span>
+</pre></div>
+
+<ul>
+<li><strong>Keep HTML Out of JavaScript</strong></li>
+</ul>
+<div class="highlight"><pre><span class="c1">// Bad </span>
+<span class="kd">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;my-div&quot;</span><span class="p">);</span>
+<span class="nx">div</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&lt;h3&gt;Error&lt;/h3&gt;&lt;p&gt;Invalid e-mail address.&lt;/p&gt;&quot;</span><span class="p">;</span>
+</pre></div>
+<p>Embedding HTML strings inside your JavaScript is a bad practice for a number of
+reasons.And there are several ways to accomplish this in a loosely coupled manner.</p>
+
+<h4 id="toc_6">1.Load from the Server</h4>
+<p>keep the templates remote and use an XMLHttpRequest object to retrieve
+additional markup, it is much more convenient for single-page applications than 
+multiple-page applications. But when using this method, you should pay attention 
+to <code>XSS</code> attack, and it requires lots of transcode and decode strategy between client and server to defense.</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">loadDialog</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">oncomplete</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+    <span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;/js/dialog/&quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+
+    <span class="nx">xhr</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="kd">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;dlg-holder&quot;</span><span class="p">);</span>
+            <span class="nx">div</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
+            <span class="nx">oncomplete</span><span class="p">();</span>
+
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c1">// wrong handler</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4 id="toc_7">2.Simple Client-Side Templates</h4>
+<p>Client-side Templates are markup pieces with slots that must be filled by JavaScript in order to be complete.For example:</p>
+<div class="highlight"><pre><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;%s&quot;</span><span class="nt">&gt;</span>%s<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</pre></div>
+<p>And you can make templates accessible to Javascript by embedding them directly
+in the HTML page.Maybe a function will make it.</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">sprintf</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">text</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/%s/g</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="o">?</span> <span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="c1">// usage</span>
+<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">sprintf</span><span class="p">(</span><span class="nx">templateText</span><span class="p">,</span> <span class="s2">&quot;/item/4&quot;</span><span class="p">,</span> <span class="s2">&quot;Fourth item&quot;</span><span class="p">);</span>
+</pre></div>
+<p>It is ok to include the templates as an comment or embed templates into an HTML
+page by using a <code>&lt;script&gt;</code> element with a custom <code>type</code> property.</p>
+<div class="highlight"><pre>// comment
+<span class="nt">&lt;ul</span> <span class="na">id=</span><span class="s">&quot;mylist&quot;</span><span class="nt">&gt;</span><span class="c">&lt;!--&lt;li id=&quot;item%s&quot;&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;--&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+</pre></div>
+
+<pre><code>/* script element, remember to strip any leading white space 
+that may be in the template, because template text is  
+on the line after the opening script tag */
+&lt;script type=&quot;text/x-my-template&quot; id=&quot;list-item&quot;&gt;
+    &lt;li&gt;&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;&lt;/li&gt;
+&lt;/script&gt;</code></pre>
+
+<h4 id="toc_8">3.Complex Client-Side Templates</h4>
+<p>Complex Client-Side Templates may do some escaping, well, you can use some robust templates like <a href="http://handlebarsjs.com/">Handlebars</a>, which is a complete client-side templating system designed to work with JavaScript in the browser.</p>
+<p><strong>Maintainable Javascript Part One over</strong>.</p>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Maintainable Javascript Part One';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://twitter.com/htinple">Twitter</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>

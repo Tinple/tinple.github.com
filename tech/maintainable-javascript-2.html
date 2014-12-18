@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Maintainable Javascript Part Two - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=f93f9" />
+    <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/maintainable-javascript-2" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Maintainable Javascript Part Two</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2013-10-30T00:00:00+08:00" pubdate>
+            <a href="/2013/">2013-10-30</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <p><strong>Maintainable Javascript continue</strong>, you can read <a href="http://tinple.me/tech/maintainable-javascript-1">Part One</a> to review.</p>
+
+<h3 id="toc_0">Avoid Globals</h3>
+<p>Global variables are really special in <code>Javascript</code>, see examples below.</p>
+
+<script>
+// A "mistake" semicolon creates a global variable
+function doSomething() {
+    var count = 10; 
+        title = "Maintainable Javascript"; 
+}
+
+// This global variable affects window.name
+function doAnotherThing() {
+    var count = 10;
+        name = "Tinple"; 
+}
+</script>
+<div class="highlight"><pre><span class="c1">// A &quot;mistake&quot; semicolon creates a global variable</span>
+<span class="kd">function</span> <span class="nx">doSomething</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> 
+        <span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Maintainable Javascript&quot;</span><span class="p">;</span> 
+<span class="p">}</span>
+
+<span class="c1">// This global variable affects window.name</span>
+<span class="kd">function</span> <span class="nx">doAnotherThing</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Tinple&quot;</span><span class="p">;</span> 
+<span class="p">}</span>
+</pre></div>
+<p>And the author recommends that anything that can be defined within the function should be written as such; any data that comes from outside the function should be passed in as an argument. Besides, it is better to use <strong>The One-Global Approach</strong>, like some popular <code>JavaScript libraries</code>.</p>
+<div class="highlight"><pre><span class="c1">// only one gloabal object</span>
+<span class="kd">var</span> <span class="nx">MaintainableJS</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">page</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">turnPage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">direction</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">page</span> <span class="o">+=</span> <span class="nx">direction</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Chapter1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;part-one&quot;</span><span class="p">);</span>
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Chapter2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;part-two&quot;</span><span class="p">);</span>
+<span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Chapter3</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MaintainableJS</span><span class="p">.</span><span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;part-three&quot;</span><span class="p">);</span>
+</pre></div>
+
+<h3 id="toc_1">Namespace</h3>
+<p>And you can easily create your own namespaces in <code>JavaScript</code> with objects.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Books</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="c1">// namespace for this book</span>
+<span class="nx">Books</span><span class="p">.</span><span class="nx">MaintainableJavascript</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="c1">//namespace for another book</span>
+<span class="nx">Books</span><span class="p">.</span><span class="nx">HighPerformanceJavascript</span> <span class="o">=</span> <span class="p">{};</span>
+</pre></div>
+<p>There are also times when each file is simply adding to a namespace.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">YourGlobal</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">namespace</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ns</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">parts</span> <span class="o">=</span> <span class="nx">ns</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">),</span>
+            <span class="nx">object</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span>
+            <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">object</span><span class="p">[</span><span class="nx">parts</span><span class="p">[</span><span class="nx">i</span><span class="p">]])</span> <span class="p">{</span>
+                <span class="nx">object</span><span class="p">[</span><span class="nx">parts</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{};</span>
+            <span class="p">}</span>
+            <span class="nx">object</span> <span class="o">=</span> <span class="nx">object</span><span class="p">[</span><span class="nx">parts</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">object</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/*</span>
+<span class="cm">* Creates both YourGlobal.Books and YourGlobal.Books.MaintainableJavaScript.</span>
+<span class="cm">* Neither exists before hand, so each is created from scratch.</span>
+<span class="cm">*/</span>
+<span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;Books.MaintainableJavaScript&quot;</span><span class="p">);</span>
+
+<span class="c1">// you can now start using the namespace</span>
+<span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">Books</span><span class="p">.</span><span class="nx">MaintainableJavaScript</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="s2">&quot;Nicholas C. Zakas&quot;</span><span class="p">;</span>
+
+<span class="cm">/*</span>
+<span class="cm">* Leaves YourGlobal.Books alone and adds HighPerformanceJavaScript to it.</span>
+<span class="cm">* This leaves YourGlobal.Books.MaintainableJavaScript intact.</span>
+<span class="cm">*/</span>
+<span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;Books.HighPerformanceJavaScript&quot;</span><span class="p">);</span>
+
+<span class="c1">// still a valid reference</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">Books</span><span class="p">.</span><span class="nx">MaintainableJavaScript</span><span class="p">.</span><span class="nx">author</span><span class="p">);</span>
+
+<span class="c1">// You can also start adding new properties right off the method call</span>
+<span class="nx">YourGlobal</span><span class="p">.</span><span class="nx">namespace</span><span class="p">(</span><span class="s2">&quot;Books&quot;</span><span class="p">).</span><span class="nx">ANewBook</span> <span class="o">=</span> <span class="p">{};</span>
+</pre></div>
+
+<h3 id="toc_2">Modules</h3>
+<p>Sorry, but I will try to understand it entirely later.You can read some documents
+at will.</p>
+
+<blockquote>
+<p><a href="http://seajs.org/docs/">Sea.js</a></p>
+<p><a href="http://requirejs.org/">Require.js</a></p>
+</blockquote>
+
+<h3 id="toc_3">Event Handling</h3>
+<p>Event handling is an important part of any JavaScript application. All JavaScript is tied to the UI through events.And the following rules may improve your code.</p>
+<div class="highlight"><pre><span class="c1">// Rule #1</span>
+<span class="c1">// It is better to separate application logic</span>
+<span class="kd">var</span> <span class="nx">MyApplication</span> <span class="o">=</span> <span class="p">{</span>
+
+    <span class="nx">handleClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">showPopup</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="nx">showPopup</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">popup</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;popup&quot;</span><span class="p">);</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">clientX</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">clientY</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;reveal&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">addListener</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">MyApplication</span><span class="p">.</span><span class="nx">handleClick</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// Rule #2</span>
+<span class="c1">// Do not Pass the Event Object Around</span>
+<span class="kd">var</span> <span class="nx">MyApplication</span> <span class="o">=</span> <span class="p">{</span>
+
+    <span class="nx">handleClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">// assume DOM Level 2 events support</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+
+        <span class="c1">// pass to application logic</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">showPopup</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">clientX</span><span class="p">,</span> <span class="nx">event</span><span class="p">.</span><span class="nx">clientY</span><span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="nx">showPopup</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">popup</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;popup&quot;</span><span class="p">);</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">y</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span>
+        <span class="nx">popup</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s2">&quot;reveal&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">addListener</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">MyApplication</span><span class="p">.</span><span class="nx">handleClick</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3 id="toc_4">Avoid Null Comparisons</h3>
+
+<ul>
+<li>Use <code>typeof</code> operator to detect <strong>Primitive Values (string, number, boolean, undefined)</strong></li>
+<li>Use <code>instanceof</code> operator to detect <strong>Reference Values (Obejct, Array, Date, Error, RegExp)</strong></li>
+<li>Use <code>typeof</code> operator to detect <strong>Functions (also works across frames
+but not IE8)</strong></li>
+<li>Use <code>in</code> operator to detect <strong>the presence of a property (hasOwnProperty() to make sure of an instance property)</strong></li>
+<li>Detect <strong>Array</strong></li>
+</ul>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">isArray</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">===</span> <span class="s2">&quot;[object Array]&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p><strong>Maintainable Javascript Part Two over</strong>.</p>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Maintainable Javascript Part Two';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://twitter.com/htinple">Twitter</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>

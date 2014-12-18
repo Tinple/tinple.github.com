@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Computer Network and Communication - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=f93f9" />
+    <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/computer-network-and-communication-1" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Computer Network and Communication</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2014-10-18T00:00:00+08:00" pubdate>
+            <a href="/2014/">2014-10-18</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <h1 id="toc_0">Computer Networks</h1>
+
+<h2 id="toc_1">Chapter 1 problems:</h2>
+
+<h3 id="toc_2">Question 1:</h3>
+<p>Imagine that you have trained your St. Bernard, Bernie, to carry a box of three 8mm tapes instead of a flask of brandy. (When your disk fills up, you consider that an emergency.) These tapes each contain 7 gigabytes. The dog can travel to your side, wherever you may be, at 18 km/hour. For what range of distances does Bernie have a higher data rate than a transmission line whose data rate (excluding overhead) is 150 Mbps?</p>
+
+<h3 id="toc_3">Answer:</h3>
+
+<pre><code>The dog can carry 3 * 7 = 21 gigabytes (168 gigabits)
+Speed = 18 km/hour = 0.005 km/sec
+Distance: x km
+Time: x / 0.005 = 200x sec
+Hence, 168 / 200x Gbps or 840 / x Mbps.
+For x &lt; 5.6 km, the dog has higher rate than the communication line.</code></pre>
+
+<h3 id="toc_4">Question 6:</h3>
+<p>A client-server system uses a satellite network, with the satellite at a height of 40,000 km. What is the best-case delay in response to a request?</p>
+
+<h3 id="toc_5">Answer:</h3>
+
+<pre><code>Request distance: 40000 * 2 = 80000 km
+Response distance: 40000 * 2 = 80000 km
+Total distance: 80000 + 80000 = 160000 km
+The speed of light: 300000 km/sec
+Delay: 160000 / 300000 = 533 msec</code></pre>
+
+<h3 id="toc_6">Question 10:</h3>
+<p>A disadvantage of a broadcast subnet is the capacity wasted when multiple hosts attempt to access the channel at the same time. As a simplistic example, suppose that time is divided into discrete slots, with each of the n hosts attempting to use the channel with probability p during each slot. What fraction of the slots are wasted due to collisions?</p>
+
+<h3 id="toc_7">Answer:</h3>
+
+<pre><code>There are two situations without collisions.
+1. Successful transmission. n * p * (1 - p) ^ (n - 1)
+2. All stations are idle. (1 - p) ^ n
+Hence, the fraction that are wasted is
+1 - n * p * (1 - p) ^ (n - 1) - (1 - p) ^ n</code></pre>
+
+<h3 id="toc_8">Question 20:</h3>
+<p>A system has an n-layer protocol hierarchy. Applications generate messages of length M bytes. At each of the layers, an h-byte header is added. What fraction of the network bandwidth is filled with headers?</p>
+
+<h3 id="toc_9">Answer:</h3>
+
+<pre><code>The total number of header bytes: n * h
+The total packet size: n * h + M
+Hence, the fraction of each packet used by protocol header is 
+[n * h / (M + n * h)]</code></pre>
+
+<h3 id="toc_10">Question 27:</h3>
+<p>How long was a bit on the original 802.3 standard in meters? Use a transmission speed of 10 Mbps and assume the propagation speed in coax is 2/3 the speed of light in vacuum.</p>
+
+<h3 id="toc_11">Answer:</h3>
+
+<pre><code>The speed of light in coax: 200000 km/sec (200 meter/μsec).
+At 10Mbps, it takes 0.1μsec to transmit a bit.
+0.1 * 200 = 20 meters.
+Hence, a bit is 20 meters long here.</code></pre>
+
+<h3 id="toc_12">Question 28:</h3>
+<p>An image is 1024 x 768 pixels with 3 bytes/pixel. Assume the image is uncompressed. How long does it take to transmit it over a 56-kbps modem channel? Over a 1-Mbps cable modem? Over a 10-Mbps Ethernet? Over 100-Mbps Ethernet?</p>
+
+<h3 id="toc_13">Answer:</h3>
+
+<pre><code>The image is 1024 * 768 * 3 = 2359296 bytes = 18874368 bits
+a. 56-kbps: 337.042 sec
+b. 1-Mbps: 18.874 sec
+c. 10-Mbps: 1.887 sec
+d. 100-Mbps: 0.189 sec</code></pre>
+
+<h1 id="toc_14">Data and computer communication</h1>
+
+<h2 id="toc_15">Chapter 2 problems:</h2>
+
+<h3 id="toc_16">Question 2:</h3>
+<p>a.The French and Chinese prime ministers need to come to an agreement by telephone, but neither speaks the other’s language. Further, neither has on hand a translator that can translate to the language of the other. However, both prime ministers have English translators on their staffs. Draw a diagram similar to Figure 2.12 to depict the situation, and describe the interaction and each level.</p>
+<p>b. Now suppose that the Chinese prime minister’s translator can translate only into Japanese and that the French prime minister has a German translator available. A translator between German and Japanese is available in Germany. Draw a new diagram that reflects this arrangement and describe the hypothetical phone conversation.</p>
+
+<h3 id="toc_17">Answer:</h3>
+<p>  a. Picture</p>
+
+<pre><code>----------------------           ----------------------
+|Chinese prime ministers|        |French prime ministers|
+-----------------------          ----------------------
+|  Chinese Translator   |        |   French Translator  |
+-----------------------          ----------------------
+|        Telephone      |        |     Telephone        |
+---------------------------------------------------------
+                       Telephone Line
+---------------------------------------------------------</code></pre>
+<p>b. Picture</p>
+
+<pre><code>----------------                           -----------------
+|China  ministers|                         |French ministers |
+ -----------------   -------------------    -----------------
+|China Translator|  |Germany Translator |  |French Translator|
+ -----------------   -------------------    -----------------
+|   Telephone    |  |Telephone|Telephone|  |     Telephone   |
+ ------------------------------------------------------------
+  Chinese and German                        French and German
+    Telephone Line                            Telephone Line
+  ------------------                        -----------------</code></pre>
+
+<h3 id="toc_18">Question 3:</h3>
+<p>List the major disadvantages with the layered approach to protocols.</p>
+
+<h3 id="toc_19">Answer:</h3>
+<p>The layered protocols may cause the processing and data overhead. And with so many layers,
+it takes a long time to develop and promulgate the standards.</p>
+
+<h3 id="toc_20">Question 4:</h3>
+<p>Two blue armies are each poised on opposite hills preparing to attack a single red army in the valley. The red army can defeat either of the blue armies separately but will fail to defeat both blue armies if they attack simultaneously. The blue armies communicate via an unreliable communications system (a foot soldier). The commander with one of the blue armies would like to attack at noon. His problem is this: If he sends a message to the other blue army, ordering the attack, he cannot be sure it will get through. He could ask for acknowledgment, but that might not get through. Is there a protocol that the two blue armies can use to avoid defeat? </p>
+
+<h3 id="toc_21">Answer:</h3>
+<p>No. There is no way to be assured that the last message gets through, except by acknowledging it. </p>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Computer Network and Communication';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://twitter.com/htinple">Twitter</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>

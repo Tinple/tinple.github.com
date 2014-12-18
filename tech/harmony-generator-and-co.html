@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Harmony generator , for-of and co - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=f93f9" />
+    <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/harmony-generator-and-co" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Harmony generator , for-of and co</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2014-05-15T00:00:00+08:00" pubdate>
+            <a href="/2014/">2014-05-15</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <h2 id="toc_0"><em>Begin</em></h2>
+<p>We talk about the new stuff with <code>harmony</code>, so make sure your <code>harmony mode</code> is enabled. With Chrome, go <code>chrome://flags/</code>, search <code>harmony</code> and enable it. With node, you need <code>0.11.*</code> version, and execute <code>node --harmony</code>. For me, I use <a href="https://github.com/visionmedia/n">n</a> to manage my node version, which is powered by TJ.</p>
+
+<h2 id="toc_1"><em>Generator</em></h2>
+<p>These days I was diving into <code>Harmony generator</code>, it is defined in <code>ES6</code>. So what calls generator? Let&#39;s begin with a simple code.</p>
+<div class="highlight"><pre><span class="kd">function</span><span class="o">*</span> <span class="nx">gen</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">yield</span> <span class="nx">index</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">gen</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">();</span>
+<span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">();</span> <span class="c1">// return {value: 0, done: false}</span>
+<span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">();</span> <span class="c1">// return {value: 1, done: false}</span>
+<span class="c1">//...</span>
+</pre></div>
+<p>As you can see, <code>function gen</code> has a method called <strong>next</strong>. This method returns an object with two properties: value and done. The value can be any value, and the done will be read as a boolean to distinguish whether the iterator has already to the end.</p>
+<p>A simple iterator implement:</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">gen</span><span class="p">(</span><span class="nx">array</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">next</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="nx">array</span><span class="p">.</span><span class="nx">length</span> <span class="o">?</span>
+                <span class="p">{</span><span class="nx">vale</span><span class="o">:</span> <span class="nx">array</span><span class="p">[</span><span class="nx">index</span><span class="o">++</span><span class="p">],</span> <span class="nx">done</span><span class="o">:</span> <span class="kc">false</span><span class="p">}</span> <span class="o">:</span>
+                <span class="p">{</span><span class="nx">done</span><span class="o">:</span> <span class="kc">true</span><span class="p">};</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>You may also notice the grammer <code>function*</code>, that&#39;s called <code>generator function</code>, and you can use keyword <code>field</code> there, which works combined with <code>next()</code>. When <code>next</code> is invoked, it starts the execution of the generator. The generator runs until it encounters a <code>yield</code> expression. Then it pauses and the execution goes back to the code that called <code>next</code>.</p>
+<p>You can also pass parameters to <code>next()</code>. It behaves like this:</p>
+<div class="highlight"><pre><span class="kd">function</span><span class="o">*</span> <span class="nx">gen</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">index</span><span class="o">++</span><span class="p">;</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/**  yield and next</span>
+<span class="cm"> * gen() is invoked by a next.</span>
+<span class="cm"> * when execute gen.next(88), the generator runs until</span>
+<span class="cm"> * it encounter a yield and pauses, but not give the value</span>
+<span class="cm"> * to res. when execute gen.next(888), it goes back to the</span>
+<span class="cm"> * code and give the value to res, and the value is the </span>
+<span class="cm"> * parameter passed to next.</span>
+<span class="cm"> */</span>
+<span class="kd">var</span> <span class="nx">gen</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">();</span> <span class="c1">// gen() is not invoked there</span>
+<span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="mi">88</span><span class="p">);</span> <span class="c1">// {value: 1, done: false} </span>
+<span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="mi">888</span><span class="p">);</span> <span class="c1">// 888</span>
+</pre></div>
+<p>It is like another way to execute callback. However, we can code synchronously to express the asynchronous progress without nested function.</p>
+
+<h2 id="toc_2"><strong>for-of</strong></h2>
+<p>This expression is used to iterate over iterable objects(including Array, Map, Set, arguments object and so on). Just a generator comprehension.</p>
+<div class="highlight"><pre><span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="nx">of</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span> <span class="o">*</span> <span class="nx">i</span><span class="p">);</span> 
+<span class="p">}</span>
+<span class="c1">// 1, 4, 9</span>
+</pre></div>
+
+<h2 id="toc_3"><em>co</em></h2>
+<p><code>co</code> is an ultimate generator made by TJ, using thunks or promises. A simple co example:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">co</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;co&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">read</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">){</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="nx">fn</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">co</span><span class="p">(</span><span class="kd">function</span> <span class="o">*</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">read</span><span class="p">(</span><span class="s1">&#39;1.txt&#39;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">read</span><span class="p">(</span><span class="s1">&#39;2.txt&#39;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">read</span><span class="p">(</span><span class="s1">&#39;3.txt&#39;</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">c</span><span class="p">]);</span>
+<span class="p">})();</span>
+</pre></div>
+<p>We pass a generator <code>fn</code> to <code>co</code> and <code>co</code> return a <code>thunk</code>. A <code>thunk</code> is just like the traditional node-style callback whith a signature of: <code>(err, res)</code>.</p>
+<div class="highlight"><pre><span class="c1">// read thunk</span>
+<span class="kd">function</span> <span class="nx">read</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">encoding</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">encoding</span><span class="p">,</span> <span class="nx">cb</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">//invoke</span>
+<span class="nx">read</span><span class="p">(</span><span class="s1">&#39;package.json&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">)(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">str</span><span class="p">){</span>
+    <span class="c1">//...</span>
+<span class="p">})</span>
+</pre></div>
+<p>Actually, in <code>co</code>, the <code>yieldable</code> objects supports thunks, promises, generators, generator functions and array. <code>co</code> will iterate many times until the <code>fn.done</code> is <code>true</code>. A most simple <code>co</code> implement:</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">co</span><span class="p">(</span><span class="nx">GenFunc</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">gen</span> <span class="o">=</span> <span class="nx">GenFunc</span><span class="p">();</span>
+    <span class="p">(</span><span class="kd">function</span> <span class="nx">next</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">done</span> <span class="o">?</span> <span class="nx">cb</span> <span class="o">&amp;&amp;</span> <span class="nx">cb</span><span class="p">()</span> <span class="o">:</span> <span class="nx">next</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">})();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p><code>co</code> also support passing arguments into the generator.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">exec</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;co-exec&#39;</span><span class="p">);</span>
+<span class="nx">co</span><span class="p">(</span><span class="kd">function</span> <span class="o">*</span><span class="p">(</span><span class="nx">cmd</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">exec</span><span class="p">(</span><span class="nx">cmd</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">res</span><span class="p">;</span>
+<span class="p">})(</span><span class="s1">&#39;pwd&#39;</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span> <span class="c1">// done is the callback function</span>
+</pre></div>
+<p><code>co</code> support error handle as well. And in <a href="https://github.com/visionmedia/co">github</a>, it says:</p>
+
+<blockquote>
+<p>Co is careful to relay any errors that occur back to the generator, including those within the thunk, or from the thunk&#39;s callback.</p>
+</blockquote>
+<p>At last, I&#39;m strongly recommend that you should <strong>read co&#39;s source code</strong>, it is less than 300 lines. Have fun:D</p>
+
+<h2 id="toc_4"><em>Reference</em></h2>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/The_Iterator_protocol">MDN-The-Iterator-protocol</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of">MDN-for-of</a></li>
+<li><a href="http://domenic.me/2013/09/06/es6-iterators-generators-and-iterables/">es6-iterators-generators-and-iterables</a></li>
+<li><a href="https://github.com/visionmedia/co">co</a></li>
+</ul>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Harmony generator , for-of and co';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://twitter.com/htinple">Twitter</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>

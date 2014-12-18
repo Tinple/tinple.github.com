@@ -1,0 +1,232 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Keyword &quot;this&quot; in Javascript - Tinple</title>
+    <script>if (top !== self) top.location = self.location;</script>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/yue.css?v=f93f9" />
+    <link rel="stylesheet" href="/static/pygments.css?v=7ca64" />
+    <link rel="stylesheet" href="/static/style.css?v=e3dd7" />
+    
+    <link rel="alternate" type="application/rss+xml" href="/feed" title="Tinple" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="/static/html5shiv.js?v=9a10c"></script>
+        <![endif]-->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43822965-1']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+<link rel="canonical" href="/tech/keyword-this-in-javascript" />
+
+
+  </head>
+  <body>
+    <header id="header">
+      <div class="container">
+        <div id="brand"><a href="/">Tinple</a></div>
+        <nav id="nav" role="navigation">
+          
+          <a href="/archive">Blog</a>
+          <a href="/life/">Life</a>
+          <a href="/tech/">Tech</a>
+          <a href="/resume">Résumé</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="main">
+      <div class="container yue"><div class="hentry">
+    <h1 class="entry-title">Keyword &quot;this&quot; in Javascript</h1>
+    <div class="entry-meta">
+        <time class="updated" datetime="2013-11-01T00:00:00+08:00" pubdate>
+            <a href="/2013/">2013-11-01</a>
+        </time>
+        <span class="author vcard">
+            by <span class="fn">Tinple</span>
+        </span>
+    </div>
+    <div class="entry-content">
+        <p>I always get tripped up by the <code>this</code> keyword in <code>Javascript</code>.And everytime when I &ldquo;understand&rdquo; it, I still feel confused about
+it next time.Hence, this post is here.</p>
+<p>In fact, <code>this</code> follows a relatively small set of simple rules.</p>
+
+<h2 id="toc_0">Gloabal context</h2>
+<p>In the global execution context, <code>this</code> refers to the <strong>global object</strong>, whether in strict mode or not.</p>
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nb">document</span> <span class="o">===</span> <span class="nb">document</span><span class="p">);</span> <span class="c1">// true</span>
+
+<span class="c1">// In browser, the global object is the ```window``` object</span>
+<span class="c1">// In Node.js, it&#39;s just called the &quot;global object&quot;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span> <span class="o">===</span> <span class="nb">window</span><span class="p">);</span> <span class="c1">// true</span>
+
+<span class="k">this</span><span class="p">.</span><span class="nx">a</span> <span class="o">=</span> <span class="mi">37</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// 37</span>
+</pre></div>
+
+<h2 id="toc_1">Function context</h2>
+<p>A function&#39;s <code>this</code> keyword may behaves a little differently in <code>Javascript</code> compared to other languages.
+And there are some cases where the value of <code>this</code> changes.</p>
+
+<h3 id="toc_2">Method invocations</h3>
+<p>When a function is called as a method of an object, its <code>this</code> refers to the object the method is called on.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">creditCard</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">money</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">increment</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="mi">8888</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1">// dot notation</span>
+<span class="nx">creditCard</span><span class="p">.</span><span class="nx">increment</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span>  <span class="c1">// 8888</span>
+
+<span class="c1">// bracket notation</span>
+<span class="nx">creditCard</span><span class="p">[</span><span class="s1">&#39;increment&#39;</span><span class="p">]();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// 17776</span>
+
+<span class="cm">/*****call the same function directly*****/</span>
+<span class="kd">var</span> <span class="nx">moreMoney</span> <span class="o">=</span> <span class="nx">creditCard</span><span class="p">.</span><span class="nx">increment</span><span class="p">;</span>
+<span class="nx">moreMoney</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// 17776</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// NAN</span>
+</pre></div>
+<p>Note that when we call the same function directly, <code>this</code> refers to the global object instead of <code>creditCard</code> object.</p>
+<div class="highlight"><pre><span class="c1">// window.money += 8888, but window.money is undefined </span>
+<span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="mi">8888</span><span class="p">;</span>
+</pre></div>
+<p>And what&#39;s more, this rule also works on the prototype chain.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">moneyUp</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">increment</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="mi">8888</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">creditCard</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">moneyUp</span><span class="p">);</span>
+<span class="nx">creditCard</span><span class="p">.</span><span class="nx">money</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">.</span><span class="nx">increment</span><span class="p">());</span>
+</pre></div>
+
+<h3 id="toc_3">The new operator</h3>
+<p>And when a function is used as a <strong>constructor</strong>(with the <code>new</code> keyword), its <code>this</code> is set to the newly created object.</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">CreditCard</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">=</span> <span class="mi">8888</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">savedMoney</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CreditCard</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">savedMoney</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// 8888</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">money</span><span class="p">);</span>  <span class="c1">// ReferenceError</span>
+
+<span class="c1">// And without new, </span>
+<span class="c1">// this refers to the global object</span>
+<span class="kd">var</span> <span class="nx">savedMoney_</span> <span class="o">=</span> <span class="nx">CreditCard</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">savedMoney_</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// undefined</span>
+</pre></div>
+
+<h3 id="toc_4">Call and apply</h3>
+<p>All Javascript functions have two methods, <code>call</code> and <code>apply</code>, which let you call
+functions and explicitly set the value of <code>this</code>.</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">add</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">a</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">b</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="nx">d</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="nx">a</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span> <span class="nx">b</span><span class="o">:</span><span class="mi">3</span><span class="p">};</span>
+
+<span class="c1">//call</span>
+<span class="c1">//The first parameter is the object to use as this</span>
+<span class="c1">//and the second is an (optional) array of arguments </span>
+<span class="nx">add</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">);</span> <span class="c1">// 1+3+5+7=16</span>
+
+<span class="c1">//apply</span>
+<span class="c1">//The first parameter is the object to use as this</span>
+<span class="c1">//and the second should be passed individually </span>
+<span class="nx">add</span><span class="p">.</span><span class="nx">appy</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]);</span> <span class="c1">// 1+3+10+20=34</span>
+</pre></div>
+<p>And in this part, <code>this</code> is set to the first argument passed to <code>call</code> or <code>apply</code> inside function code when that function is called with either <code>call</code> or <code>apply</code>.</p>
+
+<h3 id="toc_5">Bound functions</h3>
+<p>ECMAScript 5 introduced <code>Function.prototype.bind</code> .Calling <code>f.bind(someObejct)</code> creates a new function with the same body and scope as f, and has its <code>this</code> keyword set to the provided value, regardless of how the function is being used.</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">f</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">nickname</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// a new function has its own this keyword</span>
+<span class="kd">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">bind</span><span class="p">({</span><span class="nx">nickname</span><span class="o">:</span> <span class="s2">&quot;Tinple&quot;</span><span class="p">});</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">g</span><span class="p">());</span> <span class="c1">// Tinple</span>
+
+<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="nx">nickname</span><span class="o">:</span><span class="s2">&quot;Kristine&quot;</span><span class="p">,</span> <span class="nx">f</span><span class="o">:</span><span class="nx">f</span><span class="p">,</span> <span class="nx">g</span><span class="o">:</span><span class="nx">g</span><span class="p">};</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">f</span><span class="p">(),</span> <span class="nx">o</span><span class="p">.</span><span class="nx">g</span><span class="p">());</span> <span class="c1">// Kristine, Tinple</span>
+</pre></div>
+
+<h2 id="toc_6">Other conditions</h2>
+
+<h3 id="toc_7">DOM event handler</h3>
+<p>When a function is used as an 
+event handler, its this is set to the element the event fired from (some browsers do not follow this convention for listeners added dynamically with methods other than addEventListener).</p>
+
+<h3 id="toc_8">In-line event handler</h3>
+<p>When code is called from an 
+in-line handler, its <code>this</code> is 
+set to the DOM element on which the listener is placed.</p>
+<div class="highlight"><pre><span class="c">&lt;!-- button --&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;alert(this.tagName.toLowerCase());&quot;</span><span class="nt">&gt;</span>Show this<span class="nt">&lt;/button&gt;</span>
+<span class="c">&lt;!-- the global window object--&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;alert((function(){return this}}()));&quot;</span><span class="nt">&gt;</span>Show inner this<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<p>Note that only the outer code has its <code>this</code> set this way.</p>
+
+<h3 id="toc_9">Eval breaks all the rules</h3>
+<p>As the code evaluated inside <code>eval</code> is its own type of 
+executable code, the rules of determining what <code>this</code> refers to inside of eval code are a little more complex.</p>
+<div class="highlight"><pre><span class="c1">//depends on browser</span>
+<span class="nb">eval</span><span class="p">.</span><span class="nx">call</span><span class="p">({</span><span class="nx">val</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span> <span class="s2">&quot;console.log(this.val)&quot;</span><span class="p">);</span>
+</pre></div>
+<p>And you can read more about <code>eval</code> <a href="http://perfectionkills.com/global-eval-what-are-the-options/">here</a>.</p>
+<p><strong>References:</strong></p>
+
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/JavaScript/Reference/Operators/this">MDN</a></li>
+<li><a href="http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262,%203rd%20edition,%20December%201999.pdf">ECMA</a></li>
+</ul>
+
+    </div>
+
+    
+
+    <div class="entry-tags">
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'tinple';
+        var disqus_title = 'Keyword &quot;this&quot; in Javascript';
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+</div></div>
+    </div>
+
+    <footer id="footer">
+      <div class="end"></div>
+      <nav class="elsewhere">
+        <a href="https://github.com/Tinple">Github</a><a href="https://twitter.com/htinple">Twitter</a><a href="http://weibo.com/tinple">Weibo</a>
+      </nav>
+    </footer>
+    <script type="text/javascript" src="/static/mobile.js?v=3b6df"></script>
+    
+  </body>
+</html>
