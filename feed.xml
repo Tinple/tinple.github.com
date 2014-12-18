@@ -3,14 +3,52 @@
     <title>Tinple</title>
     <link href="http://tinple.me/feed" rel="self" />
     <link href="http://tinple.me/" />
-    <updated>2014-12-18T13:07:55+08:00</updated>
+    <updated>2014-12-18T14:51:57+08:00</updated>
     <id>http://tinple.me/</id>
     <entry>
+        <title type="html"><![CDATA[MongoDB Security Part Three]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/mongo-security-part-three"/>
+        <published>2014-12-18T00:00:00+08:00</published>
+        <updated>2014-12-18T14:51:57+08:00</updated>
+        <id>http://tinple.me/tech/mongo-security-part-three</id>
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ 
+<pre><code>## End
+
+If you have something to correct, welcome to point it out:D
+
+###References:
+* [nosql injection](https://community.rapid7.com/community/metasploit/blog/2014/06/12/you-have-no-sql-inj--sorry-nosql-injections-in-your-application)
+* [Server-Side JavaScript Injection](https://media.blackhat.com/bh-us-11/Sullivan/BH_US_11_Sullivan_Server_Side_WP.pdf)
+* [Testing for NoSQL injection](https://www.owasp.org/index.php/Testing_for_NoSQL_injection)</code></pre>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[MongoDB Security Part Two]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.me/tech/mongo-security-part-two"/>
+        <published>2014-12-17T00:00:00+08:00</published>
+        <updated>2014-12-18T14:51:55+08:00</updated>
+        <id>http://tinple.me/tech/mongo-security-part-two</id>
+        <content type="html" xml:base="http://tinple.me" xml:lang="en">
+            <![CDATA[ 
+<pre><code>## End
+
+If you have something to correct, welcome to point it out:D
+
+###References:
+* [Attacking NodeJS and MongoDB](http://blog.websecurify.com/2014/08/attacks-nodejs-and-mongodb-part-to.html)
+* [Hacking NodeJS and MongoDB](http://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html)
+* [Testing for NoSQL injection](https://www.owasp.org/index.php/Testing_for_NoSQL_injection)</code></pre>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[MongoDB Security Part One]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.me/tech/mongo-security-part-one"/>
         <published>2014-12-15T00:00:00+08:00</published>
-        <updated>2014-12-17T21:58:22+08:00</updated>
+        <updated>2014-12-18T14:51:52+08:00</updated>
         <id>http://tinple.me/tech/mongo-security-part-one</id>
         <content type="html" xml:base="http://tinple.me" xml:lang="en">
             <![CDATA[ <p><a href="https://time.xctf.org.cn/ctfs/1/">hctf</a> is over a month away. In the online game, I prepared two <code>MongoDB</code>
@@ -130,143 +168,8 @@ default is 27017) and start the firewall only allow the white-list ip to connect
 If you have something to correct, welcome to point it out:D
 
 ###References:
-* [Attacking NodeJS and MongoDB](http://blog.websecurify.com/2014/08/attacks-nodejs-and-mongodb-part-to.html)
-* [Hacking NodeJS and MongoDB](http://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html)
-* [nosql injection](https://community.rapid7.com/community/metasploit/blog/2014/06/12/you-have-no-sql-inj--sorry-nosql-injections-in-your-application)
-* [Server-Side JavaScript Injection](https://media.blackhat.com/bh-us-11/Sullivan/BH_US_11_Sullivan_Server_Side_WP.pdf)
-* [mongodb_unauthorized_access](http://www.hackersoul.com/post/mongodb_unauthorized_access_vulnerability_global_probing_report.html)</code></pre>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[MongoDB Security Part One]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/mongo-security"/>
-        <published>2014-12-15T00:00:00+08:00</published>
-        <updated>2014-12-18T13:07:55+08:00</updated>
-        <id>http://tinple.me/tech/mongo-security</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p><a href="https://time.xctf.org.cn/ctfs/1/">hctf</a> is over a month away. In the online game, I prepared two <code>MongoDB</code>
-vulnerable applications for players to capture the flag. Actually, <code>NoSQL</code> develops fast these years, and 
-unlike traditional SQL databases, NoSQL databases require fewer relational constraints and consistency checks.
-However, they are still potentially vulnerable to injection attacks, even if they aren&#39;t using the traditional
-sql syntax. I think it&#39;s time for us to focus on NoSQL security, and this is also my initial purpose.</p>
-
-<blockquote>
-<p>NoSQL injection attacks may execute in different areas of an application than traditional SQL injection. Where SQL injection would execute within the database engine, NoSQL variants may execute during within the application layer or the database layer, depending on the NoSQL API used and data model. Typically NoSQL injection attacks will execute where the attack string is parsed, evaluated, or concatenated into a NoSQL API call.</p>
-</blockquote>
-<p>There are now over 150 <a href="http://nosql-database.org/">NoSQL databases</a> available, and <code>MongoDB</code> is the most widely
-used NoSQL database. In a series of MongoDB Security articles, I will show different vulnerable applications,
-the code and payload is available in <a href="https://github.com/Tinple/mongo-attack-example">github</a>.</p>
-<p>For the first part, I would like to show the MongoDB unauthorized access vulnerability, which causes MongoDB
-information leakage because the MongoDB runned without the option <code>--auth</code>.  And the information leakage may
-cause a series of other security problem further. </p>
-<p>As the payload may attackable, I only scan my servers for the example. And I write my payload as follow:</p>
-
-<pre><code>var file = &quot;data&quot;,
-    lineReader = require(&quot;line-reader&quot;),
-    mongoose = require('mongoose');
-
-function conn (host, cb){
-    var url = 'mongodb://' + host,
-        options = { server: { socketOptions: { connectTimeoutMS: 4000 }}},
-        connection = mongoose.createConnection(url, options);
-        Admin = mongoose.mongo.Admin;
-    connection.on('error', function(err) {
-        if (err) throw new Error(err);
-    });
-    connection.on('open',function(){
-        new Admin(connection.db).listDatabases(function (err, res) {
-            if (err) throw new Error(err);
-            res.databases.map(function (db) {
-                console.log('[*] Database %s %s', db.name, db.sizeOnDisk);
-                var db = mongoose.createConnection(url + '/' + db.name, options);
-                db.on('open', function () {
-                    db.db.collectionNames(function (err, res) {
-                        if (err) throw new Error(err);
-                        res.map(function (collection) {
-                            console.log('[+] Collection %s', collection.name);
-                        });
-                        console.log();
-                        db.close();
-                        connection.close();
-                    })
-                })
-            })
-        })
-        cb(host);
-    });
-}
-lineReader.eachLine(file, function(line) {
-    if (String(line)) {
-        conn(line, function(host){
-            console.log(&quot;Detected: &quot; + host);
-        });
-    }
-}).then(function () {
-    console.log('[*] Read Done');
-});</code></pre>
-<p>The payload scans a list of ip, and gets the unauthorized mongo server, what&#39;s more, for every unauthorized
-mongo server, I get their <code>Databases</code> and <code>Collections</code> to stress the importance of information leakage. The
-results for my server as follow:</p>
-
-<pre><code>[*] Read Done
-Detected: xx.xx.xx.xx
-[*] Database erciyuan 218103808
-[*] Database shop 218103808
-[*] Database admin 83886080
-[*] Database test 1
-
-[+] Collection admin.system.version
-[+] Collection admin.system.indexes
-[+] Collection admin.system.users
-
-[+] Collection erciyuan.system.indexes
-[+] Collection erciyuan.system.users
-[+] Collection erciyuan.renwu
-[+] Collection erciyuan.log
-
-[+] Collection shop.system.indexes
-[+] Collection shop.system.users
-[+] Collection shop.users
-[+] Collection shop.feedbacks
-[+] Collection shop.baskets
-[+] Collection shop.products
-
-Detected: xx.xx.xx.xx
-[*] Database vnwa 218103808
-[*] Database admin 83886080
-[*] Database test 1
-
-[+] Collection admin.system.version
-[+] Collection admin.system.indexes
-[+] Collection admin.system.users
-
-[+] Collection vnwa.system.indexes
-[+] Collection vnwa.users
-[+] Collection vnwa.messages</code></pre>
-<p>Besides, the <a href="http://www.hackersoul.com/post/mongodb_unauthorized_access_vulnerability_global_probing_report.html">HackerSoul</a> scan almost 40000 IP list using 
-MongoDB, and give us a report about this vulnerability.</p>
-
-<pre><code>[*] Start-date: 20141202-23:20
-[*] End-date: 20141202-23:28
-[*] Info
-  [+] Target: 39818
-  [+] Success: 7071
-[*] Done</code></pre>
-<p>The results is crazy, hence, be sure to run your mongo with <code>auth</code> flag, or, change the mongo port(
-default is 27017) and start the firewall only allow the white-list ip to connect(something like 
-<a href="http://tinple.io/tech/work-with-iptables">iptables</a>.</p>
-
-<pre><code>## End
-
-If you have something to correct, welcome to point it out:D
-
-###References:
-* [Attacking NodeJS and MongoDB](http://blog.websecurify.com/2014/08/attacks-nodejs-and-mongodb-part-to.html)
-* [Hacking NodeJS and MongoDB](http://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html)
-* [nosql injection](https://community.rapid7.com/community/metasploit/blog/2014/06/12/you-have-no-sql-inj--sorry-nosql-injections-in-your-application)
-* [Server-Side JavaScript Injection](https://media.blackhat.com/bh-us-11/Sullivan/BH_US_11_Sullivan_Server_Side_WP.pdf)
-* [mongodb_unauthorized_access](http://www.hackersoul.com/post/mongodb_unauthorized_access_vulnerability_global_probing_report.html)</code></pre>
+* [mongodb_unauthorized_access](http://www.hackersoul.com/post/mongodb_unauthorized_access_vulnerability_global_probing_report.html)
+* [Testing for NoSQL injection](https://www.owasp.org/index.php/Testing_for_NoSQL_injection)</code></pre>
 ]]>
         </content>
     </entry><entry>
@@ -1836,157 +1739,6 @@ tell you more after.Do not be shy!</p>
 <h2 id="toc_3">End</h2>
 <p>这个月大多事是围着<strong>攻防比赛</strong>这条主线进行的，跟9月还有不一样的是，这个月还忙着处理一些情感，一些琐事。
 10月，多了点忙碌带来的紧迫节奏感。PS:明天报名平台就关闭啦:D</p>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[Keyword &quot;this&quot; in Javascript]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.me/tech/keyword-this-in-javascript"/>
-        <published>2013-11-01T00:00:00+08:00</published>
-        <updated>2014-09-24T14:50:54+08:00</updated>
-        <id>http://tinple.me/tech/keyword-this-in-javascript</id>
-        <content type="html" xml:base="http://tinple.me" xml:lang="en">
-            <![CDATA[ <p>I always get tripped up by the <code>this</code> keyword in <code>Javascript</code>.And everytime when I &ldquo;understand&rdquo; it, I still feel confused about
-it next time.Hence, this post is here.</p>
-<p>In fact, <code>this</code> follows a relatively small set of simple rules.</p>
-
-<h2 id="toc_0">Gloabal context</h2>
-<p>In the global execution context, <code>this</code> refers to the <strong>global object</strong>, whether in strict mode or not.</p>
-<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nb">document</span> <span class="o">===</span> <span class="nb">document</span><span class="p">);</span> <span class="c1">// true</span>
-
-<span class="c1">// In browser, the global object is the ```window``` object</span>
-<span class="c1">// In Node.js, it&#39;s just called the &quot;global object&quot;</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span> <span class="o">===</span> <span class="nb">window</span><span class="p">);</span> <span class="c1">// true</span>
-
-<span class="k">this</span><span class="p">.</span><span class="nx">a</span> <span class="o">=</span> <span class="mi">37</span><span class="p">;</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// 37</span>
-</pre></div>
-
-<h2 id="toc_1">Function context</h2>
-<p>A function&#39;s <code>this</code> keyword may behaves a little differently in <code>Javascript</code> compared to other languages.
-And there are some cases where the value of <code>this</code> changes.</p>
-
-<h3 id="toc_2">Method invocations</h3>
-<p>When a function is called as a method of an object, its <code>this</code> refers to the object the method is called on.</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">creditCard</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">money</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="nx">increment</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="mi">8888</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="c1">// dot notation</span>
-<span class="nx">creditCard</span><span class="p">.</span><span class="nx">increment</span><span class="p">();</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span>  <span class="c1">// 8888</span>
-
-<span class="c1">// bracket notation</span>
-<span class="nx">creditCard</span><span class="p">[</span><span class="s1">&#39;increment&#39;</span><span class="p">]();</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// 17776</span>
-
-<span class="cm">/*****call the same function directly*****/</span>
-<span class="kd">var</span> <span class="nx">moreMoney</span> <span class="o">=</span> <span class="nx">creditCard</span><span class="p">.</span><span class="nx">increment</span><span class="p">;</span>
-<span class="nx">moreMoney</span><span class="p">();</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// 17776</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// NAN</span>
-</pre></div>
-<p>Note that when we call the same function directly, <code>this</code> refers to the global object instead of <code>creditCard</code> object.</p>
-<div class="highlight"><pre><span class="c1">// window.money += 8888, but window.money is undefined </span>
-<span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="mi">8888</span><span class="p">;</span>
-</pre></div>
-<p>And what&#39;s more, this rule also works on the prototype chain.</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">moneyUp</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">increment</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">+=</span> <span class="mi">8888</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="kd">var</span> <span class="nx">creditCard</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">moneyUp</span><span class="p">);</span>
-<span class="nx">creditCard</span><span class="p">.</span><span class="nx">money</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">.</span><span class="nx">increment</span><span class="p">());</span>
-</pre></div>
-
-<h3 id="toc_3">The new operator</h3>
-<p>And when a function is used as a <strong>constructor</strong>(with the <code>new</code> keyword), its <code>this</code> is set to the newly created object.</p>
-<div class="highlight"><pre><span class="kd">function</span> <span class="nx">CreditCard</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">money</span> <span class="o">=</span> <span class="mi">8888</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kd">var</span> <span class="nx">savedMoney</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CreditCard</span><span class="p">();</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">savedMoney</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// 8888</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">money</span><span class="p">);</span>  <span class="c1">// ReferenceError</span>
-
-<span class="c1">// And without new, </span>
-<span class="c1">// this refers to the global object</span>
-<span class="kd">var</span> <span class="nx">savedMoney_</span> <span class="o">=</span> <span class="nx">CreditCard</span><span class="p">();</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">savedMoney_</span><span class="p">.</span><span class="nx">money</span><span class="p">);</span> <span class="c1">// undefined</span>
-</pre></div>
-
-<h3 id="toc_4">Call and apply</h3>
-<p>All Javascript functions have two methods, <code>call</code> and <code>apply</code>, which let you call
-functions and explicitly set the value of <code>this</code>.</p>
-<div class="highlight"><pre><span class="kd">function</span> <span class="nx">add</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">a</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">b</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="nx">d</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="nx">a</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span> <span class="nx">b</span><span class="o">:</span><span class="mi">3</span><span class="p">};</span>
-
-<span class="c1">//call</span>
-<span class="c1">//The first parameter is the object to use as this</span>
-<span class="c1">//and the second is an (optional) array of arguments </span>
-<span class="nx">add</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">);</span> <span class="c1">// 1+3+5+7=16</span>
-
-<span class="c1">//apply</span>
-<span class="c1">//The first parameter is the object to use as this</span>
-<span class="c1">//and the second should be passed individually </span>
-<span class="nx">add</span><span class="p">.</span><span class="nx">appy</span><span class="p">(</span><span class="nx">o</span><span class="p">,</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]);</span> <span class="c1">// 1+3+10+20=34</span>
-</pre></div>
-<p>And in this part, <code>this</code> is set to the first argument passed to <code>call</code> or <code>apply</code> inside function code when that function is called with either <code>call</code> or <code>apply</code>.</p>
-
-<h3 id="toc_5">Bound functions</h3>
-<p>ECMAScript 5 introduced <code>Function.prototype.bind</code> .Calling <code>f.bind(someObejct)</code> creates a new function with the same body and scope as f, and has its <code>this</code> keyword set to the provided value, regardless of how the function is being used.</p>
-<div class="highlight"><pre><span class="kd">function</span> <span class="nx">f</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">nickname</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">// a new function has its own this keyword</span>
-<span class="kd">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">bind</span><span class="p">({</span><span class="nx">nickname</span><span class="o">:</span> <span class="s2">&quot;Tinple&quot;</span><span class="p">});</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">g</span><span class="p">());</span> <span class="c1">// Tinple</span>
-
-<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="nx">nickname</span><span class="o">:</span><span class="s2">&quot;Kristine&quot;</span><span class="p">,</span> <span class="nx">f</span><span class="o">:</span><span class="nx">f</span><span class="p">,</span> <span class="nx">g</span><span class="o">:</span><span class="nx">g</span><span class="p">};</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">f</span><span class="p">(),</span> <span class="nx">o</span><span class="p">.</span><span class="nx">g</span><span class="p">());</span> <span class="c1">// Kristine, Tinple</span>
-</pre></div>
-
-<h2 id="toc_6">Other conditions</h2>
-
-<h3 id="toc_7">DOM event handler</h3>
-<p>When a function is used as an 
-event handler, its this is set to the element the event fired from (some browsers do not follow this convention for listeners added dynamically with methods other than addEventListener).</p>
-
-<h3 id="toc_8">In-line event handler</h3>
-<p>When code is called from an 
-in-line handler, its <code>this</code> is 
-set to the DOM element on which the listener is placed.</p>
-<div class="highlight"><pre><span class="c">&lt;!-- button --&gt;</span>
-<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;alert(this.tagName.toLowerCase());&quot;</span><span class="nt">&gt;</span>Show this<span class="nt">&lt;/button&gt;</span>
-<span class="c">&lt;!-- the global window object--&gt;</span>
-<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;alert((function(){return this}}()));&quot;</span><span class="nt">&gt;</span>Show inner this<span class="nt">&lt;/button&gt;</span>
-</pre></div>
-<p>Note that only the outer code has its <code>this</code> set this way.</p>
-
-<h3 id="toc_9">Eval breaks all the rules</h3>
-<p>As the code evaluated inside <code>eval</code> is its own type of 
-executable code, the rules of determining what <code>this</code> refers to inside of eval code are a little more complex.</p>
-<div class="highlight"><pre><span class="c1">//depends on browser</span>
-<span class="nb">eval</span><span class="p">.</span><span class="nx">call</span><span class="p">({</span><span class="nx">val</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span> <span class="s2">&quot;console.log(this.val)&quot;</span><span class="p">);</span>
-</pre></div>
-<p>And you can read more about <code>eval</code> <a href="http://perfectionkills.com/global-eval-what-are-the-options/">here</a>.</p>
-<p><strong>References:</strong></p>
-
-<ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/JavaScript/Reference/Operators/this">MDN</a></li>
-<li><a href="http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262,%203rd%20edition,%20December%201999.pdf">ECMA</a></li>
-</ul>
 ]]>
         </content>
     </entry>
