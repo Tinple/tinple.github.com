@@ -67,8 +67,8 @@ sql syntax. I think it&#39;s time for us to focus on NoSQL security, and this is
 <p>There are now over 150 <a href="http://nosql-database.org/">NoSQL databases</a> available, and <code>MongoDB</code> is the most widely
 used NoSQL database. In a series of MongoDB Security articles, I will show different vulnerable applications,
 the code and payload is available in <a href="https://github.com/Tinple/mongo-attack-example">github</a>.</p>
-<p>For the first part, I would like to show the MongoDB unauthorized access vulnerability, which causes MongoDB
-information leakage because the MongoDB runned without the option <code>--auth</code>.  And the information leakage may
+<p>For the first part, I would like to show the <strong>MongoDB unauthorized access vulnerability</strong>, which causes MongoDB
+information revealable because the MongoDB runned without the option <code>--auth</code>.  And the revealable information may
 cause a series of other security problem. </p>
 <p>As the payload may attackable, I only scan my servers for the example. And I write my payload as follow:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
@@ -163,7 +163,7 @@ MongoDB, and give us a report about this vulnerability.</p>
   [+] Target: 39818
   [+] Success: 7071
 [*] Done</code></pre>
-<p>The results is crazy, hence, be sure to run your mongo with <code>auth</code> flag, or, change the mongo port(
+<p>The results is crazy, hence, be sure to <strong>run your mongo with <code>auth</code> flag</strong>, or, change the mongo port(
 default is 27017) and start the firewall only allow the white-list ip to connect(something like 
 <a href="http://tinple.io/tech/work-with-iptables">iptables</a>.</p>
 

