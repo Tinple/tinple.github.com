@@ -55,12 +55,78 @@
         </span>
     </div>
     <div class="entry-content">
-        <p>** This post is unfinished, you can read later.**</p>
+        <p>For the latest posts, I showed <a href="http://tinple.io/tech/mongo-security-part-one">MongoDB unauthorized access vulnerability</a>
+and simple <a href="http://tinple.io/tech/mongo-security-part-two">MongoDB injection</a>. Each of them can reflect the <strong>Mongo
+Security</strong>. And this time we will talk about mongo security in server side javascript injection(SSJS).</p>
+<p>If you ever use <code>php</code> with <code>mongo</code>, you may find a <a href="http://php.net//manual/en/mongocollection.find.php">example</a> showed
+in php-mongo manual, just like the code below:</p>
+<div class="highlight"><pre><span class="cp">&lt;?php</span>
 
-<h2 id="toc_0">End</h2>
+<span class="nv">$m</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MongoClient</span><span class="p">();</span>
+<span class="nv">$db</span> <span class="o">=</span> <span class="nv">$m</span><span class="o">-&gt;</span><span class="na">selectDB</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">);</span>
+<span class="nv">$collection</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MongoCollection</span><span class="p">(</span><span class="nv">$db</span><span class="p">,</span> <span class="s1">&#39;phpmanual&#39;</span><span class="p">);</span>
+
+<span class="nv">$js</span> <span class="o">=</span> <span class="s2">&quot;function() {</span>
+<span class="s2">    return this.name == &#39;Joe&#39; || this.age == 50;</span>
+<span class="s2">}&quot;</span><span class="p">;</span>
+<span class="nv">$cursor</span> <span class="o">=</span> <span class="nv">$collection</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;$where&#39;</span> <span class="o">=&gt;</span> <span class="nv">$js</span><span class="p">));</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$cursor</span> <span class="k">as</span> <span class="nv">$doc</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">var_dump</span><span class="p">(</span><span class="nv">$doc</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+<p>We can find that it allows us to search a collection using javascript code to reduce the resultset.
+And the mongo will call <code>find()</code> once you put a javascript function in a string to <code>$where</code>, the query 
+result will return the document(s) if the function return true.</p>
+<p>And our further progression is to make query dynamic to build a query system, maybe based on user input, 
+something like <code>get</code> or <code>post</code> request. Imagine there is a query system for us to search someone through
+his name or nickname, we can construct the code like this:</p>
+<div class="highlight"><pre><span class="x">$q = (isset($_GET[&#39;q&#39;]) ? $_GET[&#39;q&#39;] : null);</span>
+<span class="x">if ($q) {</span>
+<span class="x">    $js = &#39;function(){if(this.name ==&#39;.&#39;\&#39;&#39;.$q.&#39;\&#39;&#39;.&#39;||this.nick==&#39;.&#39;\&#39;&#39;.$q.&#39;\&#39;&#39;.&#39;)return true;}&#39;;</span>
+<span class="x">}</span>
+</pre></div>
+
+<h2 id="toc_0">Blind nosql injection</h2>
+<p>Just like the example showed above, we make our query dynamic, put our search in a get request and wrap
+the request with a single quotes. The thing goes well, just like a tradition sql query. However, not like
+the traditional sql injection <code>&#39;or 1=1</code>, the syntax and query in mongo is quite different. Hence, what
+we to do is to make the query in mongo return true, that means, create a true statement in query.</p>
+<p>As the query function is about javascript, it&#39;s easy to make a true statement to let the function return true.
+We can guess the sql statement and input some datas like <code>aaa||true</code> or <code>aaa&#39;||true||&#39;aaa</code> to blind inject.
+Actually, the later works in our query system. And it will return every single document in our collection,
+just like the query <code>db.collection.find()</code>, because all of documents meet the query condition 
+<code>this.name=&#39;aaa&#39;||true||&#39;aaa&#39;||this.nick==&#39;aaa&#39;||true||&#39;aaa&#39;</code>.</p>
+<p>See the <code>true</code> keyword? Yes, we can make more requests like this to get more information through the global
+variable <code>db</code>, such as <code>db.getCollectionNames()</code> bala bala. Yes, we can use such blind nosql injection to
+extract the entire contents of the mongo database.</p>
+<p>The first attack is to ask how many collections are in the database. Like <code>db.getCollectionNames().length == 1</code>
+and others. When we establish how many collections exist, our next step is to get each of collection information.</p>
+<div class="highlight"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">getCollectionNames</span><span class="p">()[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span><span class="p">;</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">getCollectionNames</span><span class="p">()[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">2</span><span class="p">;</span>
+<span class="c1">// ...</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">getCollectionNames</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;a&#39;</span><span class="p">;</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">getCollectionNames</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;b&#39;</span><span class="p">;</span>
+<span class="c1">// ...</span>
+</pre></div>
+<p>And extract all of the documents data in the collection. </p>
+
+<pre><code># pseudocode
+# loop
+code = tojson(db.#{collection}.find().toArray()).replace(/[ \t\r\n]/gm,'').charCodeAt(#{i})
+String.fromCharCode(code)</code></pre>
+<p>Actually, I put this vulnerable query system in <code>hctf</code>, the code and payload is available in 
+<a href="https://github.com/Tinple/mongo-attack-example">github</a>.</p>
+
+<h2 id="toc_1">Attention</h2>
+<p>This blind nosql injection is only available in versions of MongoDB prior to 2.4, because the global variable
+<code>db</code> was removed in 2.4.</p>
+
+<h2 id="toc_2">End</h2>
 <p>If you have something to correct, welcome to point it out:D</p>
 
-<h3 id="toc_1">References:</h3>
+<h3 id="toc_3">References:</h3>
 
 <ul>
 <li><a href="https://community.rapid7.com/community/metasploit/blog/2014/06/12/you-have-no-sql-inj--sorry-nosql-injections-in-your-application">nosql injection</a></li>
