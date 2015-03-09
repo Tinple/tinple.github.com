@@ -3,118 +3,9 @@
     <title>Tinple</title>
     <link href="http://tinple.io/feed" rel="self" />
     <link href="http://tinple.io/" />
-    <updated>2015-03-09T18:34:23+08:00</updated>
+    <updated>2015-03-08T15:00:17+08:00</updated>
     <id>http://tinple.io/</id>
     <entry>
-        <title type="html"><![CDATA[resume]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.io/tech/resume"/>
-        <published>2015-03-09T00:00:00+08:00</published>
-        <updated>2015-03-09T18:34:23+08:00</updated>
-        <id>http://tinple.io/tech/resume</id>
-        <content type="html" xml:base="http://tinple.io" xml:lang="en">
-            <![CDATA[ <h1 id="toc_0">Contact</h1>
-
-<ul>
-<li>Mobile：(+86) 159-5815-3297</li>
-<li>Email：<a href="mailto:htinple@gmail.com">htinple@gmail.com</a></li>
-<li>QQ: 1447215256</li>
-</ul>
-
-<hr/>
-
-<h1 id="toc_1">Résumé</h1>
-
-<ul>
-<li>涂挺鹏 / 1994 / 男 </li>
-<li>ID: tinple</li>
-<li>Weibo：<a href="http://weibo.com/tinple">@tinple</a></li>
-<li>Blog：<a href="http://tinple.io">tinple.io</a></li>
-<li>Github: <a href="http://github.com/tinple">github.com/tinple</a></li>
-<li>杭州电子科技大学信息安全专业（本科） 2012/09 - 至今</li>
-</ul>
-
-<hr/>
-
-<h1 id="toc_2">Skills</h1>
-
-<ul>
-<li>熟悉、平时用的多的
-
-<ul>
-<li>Javascript</li>
-<li>CSS / HTML</li>
-<li>Node</li>
-</ul></li>
-<li>有一定了解、平时也有接触使用的
-
-<ul>
-<li>PHP （Codeigniter框架）</li>
-<li>MySQL </li>
-<li>MongoDB</li>
-</ul></li>
-<li>对Web开发过程中安全相关的也有一定了解
-
-<ul>
-<li>XSS</li>
-<li>SQLi（传统的SQL注入和Nosql注入）</li>
-<li>CSRF（跨站请求伪造）</li>
-</ul></li>
-<li>运维方面
-
-<ul>
-<li>centos下的lnmp的搭建</li>
-<li>了解一点nginx的一些配置，nginx + node的反向代理</li>
-<li>了解一些centos上的iptables配置</li>
-</ul></li>
-</ul>
-
-<hr/>
-
-<h1 id="toc_3">Workflow</h1>
-
-<ul>
-<li>自有了Mac Pro后，就一直在Mac OS X上开发，离不开zsh + item2 + alfred。</li>
-<li>IDE / Editor方面，大部分是Sublime，远程ssh连服务器基本是VIM。</li>
-<li>版本管理上一直用的git，只有过一次团队协作使用git的经历。</li>
-<li>模板用的jade。</li>
-<li>CSS方面，热衷过bootstrap一阵子，偶尔也会拿来用用。现在是Compass + Sass。</li>
-<li>在JS第三方库上，还是jQuery为主，underscore、lodash这些常用的也有在手边，平时也爱好在github上发现一些不错的实用性的库，比如moment.js、validate.js、is.js以及一些promise的集成库等。</li>
-<li>在JS框架上，接触过一段时间的MVC的Angular。</li>
-<li>包管理上用的npm，bower、component也有备之。</li>
-<li>单元测试用的mocha + should.js，也接触过headless Webkit的casperjs测试框架。</li>
-<li>自动化部署目前用的make。</li>
-</ul>
-
-<hr/>
-
-<h1 id="toc_4">团队项目经验</h1>
-
-<ul>
-<li>第五届杭电网络攻防大赛平台：提供安全爱好者一个网络攻防实战的平台。<strong>主要负责前端界面、后台功能和数据库搭建。</strong></li>
-<li>HCTF：HCTF杭电网络攻防大赛暨XCTF联赛杭州（杭电）站。<strong>主要负责Web方面出题、服务器运维、代码审计。</strong></li>
-</ul>
-
-<hr/>
-
-<h1 id="toc_5">自我评价</h1>
-
-<ul>
-<li>于互联网而言，热衷于小而美的产品，也敬佩高用户数量级的产品。喜欢互联网思想，关注用户体验、Web安全。</li>
-<li>于技术而言，喜欢泡在开源社区，坚持<strong>技术解决需求</strong>，<strong>不局限自己</strong>，热爱开源文化。</li>
-<li>于其他而言，喜欢读生活化的<code>三毛全集</code>，<strong>有点细节控，热爱生活</strong>。</li>
-</ul>
-
-<h1 id="toc_6">荣誉</h1>
-
-<ul>
-<li>全国360网络攻防竞赛优胜奖</li>
-<li>通过大学英语四、六级</li>
-<li>二等奖学金 * 4</li>
-</ul>
-]]>
-        </content>
-    </entry><entry>
         <title type="html"><![CDATA[谈谈布局]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.io/tech/talking-about-layout"/>
@@ -2250,6 +2141,52 @@ echo 'Outping:' . md5(sha1($pass.$salt));</code></pre>
             <![CDATA[ <p>第一次参加马拉松，12.8公里，在杭州。</p>
 <p>你一直在跑，但总是有人在你前面，有人在你后面。只不过当你停下来的时候，你前面的人就多了，哪怕你只是放缓脚步。马拉松如此，很多时候，生活也是如此。</p>
 <p>谨以此纪念，明年再来。</p>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[ISA Training Part Two]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/isa-training-2"/>
+        <published>2013-11-02T00:00:00+08:00</published>
+        <updated>2014-09-24T14:50:47+08:00</updated>
+        <id>http://tinple.io/tech/isa-training-2</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p>Everytime when you open your own browser, you just step into a part of <strong>Web</strong> field.And just have a glance of those web pages on the browser.</p>
+
+<ul>
+<li><a href="http://weibo.com">weibo</a></li>
+<li><a href="http://www.zhihu.com">zhihu</a></li>
+<li><a href="http://taobao.com">taobao</a></li>
+</ul>
+<p>Look at their design, layout and user experience, you may find some different stuffs, and recall what if we visit those websites on a Remote-device?Besides, you see, the nature of them varies, SNS, Social Q &amp; A and C2C.</p>
+<p>And nowadays, much more like desktop system web applications appear, like <a href="http://web2.qq.com">webqq</a>, and one more amazing thing, <a href="http://copy.sh/v24/">x86-Simulator</a>.You just can not image it!</p>
+<p>However, <strong>no pain, no gain</strong>.Maybe it is really difficult for us to do the stuffs above.But we can hold it step by step, just see those single nice pages, it only requires your imagination.Or maybe you prefer to develop a web game, see the simple tetris game I coded long ago.Yep, you can also finish your own web application game! Even more helpful things like hduhelp.</p>
+<p><strong>Only time and determination require!</strong></p>
+<p>I will show you some skills you may love to learn, you can learn these skills following the order.</p>
+
+<ul>
+<li>HTML &amp; CSS</li>
+<li>Javascript</li>
+<li>NodeJs</li>
+<li>And maybe more other skills..(we will talk about it later)</li>
+</ul>
+<p>Wait, there are some useful tools I want to show you as well.</p>
+
+<ul>
+<li><a href="http://127.0.0.1:8080/#/title">Web Slide controlled remotely</a></li>
+<li><a href="http://www.zybuluo.com/mdeditor">online markdown editor</a></li>
+<li><a href="http://lab.lepture.com/liquidluck/">liquidluck</a></li>
+</ul>
+<p>Also some really nice stuffs we usually use, you may touch later if you want to insist on.</p>
+
+<ul>
+<li><a href="https://www.github.com">github</a></li>
+<li><a href="http://stackoverflow.com">stackoverflow</a></li>
+<li><a href="https://www.yinxiang.com/">evernote</a></li>
+<li>Git</li>
+</ul>
+<p>And if you have intersts about those things I refer, just find me directly and I will 
+tell you more after.Do not be shy!</p>
 ]]>
         </content>
     </entry>
