@@ -55,9 +55,7 @@
         </span>
     </div>
     <div class="entry-content">
-        <p>** This post is unfinished, you can read later.**</p>
-
-<h2 id="toc_0">Javascript build tools</h2>
+        <h2 id="toc_0">Javascript build tools</h2>
 <p>During my frontend time, I have seen some of tools to build frontend projects. <a href="gruntjs.com">Grunt</a>,
 <a href="gulpjs.com">Gulp</a> and so on. However, these tools often make me get in the way for its verbose
 configuration and long dependent plugins.</p>
@@ -89,9 +87,98 @@ Each of these rules has:</p>
 </pre></div>
 
 <h2 id="toc_3">A Web project Makefile</h2>
-<p>Next, we will build a simple web project that uses <code>Sass</code>, <code>jade</code>, and we test it using <code>CasperJS</code>.
+<p>Next, we will build a simple web project that uses <code>Compass</code>, <code>jade</code>.
 The contents of our source files are not important, what we concern is what we need to do with the 
 files to make them ready to run.</p>
+<p>At first, we should create <code>package.json</code> file to install the dependencies for this project, then 
+run <code>npm install</code>. We could also achieve it in make.</p>
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;jade&quot;</span><span class="p">:</span>    <span class="s2">&quot;1.9.2&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;uglify-js&quot;</span><span class="p">:</span>     <span class="s2">&quot;~2.4.0&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<div class="highlight"><pre><span class="nv">NODE_MODULES</span> <span class="o">=</span> node_modules
+
+<span class="nf">install</span><span class="o">:</span> <span class="m">package.json</span>
+    @npm install
+</pre></div>
+<p>Next, we may need to compile all jade templates which under the templates directory to the single
+file. Here is the sample.</p>
+<div class="highlight"><pre><span class="nv">template_js</span> <span class="o">:=</span> templates/*.js
+<span class="nv">template_source</span> <span class="o">:=</span> templates/*.jade
+
+<span class="k">$(</span>template_js<span class="k">)</span>: <span class="k">$(</span>template_source<span class="k">)</span>
+    jade --client --no-debug <span class="nv">$^</span>
+</pre></div>
+<p>In first two lines, we use variables to define the source of our template, and in the recipe, we 
+use <code>jade --client</code> command to render the source template file. <code>$^</code> is a special make variable, which
+is a list of all the dependencies, separated with spaces. Next time, we need to concatenate our js file
+including <code>runtime.js</code> and <code>jquery</code> and minify it.</p>
+
+<pre><code>locals = js/locals.js
+app_bundle := build/app.js
+lib := vendor/jquery.js \
+        node_modules/jade/runtime.js
+uglifyjs := ./node_modules/uglify-js/bin/uglifyjs
+
+$(app_bundle): $(lib) $(template_js) $(locals)
+    $(uglifyjs) -cmo $@ $^</code></pre>
+<p>The <code>locals.js</code> is something about locals object and the <code>$@</code> refers to the target. Besides, we can also
+compile our sass code.</p>
+
+<pre><code>scss_file := sass/*.scss
+%.css: %.scss
+    compass compile $(scss_file)</code></pre>
+<p>At last, we may add a <code>.PHONY</code> target, which is not really the name of a file, and tell the make
+not to find this file. What&#39;s more, when you run make without a target, the first entry is the
+one to run, usually named <code>all</code> by convention.</p>
+
+<pre><code>all: install $(app_bundle)
+.PHONY: all</code></pre>
+<p>The whole Makefile looks like this:</p>
+
+<pre><code>uglifyjs := ./node_modules/uglify-js/bin/uglifyjs
+
+app_bundle := build/app.js
+
+locals = js/locals.js
+template_js := templates/*.js
+template_source := templates/*.jade
+lib := vendor/jquery.js \
+        node_modules/jade/runtime.js
+
+scss_file := sass/*.scss
+node_modules = node_modules
+
+all: install $(app_bundle)
+
+$(template_js): $(template_source)
+    jade --client --no-debug $^
+
+$(app_bundle): $(lib) $(template_js) $(locals)
+    @$(uglifyjs) -cmo $@ $^
+
+%.css: %.scss
+    compass compile $(scss_file)
+
+install: package.json
+    @npm install
+
+clean: 
+    @rm -rf $(node_modules) $(template_js) $(app_bundle) $(scss_file)
+
+.PHONY: all clean</code></pre>
+<p>Now we can create a web page to see the result.</p>
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE HTML&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./build/app.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>      
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
 
 <h2 id="toc_4">Reference</h2>
 

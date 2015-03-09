@@ -3,14 +3,299 @@
     <title>Tinple</title>
     <link href="http://tinple.io/feed" rel="self" />
     <link href="http://tinple.io/" />
-    <updated>2014-12-24T19:02:52+08:00</updated>
+    <updated>2015-03-09T18:34:23+08:00</updated>
     <id>http://tinple.io/</id>
     <entry>
+        <title type="html"><![CDATA[resume]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/resume"/>
+        <published>2015-03-09T00:00:00+08:00</published>
+        <updated>2015-03-09T18:34:23+08:00</updated>
+        <id>http://tinple.io/tech/resume</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <h1 id="toc_0">Contact</h1>
+
+<ul>
+<li>Mobile：(+86) 159-5815-3297</li>
+<li>Email：<a href="mailto:htinple@gmail.com">htinple@gmail.com</a></li>
+<li>QQ: 1447215256</li>
+</ul>
+
+<hr/>
+
+<h1 id="toc_1">Résumé</h1>
+
+<ul>
+<li>涂挺鹏 / 1994 / 男 </li>
+<li>ID: tinple</li>
+<li>Weibo：<a href="http://weibo.com/tinple">@tinple</a></li>
+<li>Blog：<a href="http://tinple.io">tinple.io</a></li>
+<li>Github: <a href="http://github.com/tinple">github.com/tinple</a></li>
+<li>杭州电子科技大学信息安全专业（本科） 2012/09 - 至今</li>
+</ul>
+
+<hr/>
+
+<h1 id="toc_2">Skills</h1>
+
+<ul>
+<li>熟悉、平时用的多的
+
+<ul>
+<li>Javascript</li>
+<li>CSS / HTML</li>
+<li>Node</li>
+</ul></li>
+<li>有一定了解、平时也有接触使用的
+
+<ul>
+<li>PHP （Codeigniter框架）</li>
+<li>MySQL </li>
+<li>MongoDB</li>
+</ul></li>
+<li>对Web开发过程中安全相关的也有一定了解
+
+<ul>
+<li>XSS</li>
+<li>SQLi（传统的SQL注入和Nosql注入）</li>
+<li>CSRF（跨站请求伪造）</li>
+</ul></li>
+<li>运维方面
+
+<ul>
+<li>centos下的lnmp的搭建</li>
+<li>了解一点nginx的一些配置，nginx + node的反向代理</li>
+<li>了解一些centos上的iptables配置</li>
+</ul></li>
+</ul>
+
+<hr/>
+
+<h1 id="toc_3">Workflow</h1>
+
+<ul>
+<li>自有了Mac Pro后，就一直在Mac OS X上开发，离不开zsh + item2 + alfred。</li>
+<li>IDE / Editor方面，大部分是Sublime，远程ssh连服务器基本是VIM。</li>
+<li>版本管理上一直用的git，只有过一次团队协作使用git的经历。</li>
+<li>模板用的jade。</li>
+<li>CSS方面，热衷过bootstrap一阵子，偶尔也会拿来用用。现在是Compass + Sass。</li>
+<li>在JS第三方库上，还是jQuery为主，underscore、lodash这些常用的也有在手边，平时也爱好在github上发现一些不错的实用性的库，比如moment.js、validate.js、is.js以及一些promise的集成库等。</li>
+<li>在JS框架上，接触过一段时间的MVC的Angular。</li>
+<li>包管理上用的npm，bower、component也有备之。</li>
+<li>单元测试用的mocha + should.js，也接触过headless Webkit的casperjs测试框架。</li>
+<li>自动化部署目前用的make。</li>
+</ul>
+
+<hr/>
+
+<h1 id="toc_4">团队项目经验</h1>
+
+<ul>
+<li>第五届杭电网络攻防大赛平台：提供安全爱好者一个网络攻防实战的平台。<strong>主要负责前端界面、后台功能和数据库搭建。</strong></li>
+<li>HCTF：HCTF杭电网络攻防大赛暨XCTF联赛杭州（杭电）站。<strong>主要负责Web方面出题、服务器运维、代码审计。</strong></li>
+</ul>
+
+<hr/>
+
+<h1 id="toc_5">自我评价</h1>
+
+<ul>
+<li>于互联网而言，热衷于小而美的产品，也敬佩高用户数量级的产品。喜欢互联网思想，关注用户体验、Web安全。</li>
+<li>于技术而言，喜欢泡在开源社区，坚持<strong>技术解决需求</strong>，<strong>不局限自己</strong>，热爱开源文化。</li>
+<li>于其他而言，喜欢读生活化的<code>三毛全集</code>，<strong>有点细节控，热爱生活</strong>。</li>
+</ul>
+
+<h1 id="toc_6">荣誉</h1>
+
+<ul>
+<li>全国360网络攻防竞赛优胜奖</li>
+<li>通过大学英语四、六级</li>
+<li>二等奖学金 * 4</li>
+</ul>
+]]>
+        </content>
+    </entry><entry>
+        <title type="html"><![CDATA[谈谈布局]]></title>
+        <author><name>Tinple</name></author>
+        <link href="http://tinple.io/tech/talking-about-layout"/>
+        <published>2015-01-28T00:00:00+08:00</published>
+        <updated>2015-03-07T20:46:32+08:00</updated>
+        <id>http://tinple.io/tech/talking-about-layout</id>
+        <content type="html" xml:base="http://tinple.io" xml:lang="en">
+            <![CDATA[ <p>最初接触到前端是在大一，跟很多人一样，是从模仿写一个页面开始的。当时理所当然的拿了学校主页去写，
+且暂不说第一次写得多么难堪，那个时候我只是想着自己布局一定要布好，这也成为了当时的一种动力，觉得写一个前端，以布局为大。</p>
+
+<h2 id="toc_0">一些历史</h2>
+<p>犹记得那个时候的学校首页是用<code>table</code>来布局的，一种很古老的布局方式。它用一系列复杂的嵌套的行跟列来标识<code>Header</code>、<code>Navigation</code>、<code>Footer</code>等等语义化的标签。这也是我后来了解到的很久以前开发者们在网页布局的方式。而当时自己模仿写的时候是采用了另外两种布局方式的，一种是流动式的布局，一种则是<code>div</code>
+跟<code>position</code>的定位布局。</p>
+<p>然而前端的变化发展很快，开发者们认为当今<code>html</code>应该更具语义化，为了日后项目维护的可持续和方便性。所以也就有了语义化的布局，不再是<code>&lt;div id=&quot;header&quot;&gt;</code>，或许这种更符合当今开发者们对<code>html</code>语义化的理解。</p>
+<div class="highlight"><pre><span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;header&gt;&lt;h1&gt;</span>Header<span class="nt">&lt;/h1&gt;&lt;/header&gt;</span>
+    <span class="nt">&lt;article&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>Title<span class="nt">&lt;/h1&gt;</span>
+        <span class="nt">&lt;p&gt;</span>balabala<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/article&gt;</span>
+    <span class="nt">&lt;aside&gt;&lt;h1&gt;</span>Aside<span class="nt">&lt;/h1&gt;&lt;/aside&gt;</span>
+    <span class="nt">&lt;footer&gt;&lt;h1&gt;</span>Footer<span class="nt">&lt;/h1&gt;&lt;/footer&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+<p>又或者，如果你接触过很多css的framework，你可能听过<code>grid</code>这词，一种内嵌在框架中的栅格系统。最初自己接触到这词是在<a href="http://www.blueprintcss.org/">blueprint</a>框架中，后来再次遇见是在
+<a href="http://getbootstrap.com/">bootstrap</a>中。前者只提供预定义宽度的列，而后者亦适用于流动式布局，
+更侧重响应式、mobile-first。</p>
+<div class="highlight"><pre><span class="c">/* blueprint */</span>
+<span class="nc">.span-1</span> <span class="p">{</span><span class="k">width</span><span class="o">:</span> <span class="m">30px</span><span class="p">}</span>
+<span class="nc">.span-2</span> <span class="p">{</span><span class="k">width</span><span class="o">:</span> <span class="m">70px</span><span class="p">}</span>
+<span class="nc">.span-3</span> <span class="p">{</span><span class="k">width</span><span class="o">:</span> <span class="m">110px</span><span class="p">}</span>
+<span class="nc">.span-4</span> <span class="p">{</span><span class="k">width</span><span class="o">:</span> <span class="m">150px</span><span class="p">}</span>
+
+<span class="c">/* bootstrap2 */</span>
+<span class="nc">.span1</span> <span class="p">{</span><span class="k">width</span><span class="o">:</span> <span class="m">60px</span><span class="p">}</span>
+<span class="nc">.row-fluid</span> <span class="nc">.span1</span> <span class="p">{</span>
+  <span class="k">width</span><span class="o">:</span> <span class="m">6</span><span class="o">.</span><span class="m">382978723404255</span><span class="o">%</span><span class="p">;</span>
+  <span class="o">*</span><span class="k">width</span><span class="o">:</span> <span class="m">6</span><span class="o">.</span><span class="m">329787234042553</span><span class="o">%</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>如源码中所见，grids是为你预先定义好了固定宽度和媒体查询，你可以使用它所定义的这些类去布局。换句话说，
+如果你想改变自己的布局你就需要相应的增删这些类名。</p>
+
+<h2 id="toc_1"><a href="http://susy.oddbird.net/">Susy</a></h2>
+<p>用过一段时间栅格系统后，我接触到了<code>Susy</code>。</p>
+
+<blockquote>
+<p>Your MARKUP, YOUR DESIGN, YOUR OPINIONS | OUR MATH.</p>
+</blockquote>
+<p>这是Susy官网的原话，很明显，Susy是完全根据开发者主观意想来为你构建不同grids的一种工具，这意味着你不再需要任何预先设定好的一系列的grids，你可以用susy自己来定义想要的grid，而且，它是完全分离css跟html的。
+Susy有多简单？如果你用过<a href="http://compass-style.org">compass</a>，相信你会上手非常快。</p>
+<p>比如我们构建一个最简单的页面，只包含content、sidebar和底部的gallery图标。</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>Content<span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;sidebar&quot;</span><span class="nt">&gt;</span>Sidebar<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;footer&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;gallery&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;ul&gt;</span>
+            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;gallery-item&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/100x100&quot;</span> <span class="na">alt=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;gallery-item&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/100x100&quot;</span> <span class="na">alt=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;gallery-item&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/100x100&quot;</span> <span class="na">alt=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;gallery-item&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/100x100&quot;</span> <span class="na">alt=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;gallery-item&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/100x100&quot;</span> <span class="na">alt=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;gallery-item&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/100x100&quot;</span> <span class="na">alt=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;gallery-item&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/100x100&quot;</span> <span class="na">alt=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;gallery-item&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">src=</span><span class="s">&quot;http://placehold.it/100x100&quot;</span> <span class="na">alt=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;/li&gt;</span>
+        <span class="nt">&lt;/ul&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<p>我们可以自己定义在最小屏幕分辨率600px下content和sidebar横向对齐，底部图标一横排开。而在手机页面则是content和
+sidebar垂直挨着，底部图标呈两横四列。</p>
+<p><img src="http://ttpphot.qiniudn.com/img.png" alt="desktop"/>
+<img src="http://ttpphot.qiniudn.com/img2.png" alt="mobile"/></p>
+<p>你可能想到媒体查询，没错，我们来看看使用Susy会有多畅快。</p>
+<div class="highlight"><pre><span class="err">$</span><span class="nt">susy</span><span class="o">:</span> <span class="o">(</span> <span class="nt">column</span><span class="o">:</span> <span class="nt">12</span><span class="o">);</span>
+
+<span class="nc">.content</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#fbeecb</span><span class="p">;</span>
+    <span class="o">@</span><span class="n">include</span> <span class="n">breakpoint</span><span class="p">(</span><span class="m">600px</span><span class="p">)</span> <span class="err">{</span>
+        <span class="o">@</span><span class="n">include</span> <span class="n">span</span><span class="p">(</span><span class="m">8</span> <span class="n">of</span> <span class="m">12</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="err">}</span>
+
+<span class="nc">.sidebar</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#71dad2</span><span class="p">;</span>
+    <span class="o">@</span><span class="n">include</span> <span class="n">breakpoint</span><span class="p">(</span><span class="m">600px</span><span class="p">)</span> <span class="err">{</span>
+        <span class="o">@</span><span class="n">include</span> <span class="n">span</span><span class="p">(</span><span class="m">4</span> <span class="n">of</span> <span class="m">12</span> <span class="n">last</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="err">}</span>
+
+<span class="nc">.gallery</span> <span class="p">{</span>
+    <span class="o">@</span><span class="n">include</span> <span class="n">clearfix</span><span class="p">;</span>
+    <span class="k">background</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
+    <span class="k">padding</span><span class="o">:</span> <span class="n">gutter</span><span class="p">();</span>
+    <span class="o">.</span><span class="n">gallery</span><span class="o">-</span><span class="n">item</span> <span class="err">{</span>
+        <span class="o">@</span><span class="n">include</span> <span class="n">gallery</span><span class="p">(</span><span class="m">2</span> <span class="n">of</span> <span class="m">8</span><span class="p">);</span>
+        <span class="k">margin-bottom</span><span class="o">:</span> <span class="n">gutter</span><span class="p">(</span><span class="m">8</span><span class="p">);</span>
+
+        <span class="o">@</span><span class="n">include</span> <span class="n">breakpoint</span><span class="p">(</span><span class="m">600px</span><span class="p">)</span> <span class="err">{</span>
+            <span class="o">@</span><span class="n">include</span> <span class="n">gallery</span><span class="p">(</span><span class="m">1</span> <span class="n">of</span> <span class="m">8</span><span class="p">);</span>
+            <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="err">}</span>
+<span class="err">}</span>
+</pre></div>
+<p>抛开其他繁琐的问题，我们只关注Susy如何快速构建我们所要的布局，我们先声明了Susy全局默认下应该有12列，然后根据
+<a href="breakpoint-sass.com">breakpoint</a>这个<a href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html#mixins">mixin</a>来进行媒体查询。你可能疑惑breakpoint最后输出的媒体查询是什么样的。</p>
+<div class="highlight"><pre><span class="k">@media</span> <span class="o">(</span><span class="nt">min-width</span><span class="o">:</span> <span class="nt">600px</span><span class="o">)</span> <span class="p">{</span>
+    <span class="nc">.content</span> <span class="p">{</span>
+        <span class="k">width</span><span class="o">:</span> <span class="m">66</span><span class="o">.</span><span class="m">10169</span><span class="o">%</span><span class="p">;</span>
+        <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
+        <span class="k">margin-right</span><span class="o">:</span> <span class="m">1</span><span class="o">.</span><span class="m">69492</span><span class="o">%</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>没错，这就是我们预先定义最小屏幕分辨率下的媒体查询，然后我们使用<code>span</code>函数来声明content和sidebar分别占据的宽度，
+<code>span(8 of 12)</code>代表content占据整个12列宽度的8列，你可能会对<code>of</code>关键字感兴趣，实际上，Susy的这个函数还有许多关键字都有特定含义，比如<code>at</code>，<code>last</code>。Susy会自动帮你计算出特定条件下的宽度，当然它还拥有许多<a href="http://susydocs.oddbird.net/en/latest/toolkit/">toolkit</a>比如gallery。</p>
+<p>如果你此时对Susy感兴趣，你可以移步官网去获取更多资源。实际上，接触Susy后我一直在使用Susy，当然你可能还需要去接触sass、compass
+等等。</p>
+
+<h2 id="toc_2">Flexbox</h2>
+<p>Susy面向传统的布局设计，你可以依靠它把各种浏览器兼容抛开。然而如果不讲兼容性，<code>Flexbox</code>绝对是大杀器。</p>
+
+<blockquote>
+<p>Child elements in a flexbox can be laid out in any direction and can have flexible dimensions to adapt
+to the display space.</p>
+</blockquote>
+<p>你可以在<a href="https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes">MDN</a>上获取相关的文档。
+拿一个含有header、article、sidebar和footer的页面来说，flexbox看起来是这样的。</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;header&gt;</span>Header<span class="nt">&lt;/header&gt;</span>
+    <span class="nt">&lt;article&gt;</span>Article<span class="nt">&lt;/article&gt;</span>
+    <span class="nt">&lt;aside&gt;</span>Aside<span class="nt">&lt;/aside&gt;</span>
+    <span class="nt">&lt;footer&gt;</span>Footer<span class="nt">&lt;/footer&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="highlight"><pre><span class="nf">#container</span> <span class="p">{</span>
+  <span class="k">display</span><span class="o">:</span> <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">flex</span><span class="p">;</span>
+  <span class="k">display</span><span class="o">:</span> <span class="n">flex</span><span class="p">;</span>
+  <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">flex</span><span class="o">-</span><span class="n">flow</span><span class="o">:</span> <span class="n">row</span> <span class="n">wrap</span><span class="p">;</span>
+  <span class="n">flex</span><span class="o">-</span><span class="n">flow</span><span class="o">:</span> <span class="n">row</span> <span class="n">wrap</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#container</span> <span class="nt">header</span><span class="o">,</span> <span class="nf">#container</span> <span class="nt">footer</span> <span class="p">{</span>
+  <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">flex</span><span class="o">:</span> <span class="m">1</span> <span class="m">0</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
+  <span class="n">flex</span><span class="o">:</span> <span class="m">1</span> <span class="m">0</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#container</span> <span class="nt">header</span> <span class="p">{</span>
+  <span class="k">background</span><span class="o">:</span> <span class="m">#4dff4d</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#container</span> <span class="nt">footer</span> <span class="p">{</span>
+  <span class="k">background</span><span class="o">:</span> <span class="m">#ffffcc</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#container</span> <span class="nt">article</span> <span class="p">{</span>
+  <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">flex</span><span class="o">:</span> <span class="m">2</span> <span class="m">1</span> <span class="m">30em</span><span class="p">;</span>
+  <span class="n">flex</span><span class="o">:</span> <span class="m">2</span> <span class="m">1</span> <span class="m">30em</span><span class="p">;</span>
+  <span class="k">background</span><span class="o">:</span> <span class="m">#ff4dff</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#container</span> <span class="nt">aside</span> <span class="p">{</span>
+  <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">flex</span><span class="o">:</span> <span class="m">1</span> <span class="m">0</span> <span class="m">15em</span><span class="p">;</span>
+  <span class="n">flex</span><span class="o">:</span> <span class="m">1</span> <span class="m">0</span> <span class="m">15em</span><span class="p">;</span>
+  <span class="k">background</span><span class="o">:</span> <span class="m">#ccccff</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<p>在Flexbox中，我们可以自动调整子元素的高和宽，来很好的填充任何显示设备中的可用显示空间，收缩内容防止内容溢出。</p>
+
+<h2 id="toc_3">Summary</h2>
+<p>目前自己常用的是Susy，但相信未来<code>Flexbox</code>也将大放光彩。</p>
+
+<h2 id="toc_4">Reference</h2>
+<p><a href="https://css-tricks.com/build-web-layouts-easily-susy/">build-web-layouts-easily-susy</a>
+<a href="https://developer.mozilla.org/zh-CN/docs/CSS/Tutorials/Using_CSS_flexible_boxes">Using_css_flexible_boxes</a></p>
+]]>
+        </content>
+    </entry><entry>
         <title type="html"><![CDATA[MongoDB Security Part Three]]></title>
         <author><name>Tinple</name></author>
         <link href="http://tinple.io/tech/mongo-security-part-three"/>
         <published>2014-12-18T00:00:00+08:00</published>
-        <updated>2014-12-24T19:02:52+08:00</updated>
+        <updated>2014-12-24T19:26:42+08:00</updated>
         <id>http://tinple.io/tech/mongo-security-part-three</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
             <![CDATA[ <p>For the latest posts, I showed <a href="http://tinple.io/tech/mongo-security-part-one">MongoDB unauthorized access vulnerability</a>
@@ -395,12 +680,10 @@ default is 27017) and start the firewall only allow the white-list ip to connect
         <author><name>Tinple</name></author>
         <link href="http://tinple.io/tech/use-make-with-javascript"/>
         <published>2014-12-11T00:00:00+08:00</published>
-        <updated>2014-12-22T14:27:03+08:00</updated>
+        <updated>2015-03-08T15:00:17+08:00</updated>
         <id>http://tinple.io/tech/use-make-with-javascript</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
-            <![CDATA[ <p>** This post is unfinished, you can read later.**</p>
-
-<h2 id="toc_0">Javascript build tools</h2>
+            <![CDATA[ <h2 id="toc_0">Javascript build tools</h2>
 <p>During my frontend time, I have seen some of tools to build frontend projects. <a href="gruntjs.com">Grunt</a>,
 <a href="gulpjs.com">Gulp</a> and so on. However, these tools often make me get in the way for its verbose
 configuration and long dependent plugins.</p>
@@ -432,9 +715,98 @@ Each of these rules has:</p>
 </pre></div>
 
 <h2 id="toc_3">A Web project Makefile</h2>
-<p>Next, we will build a simple web project that uses <code>Sass</code>, <code>jade</code>, and we test it using <code>CasperJS</code>.
+<p>Next, we will build a simple web project that uses <code>Compass</code>, <code>jade</code>.
 The contents of our source files are not important, what we concern is what we need to do with the 
 files to make them ready to run.</p>
+<p>At first, we should create <code>package.json</code> file to install the dependencies for this project, then 
+run <code>npm install</code>. We could also achieve it in make.</p>
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;jade&quot;</span><span class="p">:</span>    <span class="s2">&quot;1.9.2&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;uglify-js&quot;</span><span class="p">:</span>     <span class="s2">&quot;~2.4.0&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<div class="highlight"><pre><span class="nv">NODE_MODULES</span> <span class="o">=</span> node_modules
+
+<span class="nf">install</span><span class="o">:</span> <span class="m">package.json</span>
+    @npm install
+</pre></div>
+<p>Next, we may need to compile all jade templates which under the templates directory to the single
+file. Here is the sample.</p>
+<div class="highlight"><pre><span class="nv">template_js</span> <span class="o">:=</span> templates/*.js
+<span class="nv">template_source</span> <span class="o">:=</span> templates/*.jade
+
+<span class="k">$(</span>template_js<span class="k">)</span>: <span class="k">$(</span>template_source<span class="k">)</span>
+    jade --client --no-debug <span class="nv">$^</span>
+</pre></div>
+<p>In first two lines, we use variables to define the source of our template, and in the recipe, we 
+use <code>jade --client</code> command to render the source template file. <code>$^</code> is a special make variable, which
+is a list of all the dependencies, separated with spaces. Next time, we need to concatenate our js file
+including <code>runtime.js</code> and <code>jquery</code> and minify it.</p>
+
+<pre><code>locals = js/locals.js
+app_bundle := build/app.js
+lib := vendor/jquery.js \
+        node_modules/jade/runtime.js
+uglifyjs := ./node_modules/uglify-js/bin/uglifyjs
+
+$(app_bundle): $(lib) $(template_js) $(locals)
+    $(uglifyjs) -cmo $@ $^</code></pre>
+<p>The <code>locals.js</code> is something about locals object and the <code>$@</code> refers to the target. Besides, we can also
+compile our sass code.</p>
+
+<pre><code>scss_file := sass/*.scss
+%.css: %.scss
+    compass compile $(scss_file)</code></pre>
+<p>At last, we may add a <code>.PHONY</code> target, which is not really the name of a file, and tell the make
+not to find this file. What&#39;s more, when you run make without a target, the first entry is the
+one to run, usually named <code>all</code> by convention.</p>
+
+<pre><code>all: install $(app_bundle)
+.PHONY: all</code></pre>
+<p>The whole Makefile looks like this:</p>
+
+<pre><code>uglifyjs := ./node_modules/uglify-js/bin/uglifyjs
+
+app_bundle := build/app.js
+
+locals = js/locals.js
+template_js := templates/*.js
+template_source := templates/*.jade
+lib := vendor/jquery.js \
+        node_modules/jade/runtime.js
+
+scss_file := sass/*.scss
+node_modules = node_modules
+
+all: install $(app_bundle)
+
+$(template_js): $(template_source)
+    jade --client --no-debug $^
+
+$(app_bundle): $(lib) $(template_js) $(locals)
+    @$(uglifyjs) -cmo $@ $^
+
+%.css: %.scss
+    compass compile $(scss_file)
+
+install: package.json
+    @npm install
+
+clean: 
+    @rm -rf $(node_modules) $(template_js) $(app_bundle) $(scss_file)
+
+.PHONY: all clean</code></pre>
+<p>Now we can create a web page to see the result.</p>
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE HTML&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./build/app.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>      
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
 
 <h2 id="toc_4">Reference</h2>
 
@@ -1878,87 +2250,6 @@ echo 'Outping:' . md5(sha1($pass.$salt));</code></pre>
             <![CDATA[ <p>第一次参加马拉松，12.8公里，在杭州。</p>
 <p>你一直在跑，但总是有人在你前面，有人在你后面。只不过当你停下来的时候，你前面的人就多了，哪怕你只是放缓脚步。马拉松如此，很多时候，生活也是如此。</p>
 <p>谨以此纪念，明年再来。</p>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[ISA Training Part Two]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.io/tech/isa-training-2"/>
-        <published>2013-11-02T00:00:00+08:00</published>
-        <updated>2014-09-24T14:50:47+08:00</updated>
-        <id>http://tinple.io/tech/isa-training-2</id>
-        <content type="html" xml:base="http://tinple.io" xml:lang="en">
-            <![CDATA[ <p>Everytime when you open your own browser, you just step into a part of <strong>Web</strong> field.And just have a glance of those web pages on the browser.</p>
-
-<ul>
-<li><a href="http://weibo.com">weibo</a></li>
-<li><a href="http://www.zhihu.com">zhihu</a></li>
-<li><a href="http://taobao.com">taobao</a></li>
-</ul>
-<p>Look at their design, layout and user experience, you may find some different stuffs, and recall what if we visit those websites on a Remote-device?Besides, you see, the nature of them varies, SNS, Social Q &amp; A and C2C.</p>
-<p>And nowadays, much more like desktop system web applications appear, like <a href="http://web2.qq.com">webqq</a>, and one more amazing thing, <a href="http://copy.sh/v24/">x86-Simulator</a>.You just can not image it!</p>
-<p>However, <strong>no pain, no gain</strong>.Maybe it is really difficult for us to do the stuffs above.But we can hold it step by step, just see those single nice pages, it only requires your imagination.Or maybe you prefer to develop a web game, see the simple tetris game I coded long ago.Yep, you can also finish your own web application game! Even more helpful things like hduhelp.</p>
-<p><strong>Only time and determination require!</strong></p>
-<p>I will show you some skills you may love to learn, you can learn these skills following the order.</p>
-
-<ul>
-<li>HTML &amp; CSS</li>
-<li>Javascript</li>
-<li>NodeJs</li>
-<li>And maybe more other skills..(we will talk about it later)</li>
-</ul>
-<p>Wait, there are some useful tools I want to show you as well.</p>
-
-<ul>
-<li><a href="http://127.0.0.1:8080/#/title">Web Slide controlled remotely</a></li>
-<li><a href="http://www.zybuluo.com/mdeditor">online markdown editor</a></li>
-<li><a href="http://lab.lepture.com/liquidluck/">liquidluck</a></li>
-</ul>
-<p>Also some really nice stuffs we usually use, you may touch later if you want to insist on.</p>
-
-<ul>
-<li><a href="https://www.github.com">github</a></li>
-<li><a href="http://stackoverflow.com">stackoverflow</a></li>
-<li><a href="https://www.yinxiang.com/">evernote</a></li>
-<li>Git</li>
-</ul>
-<p>And if you have intersts about those things I refer, just find me directly and I will 
-tell you more after.Do not be shy!</p>
-]]>
-        </content>
-    </entry><entry>
-        <title type="html"><![CDATA[Monthly review for Oct.2013]]></title>
-        <author><name>Tinple</name></author>
-        <link href="http://tinple.io/life/monthly-review-for-oct-2013"/>
-        <published>2013-11-01T00:00:00+08:00</published>
-        <updated>2014-09-24T14:49:21+08:00</updated>
-        <id>http://tinple.io/life/monthly-review-for-oct-2013</id>
-        <content type="html" xml:base="http://tinple.io" xml:lang="en">
-            <![CDATA[ <h2 id="toc_0">Tech</h2>
-<p>1.国庆回来后月初忙着报名平台的上线，忙乱中各种页面UI优化，功能测试，注入测试，最后还是赶在10号上线了。</p>
-<p>2.也是管中窥豹了一番web安全，学习了数据库权限(Privilege)的精确设置，数据的各种过滤，服务端文件的权限设置。</p>
-<p>3.第一次读完了英文影印版的Head First系列PHP &amp; Mysql，非常有趣，idea发散式学习，觉得比较适合入门看如果英文阅读能力强的话，但还是权当巩固基础知识了。</p>
-<p>4.月末在读Javascript的乌龟书，200多页精悍的书讲述着编程风格，编程实践等等，虽然现在缺少机会去参与团队协作开发，但现在看一点也不显早，相反的确帮我改进了许多coding习惯还有思维。</p>
-<p>5.间断性地读了一些框架的源码，比如codeigniter（CI），jQuery。感触最大的一点是它们整体的设计模式，还有编程，的确能学到许多，从中也是能看到它们之所以作为框架给予开发者的便捷之处。</p>
-<p>6.这个月学习的时候更侧重自己的<strong>英文阅读能力</strong>了，啃Head First系列的书时把不认识的单词全都摘记下来一个个google translate。总之现在觉得英语很重要。</p>
-
-<h2 id="toc_1">Work</h2>
-<p>1.随着10号报名平台的上线，也是跟协会的小伙伴们去摆了3天的摊。累归累，但这种活动收获还是颇多，校内宣传也基本到位。PS：怀念那个音箱。</p>
-<p>2.参与了院级的创新项目，混了小学妹的队。主要是觉得这个项目的idea很赞，但总隐隐感觉后续的发展绝不会如我们策划预料的那么吻合，潜在许多未知的隐患，真正做好很难。不过还是要赞一下这个idea。</p>
-<p>3.把以前存的乱七八糟零碎的东西都整理了一遍，开始合理有秩序地收集资料，方便以后需要的时候查找。也是整理了寝室的书桌和协会的桌子:D</p>
-<p>4.跟别人讨论马云强推来往的事，weibo上也是炒得很火。暂不论来往这个产品的好坏，总之觉得马云这事强制性做的比较成功。许多时候产品是一回事，宣传推广是一回事，至于结果，往往取决于两者之和。</p>
-<p>5.参加了今年10月的阿里云开发者大会，虽然地点设在偏僻的云溪小镇，到处都是来往的牌子。但是阿里人的热情真是火旺，从头到尾都很贴心。也看到了一些自己想看到的东西，引发了许多对产品的思考。听说随行的小伙伴还见到马云了。</p>
-<p>6.简单地思考了下以后的出路。暂时不说，继续努力，毕竟现在还远远不够。</p>
-
-<h2 id="toc_2">Life</h2>
-<p>1.国庆还是回了嘉兴，在那闷的慌没事做，呆了几天就匆忙回去了。换了个环境就不知道该去做什么，相信这的确是自己生活上一个赤裸裸的嘲讽。</p>
-<p>2.报名参加了今年11月份的杭州国际马拉松，报的短程12800。想去挑战下，或者又可以说是想跟小伙伴们去玩下:D</p>
-<p>3.这个月中旬写了每天Must to do的清单，但还是有一些没能坚持下来，比如每天一集美剧，每天shanbay打卡。反思。</p>
-<p>4.月末不是特别想坐在电脑前了，更倾向于捧着本书看，或者是去思考其他事。</p>
-
-<h2 id="toc_3">End</h2>
-<p>这个月大多事是围着<strong>攻防比赛</strong>这条主线进行的，跟9月还有不一样的是，这个月还忙着处理一些情感，一些琐事。
-10月，多了点忙碌带来的紧迫节奏感。PS:明天报名平台就关闭啦:D</p>
 ]]>
         </content>
     </entry>
