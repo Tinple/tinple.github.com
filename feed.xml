@@ -3,7 +3,7 @@
     <title>Tinple</title>
     <link href="http://tinple.io/feed" rel="self" />
     <link href="http://tinple.io/" />
-    <updated>2015-03-08T15:00:17+08:00</updated>
+    <updated>2015-03-12T15:10:59+08:00</updated>
     <id>http://tinple.io/</id>
     <entry>
         <title type="html"><![CDATA[谈谈布局]]></title>
@@ -768,7 +768,7 @@ to get our site up and running.</p>
         <author><name>Tinple</name></author>
         <link href="http://tinple.io/tech/testing-with-mocha-and-casperjs"/>
         <published>2014-10-22T00:00:00+08:00</published>
-        <updated>2014-10-24T10:37:51+08:00</updated>
+        <updated>2015-03-12T15:10:59+08:00</updated>
         <id>http://tinple.io/tech/testing-with-mocha-and-casperjs</id>
         <content type="html" xml:base="http://tinple.io" xml:lang="en">
             <![CDATA[ <p>When talking about <code>Unit Test</code> in <code>node</code>, <code>mocha</code> flashes first in my brain.</p>
@@ -784,7 +784,7 @@ And I worked <code>mocha</code> with <code>should.js</code>, which is a human as
 <h3 id="toc_1">Install</h3>
 
 <pre><code>$ npm install mocha -g 
-$ npm install shou --save-dev</code></pre>
+$ npm install should --save-dev</code></pre>
 
 <h3 id="toc_2">First Step</h3>
 <p>Let&#39;s say we have two api to test, and the api script is saved as <code>api.js</code>.</p>

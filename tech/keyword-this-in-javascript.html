@@ -179,7 +179,7 @@ set to the DOM element on which the listener is placed.</p>
 <div class="highlight"><pre><span class="c">&lt;!-- button --&gt;</span>
 <span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;alert(this.tagName.toLowerCase());&quot;</span><span class="nt">&gt;</span>Show this<span class="nt">&lt;/button&gt;</span>
 <span class="c">&lt;!-- the global window object--&gt;</span>
-<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;alert((function(){return this}}()));&quot;</span><span class="nt">&gt;</span>Show inner this<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;alert((function(){return this})());&quot;</span><span class="nt">&gt;</span>Show inner this<span class="nt">&lt;/button&gt;</span>
 </pre></div>
 <p>Note that only the outer code has its <code>this</code> set this way.</p>
 
